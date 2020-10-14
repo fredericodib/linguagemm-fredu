@@ -1,0 +1,10 @@
+/* Isso é um comentario */
+
+string 5string1 = "Nice to meet you";
+string string2;
+string result;
+
+string2 = "do you like blueberries?";
+result = string1 + ", " + string2;
+
+print(result);

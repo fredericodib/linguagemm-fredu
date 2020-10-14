@@ -1,0 +1,38 @@
+float test(int x, float y) {
+  float value;
+  value = x + y * x + 5.5;
+  return (value);
+}
+
+int main() {
+  /* Isso é um comentario */
+
+  string string1 = "Nice to meet you";
+  string string2
+  string result;
+  float functionReturn;
+
+  string2 = "do you like blueberries?";
+  result = string1 + ", " + string2;
+  print(result);
+
+  functionReturn = test(4,5);  
+  print(functionReturn);
+
+  if (functionReturn >= 20) {
+    print("maior ou igual");
+  } else {
+    print("menor");
+  }
+
+  while (functionReturn < 1000) {
+    functionReturn = functionReturn + 1;
+  }
+
+  print(functionReturn);
+
+  int scanNumero;
+  scan(scanNumero, int);
+
+  return(0);
+}
