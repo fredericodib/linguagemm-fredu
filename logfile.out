@@ -1,193 +1,488 @@
-==60044== Memcheck, a memory error detector
-==60044== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==60044== Using Valgrind-3.17.0.GIT-6049595824-20200908 and LibVEX; rerun with -h for copyright info
-==60044== Command: ./a.out input_correto1.txt
-==60044== Parent PID: 58440
-==60044== 
---60044-- 
---60044-- Valgrind options:
---60044--    -v
---60044--    --tool=memcheck
---60044--    --leak-check=full
---60044--    --show-leak-kinds=all
---60044--    --track-origins=yes
---60044--    --log-file=logfile.out
---60044-- Output from sysctl({CTL_KERN,KERN_VERSION}):
---60044--   Darwin Kernel Version 19.2.0: Sat Nov  9 03:47:04 PST 2019; root:xnu-6153.61.1~20/RELEASE_X86_64
---60044-- Arch and hwcaps: AMD64, LittleEndian, amd64-cx16-lzcnt-rdtscp-sse3-ssse3-avx-avx2-bmi-f16c-rdrand
---60044-- Page sizes: currently 4096, max supported 4096
---60044-- Valgrind library directory: /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind
---60044-- ./a.out (rx at 0x100000000, rw at 0x100004000)
---60044--    reading syms   from primary file (41 201)
---60044--    dSYM= ./a.out.dSYM/Contents/Resources/DWARF/a.out
---60044--    reading dwarf3 from dsyms file
---60044-- /usr/lib/dyld (rx at 0x10002c000, rw at 0x1000bd000)
---60044--    reading syms   from primary file (5 2716)
---60044-- Scheduler: using generic scheduler lock implementation.
---60044-- Reading suppressions file: /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/default.supp
-==60044== embedded gdbserver: reading from /var/folders/_w/hb6j306x35qdjp8cxmndvwl00000gn/T//vgdb-pipe-from-vgdb-to-60044-by-fredericodib-on-???
-==60044== embedded gdbserver: writing to   /var/folders/_w/hb6j306x35qdjp8cxmndvwl00000gn/T//vgdb-pipe-to-vgdb-from-60044-by-fredericodib-on-???
-==60044== embedded gdbserver: shared mem   /var/folders/_w/hb6j306x35qdjp8cxmndvwl00000gn/T//vgdb-pipe-shared-mem-vgdb-60044-by-fredericodib-on-???
-==60044== 
-==60044== TO CONTROL THIS PROCESS USING vgdb (which you probably
-==60044== don't want to do, unless you know exactly what you're doing,
-==60044== or are doing some strange experiment):
-==60044==   /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/../../bin/vgdb --pid=60044 ...command...
-==60044== 
-==60044== TO DEBUG THIS PROCESS USING GDB: start GDB like this
-==60044==   /path/to/gdb ./a.out
-==60044== and then give GDB the following command
-==60044==   target remote | /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/../../bin/vgdb --pid=60044
-==60044== --pid is optional if only one valgrind process is running
-==60044== 
---60044-- REDIR: 0x10007d520 (dyld:strcmp) redirected to 0x25805844d (???)
---60044-- REDIR: 0x100077810 (dyld:arc4random) redirected to 0x2580584eb (???)
---60044-- REDIR: 0x10007c900 (dyld:strlen) redirected to 0x25805841c (???)
---60044-- REDIR: 0x10007d820 (dyld:strcpy) redirected to 0x258058469 (???)
---60044-- REDIR: 0x10007a9a4 (dyld:strcat) redirected to 0x25805842d (???)
---60044-- REDIR: 0x10007c6fe (dyld:strlcat) redirected to 0x258058486 (???)
---60044-- /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_core-amd64-darwin.so (rx at 0x100130000, rw at 0x100134000)
---60044--    reading syms   from primary file (3 48)
---60044--    dSYM= /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_core-amd64-darwin.so.dSYM/Contents/Resources/DWARF/vgpreload_core-amd64-darwin.so
---60044-- /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so (rx at 0x100136000, rw at 0x10013d000)
---60044--    reading syms   from primary file (75 57)
---60044--    dSYM= /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so.dSYM/Contents/Resources/DWARF/vgpreload_memcheck-amd64-darwin.so
---60044-- /usr/lib/libSystem.B.dylib (rx at 0x100142000, rw at 0x100144000)
---60044--    reading syms   from primary file (29 8)
---60044-- /usr/lib/system/libcache.dylib (rx at 0x10014c000, rw at 0x100152000)
---60044--    reading syms   from primary file (32 29)
---60044-- /usr/lib/system/libcommonCrypto.dylib (rx at 0x100159000, rw at 0x100165000)
---60044--    reading syms   from primary file (242 172)
---60044-- /usr/lib/system/libcompiler_rt.dylib (rx at 0x100175000, rw at 0x10017d000)
---60044--    reading syms   from primary file (505 8)
---60044-- /usr/lib/system/libcopyfile.dylib (rx at 0x10018c000, rw at 0x100196000)
---60044--    reading syms   from primary file (11 39)
---60044-- /usr/lib/system/libcorecrypto.dylib (rx at 0x10019e000, rw at 0x100236000)
---60044--    reading syms   from primary file (575 851)
---60044-- /usr/lib/system/libdispatch.dylib (rx at 0x100256000, rw at 0x100298000)
---60044--    reading syms   from primary file (328 1419)
---60044-- /usr/lib/system/libdyld.dylib (rx at 0x1002d2000, rw at 0x100308000)
---60044--    reading syms   from primary file (119 1463)
---60044-- /usr/lib/system/libkeymgr.dylib (rx at 0x100331000, rw at 0x100332000)
---60044--    reading syms   from primary file (11 2)
---60044-- /usr/lib/system/libmacho.dylib (rx at 0x100341000, rw at 0x100347000)
---60044--    reading syms   from primary file (105 2)
---60044-- /usr/lib/system/libquarantine.dylib (rx at 0x10034f000, rw at 0x100352000)
---60044--    reading syms   from primary file (88 12)
---60044-- /usr/lib/system/libremovefile.dylib (rx at 0x10035a000, rw at 0x10035c000)
---60044--    reading syms   from primary file (12 8)
---60044-- /usr/lib/system/libsystem_asl.dylib (rx at 0x100363000, rw at 0x10037b000)
---60044--    reading syms   from primary file (219 234)
---60044-- /usr/lib/system/libsystem_blocks.dylib (rx at 0x10038a000, rw at 0x10038b000)
---60044--    reading syms   from primary file (21 8)
---60044-- /usr/lib/system/libsystem_c.dylib (rx at 0x100392000, rw at 0x10041a000)
---60044--    reading syms   from primary file (1346 892)
---60044-- /usr/lib/system/libsystem_configuration.dylib (rx at 0x100444000, rw at 0x100448000)
---60044--    reading syms   from primary file (36 68)
---60044-- /usr/lib/system/libsystem_coreservices.dylib (rx at 0x100451000, rw at 0x100455000)
---60044--    reading syms   from primary file (14 47)
---60044-- /usr/lib/system/libsystem_darwin.dylib (rx at 0x10045d000, rw at 0x100466000)
---60044--    reading syms   from primary file (63 562)
---60044-- /usr/lib/system/libsystem_dnssd.dylib (rx at 0x100474000, rw at 0x10047c000)
---60044--    reading syms   from primary file (39 25)
---60044-- /usr/lib/system/libsystem_featureflags.dylib (rx at 0x100484000, rw at 0x100486000)
---60044--    reading syms   from primary file (1 12)
---60044-- /usr/lib/system/libsystem_info.dylib (rx at 0x10048d000, rw at 0x1004db000)
---60044--    reading syms   from primary file (427 718)
---60044-- /usr/lib/system/libsystem_m.dylib (rx at 0x1004f3000, rw at 0x10053b000)
---60044--    reading syms   from primary file (811 1)
---60044-- /usr/lib/system/libsystem_malloc.dylib (rx at 0x10054c000, rw at 0x100574000)
---60044--    reading syms   from primary file (98 475)
---60044-- /usr/lib/system/libsystem_networkextension.dylib (rx at 0x100584000, rw at 0x100592000)
---60044--    reading syms   from primary file (118 242)
---60044-- /usr/lib/system/libsystem_notify.dylib (rx at 0x1005a1000, rw at 0x1005ab000)
---60044--    reading syms   from primary file (23 1)
---60044-- /usr/lib/system/libsystem_sandbox.dylib (rx at 0x1005b3000, rw at 0x1005b8000)
---60044--    reading syms   from primary file (112 23)
---60044-- /usr/lib/system/libsystem_secinit.dylib (rx at 0x1005c1000, rw at 0x1005c4000)
---60044--    reading syms   from primary file (5 20)
---60044-- /usr/lib/system/libsystem_kernel.dylib (rx at 0x1005cb000, rw at 0x1005f8000)
---60044--    reading syms   from primary file (1356 227)
---60044-- /usr/lib/system/libsystem_platform.dylib (rx at 0x100616000, rw at 0x100620000)
---60044--    reading syms   from primary file (168 103)
---60044-- /usr/lib/system/libsystem_pthread.dylib (rx at 0x10062a000, rw at 0x100635000)
---60044--    reading syms   from primary file (189 143)
---60044-- /usr/lib/system/libsystem_symptoms.dylib (rx at 0x100642000, rw at 0x10064a000)
---60044--    reading syms   from primary file (10 86)
---60044-- /usr/lib/system/libsystem_trace.dylib (rx at 0x100652000, rw at 0x100669000)
---60044--    reading syms   from primary file (131 257)
---60044-- /usr/lib/system/libunwind.dylib (rx at 0x10067b000, rw at 0x100681000)
---60044--    reading syms   from primary file (102 52)
---60044-- /usr/lib/system/libxpc.dylib (rx at 0x10068a000, rw at 0x1006bf000)
---60044--    reading syms   from primary file (620 1287)
---60044-- /usr/lib/libobjc.A.dylib (rx at 0x1006ea000, rw at 0x10071c000)
---60044--    reading syms   from primary file (382 727)
---60044-- /usr/lib/libc++abi.dylib (rx at 0x10073f000, rw at 0x100754000)
---60044--    reading syms   from primary file (369 640)
---60044-- /usr/lib/libc++.1.dylib (rx at 0x100770000, rw at 0x1007c4000)
---60044--    reading syms   from primary file (2086 1198)
---60044-- REDIR: 0x1006181e0 (libsystem_platform.dylib:_platform_memcmp) redirected to 0x1001398fb (_platform_memcmp)
---60044-- REDIR: 0x100617a40 (libsystem_platform.dylib:_platform_strncmp) redirected to 0x100139295 (_platform_strncmp)
---60044-- REDIR: 0x100617640 (libsystem_platform.dylib:_platform_strcmp) redirected to 0x10013930f (_platform_strcmp)
---60044-- REDIR: 0x10054cfd0 (libsystem_malloc.dylib:malloc) redirected to 0x1001375c0 (malloc)
---60044-- REDIR: 0x10054f294 (libsystem_malloc.dylib:calloc) redirected to 0x100137bd6 (calloc)
---60044-- REDIR: 0x10054f13d (libsystem_malloc.dylib:realloc) redirected to 0x100137f54 (realloc)
---60044-- REDIR: 0x10054f45d (libsystem_malloc.dylib:malloc_default_zone) redirected to 0x100138909 (malloc_default_zone)
---60044-- REDIR: 0x10054d002 (libsystem_malloc.dylib:malloc_zone_malloc) redirected to 0x100137828 (malloc_zone_malloc)
---60044-- REDIR: 0x10054f2c9 (libsystem_malloc.dylib:malloc_zone_calloc) redirected to 0x100137dc2 (malloc_zone_calloc)
---60044-- REDIR: 0x10054f465 (libsystem_malloc.dylib:malloc_zone_from_ptr) redirected to 0x10013894a (malloc_zone_from_ptr)
---60044-- REDIR: 0x10054dba1 (libsystem_malloc.dylib:free) redirected to 0x10013799c (free)
---60044-- REDIR: 0x100618140 (libsystem_platform.dylib:_platform_strchr$VARIANT$Haswell) redirected to 0x100138bbd (_platform_strchr$VARIANT$Haswell)
---60044-- REDIR: 0x100617fe0 (libsystem_platform.dylib:_platform_memchr$VARIANT$Haswell) redirected to 0x100139390 (_platform_memchr$VARIANT$Haswell)
---60044-- REDIR: 0x10040f5b1 (libsystem_c.dylib:__strcpy_chk) redirected to 0x100138e6d (__strcpy_chk)
-==60044== 
-==60044== HEAP SUMMARY:
-==60044==     in use at exit: 21,688 bytes in 157 blocks
-==60044==   total heap usage: 174 allocs, 17 frees, 42,898 bytes allocated
-==60044== 
-==60044== Searching for pointers to 157 not-freed blocks
-==60044== Checked 9,274,984 bytes
-==60044== 
-==60044== 2,048 bytes in 1 blocks are still reachable in loss record 34 of 38
-==60044==    at 0x100137635: malloc (in /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
-==60044==    by 0x1007065C6: foreach_realized_class(bool ( block_pointer)(objc_class*)) (in /usr/lib/libobjc.A.dylib)
-==60044==    by 0x100706557: protocol_addProperty_nolock(property_list_t*&, char const*, objc_property_attribute_t const*, unsigned int) (in /usr/lib/libobjc.A.dylib)
-==60044==    by 0x100709FA5: _base_objc_setAssociatedObject(objc_object*, void const*, objc_object*, objc_AssociationPolicy) (in /usr/lib/libobjc.A.dylib)
-==60044==    by 0x1006F8B3E: class_getInstanceMethod (in /usr/lib/libobjc.A.dylib)
-==60044==    by 0x1006EE875: NXHashInsert (in /usr/lib/libobjc.A.dylib)
-==60044==    by 0x1007004A3: class_rw_t::extAlloc(class_ro_t const*, bool) (in /usr/lib/libobjc.A.dylib)
-==60044==    by 0x1006FFFF2: initializeNonMetaClass (in /usr/lib/libobjc.A.dylib)
-==60044==    by 0x1006FFFCB: initializeNonMetaClass (in /usr/lib/libobjc.A.dylib)
-==60044==    by 0x1006FFFCB: initializeNonMetaClass (in /usr/lib/libobjc.A.dylib)
-==60044==    by 0x1006FFFCB: initializeNonMetaClass (in /usr/lib/libobjc.A.dylib)
-==60044==    by 0x1006EC9AE: map_images_nolock (in /usr/lib/libobjc.A.dylib)
-==60044== 
-==60044== 4,096 bytes in 1 blocks are still reachable in loss record 37 of 38
-==60044==    at 0x100137635: malloc (in /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
-==60044==    by 0x1003CE4BD: __smakebuf (in /usr/lib/system/libsystem_c.dylib)
-==60044==    by 0x1003D1A86: __srefill0 (in /usr/lib/system/libsystem_c.dylib)
-==60044==    by 0x1003CC8C6: __fread (in /usr/lib/system/libsystem_c.dylib)
-==60044==    by 0x1003CC80A: fread (in /usr/lib/system/libsystem_c.dylib)
-==60044==    by 0x100002402: yy_get_next_buffer (lex.yy.c:1208)
-==60044==    by 0x100001956: yylex (lex.yy.c:1050)
-==60044==    by 0x10000322B: main (lex.l:168)
-==60044== 
-==60044== LEAK SUMMARY:
-==60044==    definitely lost: 0 bytes in 0 blocks
-==60044==    indirectly lost: 0 bytes in 0 blocks
-==60044==      possibly lost: 0 bytes in 0 blocks
-==60044==    still reachable: 6,144 bytes in 2 blocks
-==60044==         suppressed: 15,544 bytes in 155 blocks
-==60044== 
-==60044== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 7 from 7)
---60044-- 
---60044-- used_suppression:      1 OSX1015:Leak01-printf /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/default.supp:801 suppressed: 4,096 bytes in 1 blocks
---60044-- used_suppression:      2 OSX1015:dyld-4 /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/default.supp:751 suppressed: 4,128 bytes in 2 blocks
---60044-- used_suppression:     16 OSX1015:dyld-7 /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/default.supp:781 suppressed: 2,384 bytes in 72 blocks
---60044-- used_suppression:     16 OSX1015:dyld-8 /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/default.supp:791 suppressed: 4,864 bytes in 77 blocks
---60044-- used_suppression:      1 OSX1015:dyld-5 /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/default.supp:761 suppressed: 72 bytes in 3 blocks
---60044-- used_suppression:      1 OSX1015:dyld-1 /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/default.supp:726
---60044-- used_suppression:      2 OSX1015:dyld-3 /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/default.supp:742
---60044-- used_suppression:      1 OSX1015:dyld-2 /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/default.supp:733
-==60044== 
-==60044== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 7 from 7)
+==41319== Memcheck, a memory error detector
+==41319== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==41319== Using Valgrind-3.17.0.GIT-6049595824-20200908 and LibVEX; rerun with -h for copyright info
+==41319== Command: ./lang input_correto1.txt
+==41319== Parent PID: 20253
+==41319== 
+--41319-- 
+--41319-- Valgrind options:
+--41319--    -v
+--41319--    --tool=memcheck
+--41319--    --leak-check=full
+--41319--    --show-leak-kinds=all
+--41319--    --track-origins=yes
+--41319--    --log-file=logfile.out
+--41319-- Output from sysctl({CTL_KERN,KERN_VERSION}):
+--41319--   Darwin Kernel Version 19.2.0: Sat Nov  9 03:47:04 PST 2019; root:xnu-6153.61.1~20/RELEASE_X86_64
+--41319-- Arch and hwcaps: AMD64, LittleEndian, amd64-cx16-lzcnt-rdtscp-sse3-ssse3-avx-avx2-bmi-f16c-rdrand
+--41319-- Page sizes: currently 4096, max supported 4096
+--41319-- Valgrind library directory: /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind
+--41319-- ./lang (rx at 0x100000000, rw at 0x10000c000)
+--41319--    reading syms   from primary file (65 356)
+--41319--    dSYM= ./lang.dSYM/Contents/Resources/DWARF/lang
+--41319--    reading dwarf3 from dsyms file
+--41319-- /usr/lib/dyld (rx at 0x100037000, rw at 0x1000c8000)
+--41319--    reading syms   from primary file (5 2716)
+--41319-- Scheduler: using generic scheduler lock implementation.
+--41319-- Reading suppressions file: /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/default.supp
+==41319== embedded gdbserver: reading from /var/folders/_w/hb6j306x35qdjp8cxmndvwl00000gn/T//vgdb-pipe-from-vgdb-to-41319-by-fredericodib-on-???
+==41319== embedded gdbserver: writing to   /var/folders/_w/hb6j306x35qdjp8cxmndvwl00000gn/T//vgdb-pipe-to-vgdb-from-41319-by-fredericodib-on-???
+==41319== embedded gdbserver: shared mem   /var/folders/_w/hb6j306x35qdjp8cxmndvwl00000gn/T//vgdb-pipe-shared-mem-vgdb-41319-by-fredericodib-on-???
+==41319== 
+==41319== TO CONTROL THIS PROCESS USING vgdb (which you probably
+==41319== don't want to do, unless you know exactly what you're doing,
+==41319== or are doing some strange experiment):
+==41319==   /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/../../bin/vgdb --pid=41319 ...command...
+==41319== 
+==41319== TO DEBUG THIS PROCESS USING GDB: start GDB like this
+==41319==   /path/to/gdb ./lang
+==41319== and then give GDB the following command
+==41319==   target remote | /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/../../bin/vgdb --pid=41319
+==41319== --pid is optional if only one valgrind process is running
+==41319== 
+--41319-- REDIR: 0x100088520 (dyld:strcmp) redirected to 0x25805844d (???)
+--41319-- REDIR: 0x100082810 (dyld:arc4random) redirected to 0x2580584eb (???)
+--41319-- REDIR: 0x100087900 (dyld:strlen) redirected to 0x25805841c (???)
+--41319-- REDIR: 0x100088820 (dyld:strcpy) redirected to 0x258058469 (???)
+--41319-- REDIR: 0x1000859a4 (dyld:strcat) redirected to 0x25805842d (???)
+--41319-- REDIR: 0x1000876fe (dyld:strlcat) redirected to 0x258058486 (???)
+--41319-- /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_core-amd64-darwin.so (rx at 0x10013b000, rw at 0x10013f000)
+--41319--    reading syms   from primary file (3 48)
+--41319--    dSYM= /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_core-amd64-darwin.so.dSYM/Contents/Resources/DWARF/vgpreload_core-amd64-darwin.so
+--41319-- /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so (rx at 0x100141000, rw at 0x100148000)
+--41319--    reading syms   from primary file (75 57)
+--41319--    dSYM= /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so.dSYM/Contents/Resources/DWARF/vgpreload_memcheck-amd64-darwin.so
+--41319-- /usr/lib/libSystem.B.dylib (rx at 0x10014d000, rw at 0x10014f000)
+--41319--    reading syms   from primary file (29 8)
+--41319-- /usr/lib/system/libcache.dylib (rx at 0x100157000, rw at 0x10015d000)
+--41319--    reading syms   from primary file (32 29)
+--41319-- /usr/lib/system/libcommonCrypto.dylib (rx at 0x100164000, rw at 0x100170000)
+--41319--    reading syms   from primary file (242 172)
+--41319-- /usr/lib/system/libcompiler_rt.dylib (rx at 0x100180000, rw at 0x100188000)
+--41319--    reading syms   from primary file (505 8)
+--41319-- /usr/lib/system/libcopyfile.dylib (rx at 0x100197000, rw at 0x1001a1000)
+--41319--    reading syms   from primary file (11 39)
+--41319-- /usr/lib/system/libcorecrypto.dylib (rx at 0x1001a9000, rw at 0x100241000)
+--41319--    reading syms   from primary file (575 851)
+--41319-- /usr/lib/system/libdispatch.dylib (rx at 0x100261000, rw at 0x1002a3000)
+--41319--    reading syms   from primary file (328 1419)
+--41319-- /usr/lib/system/libdyld.dylib (rx at 0x1002dd000, rw at 0x100313000)
+--41319--    reading syms   from primary file (119 1463)
+--41319-- /usr/lib/system/libkeymgr.dylib (rx at 0x10033c000, rw at 0x10033d000)
+--41319--    reading syms   from primary file (11 2)
+--41319-- /usr/lib/system/libmacho.dylib (rx at 0x10034c000, rw at 0x100352000)
+--41319--    reading syms   from primary file (105 2)
+--41319-- /usr/lib/system/libquarantine.dylib (rx at 0x10035a000, rw at 0x10035d000)
+--41319--    reading syms   from primary file (88 12)
+--41319-- /usr/lib/system/libremovefile.dylib (rx at 0x100365000, rw at 0x100367000)
+--41319--    reading syms   from primary file (12 8)
+--41319-- /usr/lib/system/libsystem_asl.dylib (rx at 0x10036e000, rw at 0x100386000)
+--41319--    reading syms   from primary file (219 234)
+--41319-- /usr/lib/system/libsystem_blocks.dylib (rx at 0x100395000, rw at 0x100396000)
+--41319--    reading syms   from primary file (21 8)
+--41319-- /usr/lib/system/libsystem_c.dylib (rx at 0x10039d000, rw at 0x100425000)
+--41319--    reading syms   from primary file (1346 892)
+--41319-- /usr/lib/system/libsystem_configuration.dylib (rx at 0x10044f000, rw at 0x100453000)
+--41319--    reading syms   from primary file (36 68)
+--41319-- /usr/lib/system/libsystem_coreservices.dylib (rx at 0x10045c000, rw at 0x100460000)
+--41319--    reading syms   from primary file (14 47)
+--41319-- /usr/lib/system/libsystem_darwin.dylib (rx at 0x100468000, rw at 0x100471000)
+--41319--    reading syms   from primary file (63 562)
+--41319-- /usr/lib/system/libsystem_dnssd.dylib (rx at 0x10047f000, rw at 0x100487000)
+--41319--    reading syms   from primary file (39 25)
+--41319-- /usr/lib/system/libsystem_featureflags.dylib (rx at 0x10048f000, rw at 0x100491000)
+--41319--    reading syms   from primary file (1 12)
+--41319-- /usr/lib/system/libsystem_info.dylib (rx at 0x100498000, rw at 0x1004e6000)
+--41319--    reading syms   from primary file (427 718)
+--41319-- /usr/lib/system/libsystem_m.dylib (rx at 0x1004fe000, rw at 0x100546000)
+--41319--    reading syms   from primary file (811 1)
+--41319-- /usr/lib/system/libsystem_malloc.dylib (rx at 0x100557000, rw at 0x10057f000)
+--41319--    reading syms   from primary file (98 475)
+--41319-- /usr/lib/system/libsystem_networkextension.dylib (rx at 0x10058f000, rw at 0x10059d000)
+--41319--    reading syms   from primary file (118 242)
+--41319-- /usr/lib/system/libsystem_notify.dylib (rx at 0x1005ac000, rw at 0x1005b6000)
+--41319--    reading syms   from primary file (23 1)
+--41319-- /usr/lib/system/libsystem_sandbox.dylib (rx at 0x1005be000, rw at 0x1005c3000)
+--41319--    reading syms   from primary file (112 23)
+--41319-- /usr/lib/system/libsystem_secinit.dylib (rx at 0x1005cc000, rw at 0x1005cf000)
+--41319--    reading syms   from primary file (5 20)
+--41319-- /usr/lib/system/libsystem_kernel.dylib (rx at 0x1005d6000, rw at 0x100603000)
+--41319--    reading syms   from primary file (1356 227)
+--41319-- /usr/lib/system/libsystem_platform.dylib (rx at 0x100621000, rw at 0x10062b000)
+--41319--    reading syms   from primary file (168 103)
+--41319-- /usr/lib/system/libsystem_pthread.dylib (rx at 0x100635000, rw at 0x100640000)
+--41319--    reading syms   from primary file (189 143)
+--41319-- /usr/lib/system/libsystem_symptoms.dylib (rx at 0x10064d000, rw at 0x100655000)
+--41319--    reading syms   from primary file (10 86)
+--41319-- /usr/lib/system/libsystem_trace.dylib (rx at 0x10065d000, rw at 0x100674000)
+--41319--    reading syms   from primary file (131 257)
+--41319-- /usr/lib/system/libunwind.dylib (rx at 0x100686000, rw at 0x10068c000)
+--41319--    reading syms   from primary file (102 52)
+--41319-- /usr/lib/system/libxpc.dylib (rx at 0x100695000, rw at 0x1006ca000)
+--41319--    reading syms   from primary file (620 1287)
+--41319-- /usr/lib/libobjc.A.dylib (rx at 0x1006f5000, rw at 0x100727000)
+--41319--    reading syms   from primary file (382 727)
+--41319-- /usr/lib/libc++abi.dylib (rx at 0x10074a000, rw at 0x10075f000)
+--41319--    reading syms   from primary file (369 640)
+--41319-- /usr/lib/libc++.1.dylib (rx at 0x10077b000, rw at 0x1007cf000)
+--41319--    reading syms   from primary file (2086 1198)
+--41319-- REDIR: 0x1006231e0 (libsystem_platform.dylib:_platform_memcmp) redirected to 0x1001448fb (_platform_memcmp)
+--41319-- REDIR: 0x100622a40 (libsystem_platform.dylib:_platform_strncmp) redirected to 0x100144295 (_platform_strncmp)
+--41319-- REDIR: 0x100622640 (libsystem_platform.dylib:_platform_strcmp) redirected to 0x10014430f (_platform_strcmp)
+--41319-- REDIR: 0x100557fd0 (libsystem_malloc.dylib:malloc) redirected to 0x1001425c0 (malloc)
+--41319-- REDIR: 0x10055a294 (libsystem_malloc.dylib:calloc) redirected to 0x100142bd6 (calloc)
+--41319-- REDIR: 0x10055a13d (libsystem_malloc.dylib:realloc) redirected to 0x100142f54 (realloc)
+--41319-- REDIR: 0x10055a45d (libsystem_malloc.dylib:malloc_default_zone) redirected to 0x100143909 (malloc_default_zone)
+--41319-- REDIR: 0x100558002 (libsystem_malloc.dylib:malloc_zone_malloc) redirected to 0x100142828 (malloc_zone_malloc)
+--41319-- REDIR: 0x10055a2c9 (libsystem_malloc.dylib:malloc_zone_calloc) redirected to 0x100142dc2 (malloc_zone_calloc)
+--41319-- REDIR: 0x10055a465 (libsystem_malloc.dylib:malloc_zone_from_ptr) redirected to 0x10014394a (malloc_zone_from_ptr)
+--41319-- REDIR: 0x100558ba1 (libsystem_malloc.dylib:free) redirected to 0x10014299c (free)
+--41319-- REDIR: 0x100623140 (libsystem_platform.dylib:_platform_strchr$VARIANT$Haswell) redirected to 0x100143bbd (_platform_strchr$VARIANT$Haswell)
+--41319-- REDIR: 0x100622fe0 (libsystem_platform.dylib:_platform_memchr$VARIANT$Haswell) redirected to 0x100144390 (_platform_memchr$VARIANT$Haswell)
+--41319-- REDIR: 0x10041a5b1 (libsystem_c.dylib:__strcpy_chk) redirected to 0x100143e6d (__strcpy_chk)
+==41319== Invalid read of size 16
+==41319==    at 0x100622C92: _platform_strlen (in /usr/lib/system/libsystem_platform.dylib)
+==41319==    by 0x1003E077A: __vfprintf (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x100405E1A: __v2printf (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1003DE48D: vfprintf_l (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1003DC5FD: printf (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1000099E8: print_symbol_table (lang.y:960)
+==41319==    by 0x10000886A: main (lang.y:690)
+==41319==  Address 0x100837920 is 0 bytes inside a block of size 6 free'd
+==41319==    at 0x100142A0D: free (in /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==41319==    by 0x100004919: yyparse (lang.y:152)
+==41319==    by 0x100008832: main (lang.y:686)
+==41319==  Block was alloc'd at
+==41319==    at 0x100142635: malloc (in /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==41319==    by 0x1003F3FEC: strdup (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x100002150: yylex (lang.l:283)
+==41319==    by 0x100004188: yyparse (y.tab.c:1551)
+==41319==    by 0x100008832: main (lang.y:686)
+==41319== 
+==41319== Invalid read of size 1
+==41319==    at 0x10014439D: _platform_memchr$VARIANT$Haswell (in /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==41319==    by 0x1003D8901: __sfvwrite (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1003E2026: __vfprintf (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x100405E1A: __v2printf (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1003DE48D: vfprintf_l (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1003DC5FD: printf (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1000099E8: print_symbol_table (lang.y:960)
+==41319==    by 0x10000886A: main (lang.y:690)
+==41319==  Address 0x100837920 is 0 bytes inside a block of size 6 free'd
+==41319==    at 0x100142A0D: free (in /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==41319==    by 0x100004919: yyparse (lang.y:152)
+==41319==    by 0x100008832: main (lang.y:686)
+==41319==  Block was alloc'd at
+==41319==    at 0x100142635: malloc (in /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==41319==    by 0x1003F3FEC: strdup (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x100002150: yylex (lang.l:283)
+==41319==    by 0x100004188: yyparse (y.tab.c:1551)
+==41319==    by 0x100008832: main (lang.y:686)
+==41319== 
+==41319== Invalid read of size 1
+==41319==    at 0x100622802: _platform_memmove$VARIANT$Haswell (in /usr/lib/system/libsystem_platform.dylib)
+==41319==    by 0x1003D8980: __sfvwrite (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1003E2026: __vfprintf (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x100405E1A: __v2printf (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1003DE48D: vfprintf_l (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1003DC5FD: printf (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1000099E8: print_symbol_table (lang.y:960)
+==41319==    by 0x10000886A: main (lang.y:690)
+==41319==  Address 0x100837920 is 0 bytes inside a block of size 6 free'd
+==41319==    at 0x100142A0D: free (in /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==41319==    by 0x100004919: yyparse (lang.y:152)
+==41319==    by 0x100008832: main (lang.y:686)
+==41319==  Block was alloc'd at
+==41319==    at 0x100142635: malloc (in /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==41319==    by 0x1003F3FEC: strdup (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x100002150: yylex (lang.l:283)
+==41319==    by 0x100004188: yyparse (y.tab.c:1551)
+==41319==    by 0x100008832: main (lang.y:686)
+==41319== 
+==41319== Invalid read of size 1
+==41319==    at 0x100622810: _platform_memmove$VARIANT$Haswell (in /usr/lib/system/libsystem_platform.dylib)
+==41319==    by 0x1003D8980: __sfvwrite (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1003E2026: __vfprintf (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x100405E1A: __v2printf (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1003DE48D: vfprintf_l (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1003DC5FD: printf (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1000099E8: print_symbol_table (lang.y:960)
+==41319==    by 0x10000886A: main (lang.y:690)
+==41319==  Address 0x100837921 is 1 bytes inside a block of size 6 free'd
+==41319==    at 0x100142A0D: free (in /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==41319==    by 0x100004919: yyparse (lang.y:152)
+==41319==    by 0x100008832: main (lang.y:686)
+==41319==  Block was alloc'd at
+==41319==    at 0x100142635: malloc (in /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==41319==    by 0x1003F3FEC: strdup (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x100002150: yylex (lang.l:283)
+==41319==    by 0x100004188: yyparse (y.tab.c:1551)
+==41319==    by 0x100008832: main (lang.y:686)
+==41319== 
+==41319== Invalid read of size 8
+==41319==    at 0x1006227E9: _platform_memmove$VARIANT$Haswell (in /usr/lib/system/libsystem_platform.dylib)
+==41319==    by 0x1003D8980: __sfvwrite (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1003E2026: __vfprintf (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x100405E1A: __v2printf (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1003DE48D: vfprintf_l (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1003DC5FD: printf (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1000099E8: print_symbol_table (lang.y:960)
+==41319==    by 0x10000886A: main (lang.y:690)
+==41319==  Address 0x100839880 is 0 bytes inside a block of size 15 free'd
+==41319==    at 0x100142A0D: free (in /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==41319==    by 0x100004919: yyparse (lang.y:152)
+==41319==    by 0x100008832: main (lang.y:686)
+==41319==  Block was alloc'd at
+==41319==    at 0x100142635: malloc (in /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==41319==    by 0x1003F3FEC: strdup (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x100002150: yylex (lang.l:283)
+==41319==    by 0x100004188: yyparse (y.tab.c:1551)
+==41319==    by 0x100008832: main (lang.y:686)
+==41319== 
+==41319== Invalid read of size 8
+==41319==    at 0x1006227EC: _platform_memmove$VARIANT$Haswell (in /usr/lib/system/libsystem_platform.dylib)
+==41319==    by 0x1003D8980: __sfvwrite (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1003E2026: __vfprintf (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x100405E1A: __v2printf (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1003DE48D: vfprintf_l (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1003DC5FD: printf (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1000099E8: print_symbol_table (lang.y:960)
+==41319==    by 0x10000886A: main (lang.y:690)
+==41319==  Address 0x100839886 is 6 bytes inside a block of size 15 free'd
+==41319==    at 0x100142A0D: free (in /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==41319==    by 0x100004919: yyparse (lang.y:152)
+==41319==    by 0x100008832: main (lang.y:686)
+==41319==  Block was alloc'd at
+==41319==    at 0x100142635: malloc (in /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==41319==    by 0x1003F3FEC: strdup (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x100002150: yylex (lang.l:283)
+==41319==    by 0x100004188: yyparse (y.tab.c:1551)
+==41319==    by 0x100008832: main (lang.y:686)
+==41319== 
+==41319== Invalid free() / delete / delete[] / realloc()
+==41319==    at 0x100142A0D: free (in /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==41319==    by 0x100009CCF: free_symbol_table (lang.y:977)
+==41319==    by 0x100008883: main (lang.y:695)
+==41319==  Address 0x100837920 is 0 bytes inside a block of size 6 free'd
+==41319==    at 0x100142A0D: free (in /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==41319==    by 0x100004919: yyparse (lang.y:152)
+==41319==    by 0x100008832: main (lang.y:686)
+==41319==  Block was alloc'd at
+==41319==    at 0x100142635: malloc (in /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==41319==    by 0x1003F3FEC: strdup (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x100002150: yylex (lang.l:283)
+==41319==    by 0x100004188: yyparse (y.tab.c:1551)
+==41319==    by 0x100008832: main (lang.y:686)
+==41319== 
+==41319== 
+==41319== HEAP SUMMARY:
+==41319==     in use at exit: 21,754 bytes in 160 blocks
+==41319==   total heap usage: 413 allocs, 259 frees, 49,048 bytes allocated
+==41319== 
+==41319== Searching for pointers to 160 not-freed blocks
+==41319== Checked 9,279,248 bytes
+==41319== 
+==41319== 2 bytes in 1 blocks are indirectly lost in loss record 1 of 41
+==41319==    at 0x100142635: malloc (in /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==41319==    by 0x1003F3FEC: strdup (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x10000655A: yyparse (lang.y:634)
+==41319==    by 0x100008832: main (lang.y:686)
+==41319== 
+==41319== 42 (40 direct, 2 indirect) bytes in 1 blocks are definitely lost in loss record 16 of 41
+==41319==    at 0x100142C90: calloc (in /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==41319==    by 0x1000074FA: add_node0 (lang.y:733)
+==41319==    by 0x100006536: yyparse (lang.y:632)
+==41319==    by 0x100008832: main (lang.y:686)
+==41319== 
+==41319== 2,048 bytes in 1 blocks are still reachable in loss record 37 of 41
+==41319==    at 0x100142635: malloc (in /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==41319==    by 0x1007115C6: foreach_realized_class(bool ( block_pointer)(objc_class*)) (in /usr/lib/libobjc.A.dylib)
+==41319==    by 0x100711557: protocol_addProperty_nolock(property_list_t*&, char const*, objc_property_attribute_t const*, unsigned int) (in /usr/lib/libobjc.A.dylib)
+==41319==    by 0x100714FA5: _base_objc_setAssociatedObject(objc_object*, void const*, objc_object*, objc_AssociationPolicy) (in /usr/lib/libobjc.A.dylib)
+==41319==    by 0x100703B3E: class_getInstanceMethod (in /usr/lib/libobjc.A.dylib)
+==41319==    by 0x1006F9875: NXHashInsert (in /usr/lib/libobjc.A.dylib)
+==41319==    by 0x10070B4A3: class_rw_t::extAlloc(class_ro_t const*, bool) (in /usr/lib/libobjc.A.dylib)
+==41319==    by 0x10070AFF2: initializeNonMetaClass (in /usr/lib/libobjc.A.dylib)
+==41319==    by 0x10070AFCB: initializeNonMetaClass (in /usr/lib/libobjc.A.dylib)
+==41319==    by 0x10070AFCB: initializeNonMetaClass (in /usr/lib/libobjc.A.dylib)
+==41319==    by 0x10070AFCB: initializeNonMetaClass (in /usr/lib/libobjc.A.dylib)
+==41319==    by 0x1006F79AE: map_images_nolock (in /usr/lib/libobjc.A.dylib)
+==41319== 
+==41319== 4,096 bytes in 1 blocks are still reachable in loss record 41 of 41
+==41319==    at 0x100142635: malloc (in /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==41319==    by 0x1003D94BD: __smakebuf (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1003DCA86: __srefill0 (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1003D78C6: __fread (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1003D780A: fread (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x100002EC2: yy_get_next_buffer (lex.yy.c:1404)
+==41319==    by 0x1000023B4: yylex (lex.yy.c:1246)
+==41319==    by 0x100004188: yyparse (y.tab.c:1551)
+==41319==    by 0x100008832: main (lang.y:686)
+==41319== 
+==41319== LEAK SUMMARY:
+==41319==    definitely lost: 40 bytes in 1 blocks
+==41319==    indirectly lost: 2 bytes in 1 blocks
+==41319==      possibly lost: 0 bytes in 0 blocks
+==41319==    still reachable: 6,144 bytes in 2 blocks
+==41319==         suppressed: 15,568 bytes in 156 blocks
+==41319== 
+==41319== ERROR SUMMARY: 91 errors from 8 contexts (suppressed: 8 from 8)
+==41319== 
+==41319== 2 errors in context 1 of 8:
+==41319== Invalid read of size 8
+==41319==    at 0x1006227EC: _platform_memmove$VARIANT$Haswell (in /usr/lib/system/libsystem_platform.dylib)
+==41319==    by 0x1003D8980: __sfvwrite (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1003E2026: __vfprintf (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x100405E1A: __v2printf (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1003DE48D: vfprintf_l (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1003DC5FD: printf (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1000099E8: print_symbol_table (lang.y:960)
+==41319==    by 0x10000886A: main (lang.y:690)
+==41319==  Address 0x100839886 is 6 bytes inside a block of size 15 free'd
+==41319==    at 0x100142A0D: free (in /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==41319==    by 0x100004919: yyparse (lang.y:152)
+==41319==    by 0x100008832: main (lang.y:686)
+==41319==  Block was alloc'd at
+==41319==    at 0x100142635: malloc (in /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==41319==    by 0x1003F3FEC: strdup (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x100002150: yylex (lang.l:283)
+==41319==    by 0x100004188: yyparse (y.tab.c:1551)
+==41319==    by 0x100008832: main (lang.y:686)
+==41319== 
+==41319== 
+==41319== 2 errors in context 2 of 8:
+==41319== Invalid read of size 8
+==41319==    at 0x1006227E9: _platform_memmove$VARIANT$Haswell (in /usr/lib/system/libsystem_platform.dylib)
+==41319==    by 0x1003D8980: __sfvwrite (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1003E2026: __vfprintf (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x100405E1A: __v2printf (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1003DE48D: vfprintf_l (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1003DC5FD: printf (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1000099E8: print_symbol_table (lang.y:960)
+==41319==    by 0x10000886A: main (lang.y:690)
+==41319==  Address 0x100839880 is 0 bytes inside a block of size 15 free'd
+==41319==    at 0x100142A0D: free (in /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==41319==    by 0x100004919: yyparse (lang.y:152)
+==41319==    by 0x100008832: main (lang.y:686)
+==41319==  Block was alloc'd at
+==41319==    at 0x100142635: malloc (in /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==41319==    by 0x1003F3FEC: strdup (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x100002150: yylex (lang.l:283)
+==41319==    by 0x100004188: yyparse (y.tab.c:1551)
+==41319==    by 0x100008832: main (lang.y:686)
+==41319== 
+==41319== 
+==41319== 6 errors in context 3 of 8:
+==41319== Invalid free() / delete / delete[] / realloc()
+==41319==    at 0x100142A0D: free (in /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==41319==    by 0x100009CCF: free_symbol_table (lang.y:977)
+==41319==    by 0x100008883: main (lang.y:695)
+==41319==  Address 0x100837920 is 0 bytes inside a block of size 6 free'd
+==41319==    at 0x100142A0D: free (in /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==41319==    by 0x100004919: yyparse (lang.y:152)
+==41319==    by 0x100008832: main (lang.y:686)
+==41319==  Block was alloc'd at
+==41319==    at 0x100142635: malloc (in /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==41319==    by 0x1003F3FEC: strdup (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x100002150: yylex (lang.l:283)
+==41319==    by 0x100004188: yyparse (y.tab.c:1551)
+==41319==    by 0x100008832: main (lang.y:686)
+==41319== 
+==41319== 
+==41319== 6 errors in context 4 of 8:
+==41319== Invalid read of size 16
+==41319==    at 0x100622C92: _platform_strlen (in /usr/lib/system/libsystem_platform.dylib)
+==41319==    by 0x1003E077A: __vfprintf (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x100405E1A: __v2printf (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1003DE48D: vfprintf_l (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1003DC5FD: printf (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1000099E8: print_symbol_table (lang.y:960)
+==41319==    by 0x10000886A: main (lang.y:690)
+==41319==  Address 0x100837920 is 0 bytes inside a block of size 6 free'd
+==41319==    at 0x100142A0D: free (in /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==41319==    by 0x100004919: yyparse (lang.y:152)
+==41319==    by 0x100008832: main (lang.y:686)
+==41319==  Block was alloc'd at
+==41319==    at 0x100142635: malloc (in /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==41319==    by 0x1003F3FEC: strdup (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x100002150: yylex (lang.l:283)
+==41319==    by 0x100004188: yyparse (y.tab.c:1551)
+==41319==    by 0x100008832: main (lang.y:686)
+==41319== 
+==41319== 
+==41319== 11 errors in context 5 of 8:
+==41319== Invalid read of size 1
+==41319==    at 0x100622810: _platform_memmove$VARIANT$Haswell (in /usr/lib/system/libsystem_platform.dylib)
+==41319==    by 0x1003D8980: __sfvwrite (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1003E2026: __vfprintf (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x100405E1A: __v2printf (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1003DE48D: vfprintf_l (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1003DC5FD: printf (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1000099E8: print_symbol_table (lang.y:960)
+==41319==    by 0x10000886A: main (lang.y:690)
+==41319==  Address 0x100837921 is 1 bytes inside a block of size 6 free'd
+==41319==    at 0x100142A0D: free (in /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==41319==    by 0x100004919: yyparse (lang.y:152)
+==41319==    by 0x100008832: main (lang.y:686)
+==41319==  Block was alloc'd at
+==41319==    at 0x100142635: malloc (in /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==41319==    by 0x1003F3FEC: strdup (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x100002150: yylex (lang.l:283)
+==41319==    by 0x100004188: yyparse (y.tab.c:1551)
+==41319==    by 0x100008832: main (lang.y:686)
+==41319== 
+==41319== 
+==41319== 14 errors in context 6 of 8:
+==41319== Invalid read of size 1
+==41319==    at 0x100622802: _platform_memmove$VARIANT$Haswell (in /usr/lib/system/libsystem_platform.dylib)
+==41319==    by 0x1003D8980: __sfvwrite (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1003E2026: __vfprintf (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x100405E1A: __v2printf (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1003DE48D: vfprintf_l (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1003DC5FD: printf (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1000099E8: print_symbol_table (lang.y:960)
+==41319==    by 0x10000886A: main (lang.y:690)
+==41319==  Address 0x100837920 is 0 bytes inside a block of size 6 free'd
+==41319==    at 0x100142A0D: free (in /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==41319==    by 0x100004919: yyparse (lang.y:152)
+==41319==    by 0x100008832: main (lang.y:686)
+==41319==  Block was alloc'd at
+==41319==    at 0x100142635: malloc (in /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==41319==    by 0x1003F3FEC: strdup (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x100002150: yylex (lang.l:283)
+==41319==    by 0x100004188: yyparse (y.tab.c:1551)
+==41319==    by 0x100008832: main (lang.y:686)
+==41319== 
+==41319== 
+==41319== 49 errors in context 7 of 8:
+==41319== Invalid read of size 1
+==41319==    at 0x10014439D: _platform_memchr$VARIANT$Haswell (in /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==41319==    by 0x1003D8901: __sfvwrite (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1003E2026: __vfprintf (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x100405E1A: __v2printf (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1003DE48D: vfprintf_l (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1003DC5FD: printf (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x1000099E8: print_symbol_table (lang.y:960)
+==41319==    by 0x10000886A: main (lang.y:690)
+==41319==  Address 0x100837920 is 0 bytes inside a block of size 6 free'd
+==41319==    at 0x100142A0D: free (in /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==41319==    by 0x100004919: yyparse (lang.y:152)
+==41319==    by 0x100008832: main (lang.y:686)
+==41319==  Block was alloc'd at
+==41319==    at 0x100142635: malloc (in /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==41319==    by 0x1003F3FEC: strdup (in /usr/lib/system/libsystem_c.dylib)
+==41319==    by 0x100002150: yylex (lang.l:283)
+==41319==    by 0x100004188: yyparse (y.tab.c:1551)
+==41319==    by 0x100008832: main (lang.y:686)
+==41319== 
+--41319-- 
+--41319-- used_suppression:      1 OSX1015:Leak01-printf /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/default.supp:801 suppressed: 4,096 bytes in 1 blocks
+--41319-- used_suppression:      3 OSX1015:dyld-4 /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/default.supp:751 suppressed: 4,152 bytes in 3 blocks
+--41319-- used_suppression:     16 OSX1015:dyld-7 /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/default.supp:781 suppressed: 2,384 bytes in 72 blocks
+--41319-- used_suppression:     16 OSX1015:dyld-8 /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/default.supp:791 suppressed: 4,864 bytes in 77 blocks
+--41319-- used_suppression:      1 OSX1015:dyld-5 /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/default.supp:761 suppressed: 72 bytes in 3 blocks
+--41319-- used_suppression:      1 OSX1015:dyld-1 /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/default.supp:726
+--41319-- used_suppression:      2 OSX1015:dyld-3 /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/default.supp:742
+--41319-- used_suppression:      1 OSX1015:dyld-2 /usr/local/Cellar/valgrind/HEAD-6049595/lib/valgrind/default.supp:733
+==41319== 
+==41319== ERROR SUMMARY: 91 errors from 8 contexts (suppressed: 8 from 8)
