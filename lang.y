@@ -81,6 +81,7 @@ struct scope* get_last_scope();
 void add_symbol_table(char *id, int type);
 struct symbol_node* find_symbol_table(char *id);
 char* generate_symbol_key(char *id); // Gera uma chave concatenando scope_name + @ + id
+int get_id_type(char *id);
 
 void print_symbol_table();
 void free_symbol_table();
@@ -210,8 +211,9 @@ var:
 
 func:
   TYPESTRING ID                                         { add_symbol_table($2, 2); add_scope($2, 2); }
-  '(' paramsList ')' '{' contentList '}'                { 
-                                                          $$ = add_node2('F', $5, $8); 
+  '(' paramsList ')'                                    {;}
+  '{' contentList '}'                                   { 
+                                                          $$ = add_node2('F', $5, $9); 
                                                           $$->type = 2;
                                                           $$->value = (char *) strdup($2); 
                                                           remove_scope();   
@@ -220,8 +222,9 @@ func:
                                                         } 
 
 | TYPEFLOAT ID                                          { add_symbol_table($2, 1); add_scope($2, 1); }
-'(' paramsList ')' '{' contentList '}'                  {  
-                                                          $$ = add_node2('F', $5, $8); 
+'(' paramsList ')'                                      {;}
+'{' contentList '}'                                     {  
+                                                          $$ = add_node2('F', $5, $9); 
                                                           $$->type = 1;
                                                           $$->value = (char *) strdup($2);     
                                                           remove_scope();
@@ -230,8 +233,9 @@ func:
                                                         } 
 
 | TYPEINT ID                                            { add_symbol_table($2, 0); add_scope($2, 0); }
-'(' paramsList ')' '{' contentList '}'                  {
-                                                          $$ = add_node2('F', $5, $8); 
+'(' paramsList ')'                                      {;}
+'{' contentList '}'                                     {
+                                                          $$ = add_node2('F', $5, $9); 
                                                           $$->type = 0;
                                                           $$->value = (char *) strdup($2);
                                                           remove_scope();
@@ -253,19 +257,22 @@ params:
 param:
   TYPEINT ID              { $$ = add_node0('P'); 
                             $$->type = 0;
-                            $$->value = (char *) strdup($2);   
+                            $$->value = (char *) strdup($2); 
+                            add_symbol_table($2, 0); 
                             free($1);
                             free($2); 
                           } 
 | TYPEFLOAT ID            { $$ = add_node0('P'); 
                             $$->type = 1;
                             $$->value = (char *) strdup($2);    
+                            add_symbol_table($2, 1);
                             free($1);
                             free($2);  
                           } 
 | TYPESTRING ID           { $$ = add_node0('P'); 
                             $$->type = 2;
                             $$->value = (char *) strdup($2);
+                            add_symbol_table($2, 2);
                             free($1);
                             free($2);      
                           } 
@@ -290,6 +297,7 @@ addValue:
 ID '=' expression ';'      { 
                             $$ = add_node0('A');
                             $$->node1 = add_node0('V');
+                            $$->node1->type = get_id_type($1);
                             $$->node1->value = (char *) strdup($1);
                             $$->node2 = $3;
                             free($1);
@@ -299,6 +307,7 @@ ID '=' expression ';'      {
 expression:
 ID                        { $$ = add_node0('V'); 
                             $$->value = (char *) strdup($1);   
+                            $$->type = get_id_type($1);
                             free($1);  
                           }
 | INT                     { $$ = add_node0('I');
@@ -320,6 +329,7 @@ ID                        { $$ = add_node0('V');
 
                             $$->node1 = add_node0('V');
                             $$->node1->value = (char *) strdup($1);
+                            $$->node1->type = get_id_type($1);
 
                             $$->node2 = $2;
                             $$->node3 = $3;
@@ -383,11 +393,13 @@ condition:
 
                     $$->node1 = add_node0('V');
                     $$->node1->value = (char *) strdup($1);
+                    $$->node1->type = get_id_type($1);
 
                     $$->node2 = $2;
                     
                     $$->node3 = add_node0('V');
-                    $$->node3->value = (char *) strdup($1);
+                    $$->node3->value = (char *) strdup($3);
+                    $$->node3->type = get_id_type($3);
                     free($1);
                     free($3);
                   }
@@ -395,12 +407,13 @@ condition:
 
                     $$->node1 = add_node0('V');
                     $$->node1->value = (char *) strdup($1);
+                    $$->node1->type = get_id_type($1);
 
                     $$->node2 = $2;
                     
                     $$->node3 = add_node0('I');
                     $$->node3->type = 0;
-                    $$->node3->value = (char *) strdup($1);
+                    $$->node3->value = (char *) strdup($3);
                     free($1);
                     free($3);
                   }
@@ -408,94 +421,97 @@ condition:
 
                     $$->node1 = add_node0('V');
                     $$->node1->value = (char *) strdup($1);
+                    $$->node1->type = get_id_type($1);
 
                     $$->node2 = $2;
                     
                     $$->node3 = add_node0('D');
                     $$->node3->type = 1;
-                    $$->node3->value = (char *) strdup($1);
+                    $$->node3->value = (char *) strdup($3);
                     free($1);
                     free($3);
                   }
 | INT cond ID     { $$ = add_node0('c');
 
                     $$->node1 = add_node0('I');
-                    $$->node3->type = 0;
+                    $$->node1->type = 0;
                     $$->node1->value = (char *) strdup($1);
 
                     $$->node2 = $2;
                     
                     $$->node3 = add_node0('V');
-                    $$->node3->value = (char *) strdup($1);
+                    $$->node3->value = (char *) strdup($3);
+                    $$->node3->type = get_id_type($3);
                     free($1);
                     free($3);
                   }
 | INT cond INT    { $$ = add_node0('c');
 
                     $$->node1 = add_node0('I');
-                    $$->node3->type = 0;
+                    $$->node1->type = 0;
                     $$->node1->value = (char *) strdup($1);
 
                     $$->node2 = $2;
                     
                     $$->node3 = add_node0('I');
                     $$->node3->type = 0;
-                    $$->node3->value = (char *) strdup($1);
+                    $$->node3->value = (char *) strdup($3);
                     free($1);
                     free($3);
                   }
 | INT cond DEC    { $$ = add_node0('c');
 
                     $$->node1 = add_node0('I');
-                    $$->node3->type = 0;
+                    $$->node1->type = 0;
                     $$->node1->value = (char *) strdup($1);
 
                     $$->node2 = $2;
                     
                     $$->node3 = add_node0('D');
                     $$->node3->type = 1;
-                    $$->node3->value = (char *) strdup($1);
+                    $$->node3->value = (char *) strdup($3);
                     free($1);
                     free($3);
                   }
 | DEC cond ID     { $$ = add_node0('c');
 
                     $$->node1 = add_node0('D');
-                    $$->node3->type = 2;
+                    $$->node1->type = 2;
                     $$->node1->value = (char *) strdup($1);
 
                     $$->node2 = $2;
                     
                     $$->node3 = add_node0('V');
-                    $$->node3->value = (char *) strdup($1);
+                    $$->node3->value = (char *) strdup($3);
+                    $$->node3->type = get_id_type($3);
                     free($1);
                     free($3);
                   }
 | DEC cond INT    { $$ = add_node0('c');
 
                     $$->node1 = add_node0('D');
-                    $$->node3->type = 2;
+                    $$->node1->type = 2;
                     $$->node1->value = (char *) strdup($1);
 
                     $$->node2 = $2;
                     
                     $$->node3 = add_node0('I');
                     $$->node3->type = 1;
-                    $$->node3->value = (char *) strdup($1);
+                    $$->node3->value = (char *) strdup($3);
                     free($1);
                     free($3);
                   }
 | DEC cond DEC    { $$ = add_node0('c');
 
                     $$->node1 = add_node0('D');
-                    $$->node3->type = 2;
+                    $$->node1->type = 2;
                     $$->node1->value = (char *) strdup($1);
 
                     $$->node2 = $2;
                     
                     $$->node3 = add_node0('D');
                     $$->node3->type = 2;
-                    $$->node3->value = (char *) strdup($1);
+                    $$->node3->value = (char *) strdup($3);
                     free($1);
                     free($3);
                   }
@@ -527,6 +543,7 @@ print:
                             $$->value = (char *) strdup("PRINT");
                             $$->node1 = add_node0('V');
                             $$->node1->value = (char *) strdup($3); 
+                            $$->node1->type = get_id_type($3);
                             free($3);    
                           }
 | PRINT '(' STR ')' ';'   { $$ = add_node0('L');
@@ -558,6 +575,7 @@ scan:
                                           $$->value = (char *) strdup("SCAN");
                                           $$->node1 = add_node0('V');
                                           $$->node1->value = (char *) strdup($3);   
+                                          $$->node1->type = get_id_type($3);
                                           free($3);  
                                           free($5);  
                                         }
@@ -565,7 +583,8 @@ scan:
                                           $$->type = 1;
                                           $$->value = (char *) strdup("SCAN");
                                           $$->node1 = add_node0('V');
-                                          $$->node1->value = (char *) strdup($3);  
+                                          $$->node1->value = (char *) strdup($3); 
+                                          $$->node1->type = get_id_type($3); 
                                           free($3);  
                                           free($5);     
                                         }
@@ -573,7 +592,8 @@ scan:
                                           $$->type = 2;
                                           $$->value = (char *) strdup("SCAN");
                                           $$->node1 = add_node0('V');
-                                          $$->node1->value = (char *) strdup($3);  
+                                          $$->node1->value = (char *) strdup($3); 
+                                          $$->node1->type = get_id_type($3); 
                                           free($3);  
                                           free($5);     
                                         }
@@ -583,7 +603,8 @@ return:
   RETURN '(' ID ')' ';'   { $$ = add_node0('L');
                             $$->value = (char *) strdup("RETURN");
                             $$->node1 = add_node0('V');
-                            $$->node1->value = (char *) strdup($3);    
+                            $$->node1->value = (char *) strdup($3);   
+                            $$->node1->type = get_id_type($3); 
                             free($3); 
                           }
 | RETURN '(' STR ')' ';'  { $$ = add_node0('L');
@@ -612,13 +633,16 @@ return:
 callFunc:
   ID '(' callFuncParams ')' ';'           { $$ = add_node1('L', $3);
                                             $$->value = (char *) strdup($1);  
+                                            $$->type = get_id_type($1);
                                             free($1);  
                                           }
 | ID '=' ID '(' callFuncParams ')' ';'    { $$ = add_node0('A');
                                             $$->node1 = add_node0('V');
                                             $$->node1->value = (char *) strdup($1);
+                                            $$->node1->type = get_id_type($1);
                                             $$->node2 = add_node1('L', $5);
                                             $$->node2->value = (char *) strdup($3); 
+                                            $$->node2->type = get_id_type($3);
                                             free($1);  
                                             free($3);     
                                           }
@@ -626,7 +650,8 @@ callFunc:
 
 callFuncParams:
   ID                          { $$ = add_node0('V');
-                                $$->value = (char *) strdup($1);   
+                                $$->value = (char *) strdup($1); 
+                                $$->type = get_id_type($1);  
                                 free($1);  
                               }
 | INT                         { $$ = add_node0('I');
@@ -644,31 +669,40 @@ callFuncParams:
                                 $$->value = (char *) strdup($1);    
                                 free($1); 
                               }
-| ID ',' callFuncParams       { $$ = add_node1('R', $3);
+| ID ',' callFuncParams       { $$ = add_node0('R');
 
                                 $$->node1 = add_node0('V');
-                                $$->node1->value = (char *) strdup($1);     
+                                $$->node1->value = (char *) strdup($1);    
+                                $$->node1->type = get_id_type($1); 
+
+                                $$->node2 = $3;
                                 free($1);
                               }
-| INT ',' callFuncParams      { $$ = add_node1('R', $3);
+| INT ',' callFuncParams      { $$ = add_node0('R');
 
                                 $$->node1 = add_node0('I');
                                 $$->node1->type = 0;
-                                $$->node1->value = (char *) strdup($1);   
+                                $$->node1->value = (char *) strdup($1); 
+
+                                $$->node2 = $3;  
                                 free($1);  
                               }
-| DEC ',' callFuncParams      { $$ = add_node1('R', $3);
+| DEC ',' callFuncParams      { $$ = add_node0('R');
 
                                 $$->node1 = add_node0('D');
                                 $$->node1->type = 1;
                                 $$->node1->value = (char *) strdup($1);  
+
+                                $$->node2 = $3;
                                 free($1);   
                               }
-| STR ',' callFuncParams      { $$ = add_node1('R', $3);
+| STR ',' callFuncParams      { $$ = add_node0('R');
 
                                 $$->node1 = add_node0('S');
                                 $$->node1->type = 2;
                                 $$->node1->value = (char *) strdup($1);     
+
+                                $$->node2 = $3;
                                 free($1);
                               }
 ;
@@ -926,8 +960,24 @@ struct symbol_node* find_symbol_table(char *id) {
 
   key = generate_symbol_key(id);
   HASH_FIND_STR(symbol_table, key, symbol_node);
-  
+  if (symbol_node == NULL) {
+    free(key);
+    int size = 2;
+    size += strlen(id);
+    key = malloc(size);
+    strcpy(key, "@");
+    strcat(key, id);
+    HASH_FIND_STR(symbol_table, key, symbol_node);
+  }
+
+  free(key);
   return symbol_node;
+}
+
+int get_id_type(char *id) {
+  struct symbol_node* symbol_node;
+  symbol_node = find_symbol_table(id);
+  return symbol_node->type;
 }
 
 char* generate_symbol_key(char *id) {
