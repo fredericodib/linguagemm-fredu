@@ -39,9 +39,8 @@ struct node {
 - S -> string
 - V -> variavel
 - B -> simbolo
-- E -> Espreção
+- E -> Espressão
 - A -> Atribuição
-- D -> Declaration
 - L -> chama função
 
 # type
