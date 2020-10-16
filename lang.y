@@ -134,6 +134,7 @@ var:
                             $$->value = (char *) strdup($2);
 
                             $$->node1 = add_node0('A');
+                            $$->node1->type = 0;
                             $$->node1->node1 = add_node0('V');
                             $$->node1->node1->type = 0;
                             $$->node1->node1->value = (char *) strdup($2);
@@ -157,6 +158,7 @@ var:
                             $$->value = (char *) strdup($2);
 
                             $$->node1 = add_node0('A');
+                            $$->node1->type = 1;
                             $$->node1->node1 = add_node0('V');
                             $$->node1->node1->type = 1;
                             $$->node1->node1->value = (char *) strdup($2);
@@ -173,6 +175,7 @@ var:
                             $$->value = (char *) strdup($2);
 
                             $$->node1 = add_node0('A');
+                            $$->node1->type = 1;
                             $$->node1->node1 = add_node0('V');
                             $$->node1->node1->type = 1;
                             $$->node1->node1->value = (char *) strdup($2);
@@ -196,6 +199,7 @@ var:
                             $$->value = (char *) strdup($2);
 
                             $$->node1 = add_node0('A');
+                            $$->node1->type = 2;
                             $$->node1->node1 = add_node0('V');
                             $$->node1->node1->type = 2;
                             $$->node1->node1->value = (char *) strdup($2);
@@ -296,6 +300,7 @@ content:
 addValue:
 ID '=' expression ';'      { 
                             $$ = add_node0('A');
+                            $$->type = get_id_type($1);
                             $$->node1 = add_node0('V');
                             $$->node1->type = get_id_type($1);
                             $$->node1->value = (char *) strdup($1);
@@ -601,6 +606,8 @@ scan:
 
 return:
   RETURN '(' ID ')' ';'   { $$ = add_node0('L');
+                            struct scope* scope = get_last_scope();
+                            $$->type  = scope->type;
                             $$->value = (char *) strdup("RETURN");
                             $$->node1 = add_node0('V');
                             $$->node1->value = (char *) strdup($3);   
@@ -608,6 +615,8 @@ return:
                             free($3); 
                           }
 | RETURN '(' STR ')' ';'  { $$ = add_node0('L');
+                            struct scope* scope = get_last_scope();
+                            $$->type  = scope->type;
                             $$->value = (char *) strdup("RETURN");
                             $$->node1 = add_node0('S');
                             $$->node1->type = 2;
@@ -615,6 +624,8 @@ return:
                             free($3);   
                           }
 | RETURN '(' INT ')' ';'  { $$ = add_node0('L');
+                            struct scope* scope = get_last_scope();
+                            $$->type  = scope->type;
                             $$->value = (char *) strdup("RETURN");
                             $$->node1 = add_node0('I');
                             $$->node1->type = 0;
@@ -622,6 +633,8 @@ return:
                             free($3);   
                           }
 | RETURN '(' DEC ')' ';'  { $$ = add_node0('L');
+                            struct scope* scope = get_last_scope();
+                            $$->type  = scope->type;
                             $$->value = (char *) strdup("RETURN");
                             $$->node1 = add_node0('D');
                             $$->node1->type = 1;
@@ -718,7 +731,7 @@ int main(int argc, char **argv) {
   
   printf("\n\n########## Parser Sintatico ##########\n");
   yyparse();
-  printf("\n\n########## Arvore Binaria ##########\n");
+  printf("\n\n########## Arvore Sintatica ##########\n");
   print_tree(tree, 0);
   printf("\n\n########## Tabela de Símbolos ##########\n");
   print_symbol_table();
@@ -800,7 +813,7 @@ void print_tree(struct node *node, int depth) {
       print_tree(node->node1, depth+1);
       break;
     case 'A':
-      printf("<Atribuição> %s = \n", node->node1->value);
+      printf("<Atribuição> (tipo: %d) %s = \n", node->type, node->node1->value);
       print_tree(node->node2, depth+1);
       break;
     case 'I':
