@@ -2995,7 +2995,7 @@ void add_symbol_table(char *id, int type) {
   char* key;
 
   key = generate_symbol_key(id);
-  symbol_node->id = id;
+  symbol_node->id = (char *) strdup(id);
   symbol_node->type = type;
   symbol_node->key = (char *) strdup(key);
   if (last_scope != NULL && last_scope->scope_name != NULL) {
