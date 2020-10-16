@@ -3074,16 +3074,15 @@ void free_symbol_table() {
 
   HASH_ITER(hh, symbol_table, s, tmp) {
     HASH_DEL(symbol_table, s);
-    if (s->scope_name) {
+    if (s->scope_name != NULL) {
       free(s->scope_name);
     }
-    if (s->id) {
-      free(s->id);
-    }
-    if (s->key) {
+    if (s->key != NULL) {
       free(s->key);
     }
-    free(s);
+    if (s != NULL) {
+      free(s);
+    }
   }
 }
 
@@ -3098,7 +3097,9 @@ void free_tree(struct node *node) {
   node->node2 = NULL;
   node->node3 = NULL;
 
-  free(node->value);
+  if (node->value) {
+    free(node->value);
+  }
   free(node);
 }
 
@@ -3154,8 +3155,13 @@ void remove_scope() {
   while(scope->next->next != NULL) {
     scope = scope->next;
   }
-  free(scope->next->scope_name);
-  free(scope->next);
+  
+  if (scope->next && scope->next->scope_name) {
+    free(scope->next->scope_name);
+  }
+  if (scope->next) {
+    free(scope->next);
+  }
   scope->next = NULL;
 }
 
