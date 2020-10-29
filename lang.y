@@ -5,6 +5,7 @@
 %{
 void yyerror (char *s);
 int yylex();
+#include "global_variable.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -1123,4 +1124,4 @@ void remove_scope() {
   scope->next = NULL;
 }
 
-void yyerror (char *s) {fprintf (stderr, "%s\n", s); exit(1);} 
+void yyerror (char *s) {fprintf (stderr, "%s, linha: %d\n", s,line); exit(1);} 

@@ -1,5 +1,8 @@
+%option noyywrap
+
 %{
 #include "y.tab.h"
+#include "global_variable.h"
 #include <math.h>
 #include <string.h>
 #include <stdlib.h>
