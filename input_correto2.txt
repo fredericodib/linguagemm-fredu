@@ -3,7 +3,7 @@ int main() {
 
   int num1 = 5;
   float num2 = 6.3;
-  int num3;
+  float num3;
 
   num3 = num1 + num2;
 
