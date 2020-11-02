@@ -22,3 +22,5 @@ Instruções de Execução:
 ./lang input_erro_lexico2.txt
 ./lang input_erro_sintatico1.txt
 ./lang input_erro_sintatico2.txt
+./lang input_erro_semantico1.txt
+./lang input_erro_semantico2.txt

@@ -88,6 +88,9 @@ void free_symbol_table();
 void print_tree(struct node *node, int depth);
 void free_tree(struct node *node);
 
+void print_semantic_error(char *id, int type);
+void build_expression_type(struct node *node);
+
 %}
 
 %union {
@@ -305,6 +308,11 @@ ID '=' expression ';'      {
                             $$->node1->type = get_id_type($1);
                             $$->node1->value = (char *) strdup($1);
                             $$->node2 = $3;
+                            if ($$->node1->type != $$->node2->type) {
+                              if (!($$->node1->type == 1 && $$->node2->type == 0)) {
+                                print_semantic_error($$->node1->value, 4);
+                              }
+                            }
                             free($1);
                           }
 ;
@@ -338,6 +346,7 @@ ID                        { $$ = add_node0('V');
 
                             $$->node2 = $2;
                             $$->node3 = $3;
+                            build_expression_type($$);
                             free($1);
                           }
 | INT op expression       { $$ = add_node0('E');
@@ -348,6 +357,7 @@ ID                        { $$ = add_node0('V');
 
                             $$->node2 = $2;
                             $$->node3 = $3;
+                            build_expression_type($$);
                             free($1);
                           }
 | DEC op expression       { $$ = add_node0('E');
@@ -358,6 +368,7 @@ ID                        { $$ = add_node0('V');
 
                             $$->node2 = $2;
                             $$->node3 = $3;
+                            build_expression_type($$);
                             free($1);
                           }
 | STR op expression       { $$ = add_node0('E');
@@ -368,6 +379,7 @@ ID                        { $$ = add_node0('V');
 
                             $$->node2 = $2;
                             $$->node3 = $3;
+                            build_expression_type($$);
                             free($1);
                           }
 ;
@@ -855,7 +867,7 @@ void print_tree(struct node *node, int depth) {
       printf("FIM FUNÇÃO - %s\n\n", node->value);
       break;
     case 'E':
-      printf("<EXPRESSION>\n");
+      printf("<EXPRESSION> tipo: %d\n", node->type);
       print_tree(node->node1, depth);
       print_tree(node->node2, depth+1);
       print_tree(node->node3, depth+1);
@@ -983,6 +995,10 @@ struct symbol_node* find_symbol_table(char *id) {
     HASH_FIND_STR(symbol_table, key, symbol_node);
   }
 
+  if (symbol_node == NULL) {
+    return NULL;
+  }
+
   free(key);
   return symbol_node;
 }
@@ -990,6 +1006,9 @@ struct symbol_node* find_symbol_table(char *id) {
 int get_id_type(char *id) {
   struct symbol_node* symbol_node;
   symbol_node = find_symbol_table(id);
+  if (symbol_node == NULL) {
+    print_semantic_error(id, 1);
+  }
   return symbol_node->type;
 }
 
@@ -1122,6 +1141,45 @@ void remove_scope() {
     free(scope->next);
   }
   scope->next = NULL;
+}
+
+void print_semantic_error(char *id, int type) {
+   printf("\n######## ERRO ########\n");
+  switch (type) {
+    // 1) Utilização de uma variável não declarada.
+    case 1: 
+      printf("Variavel %s não foi declarada, linha: %d\n", id, line);
+      break;
+    // Utilização de qualquer símbolo diferente de "+" em uma operação entre strings.
+    case 2: 
+      printf("Operações entre strings só aceitam o operador de concatenação (+), linha: %d\n", line);
+      break;
+    // Qualquer operação entre uma string e uma variável/valor do tipo inteiro ou float.
+    case 3: 
+      printf("Strings só podem fazer operações com outras strings, linha: %d\n", line);
+      break;
+    // Atribuir um valor incorreto a variavel
+    case 4: 
+      printf("A variavel %s deve receber um valor de  tipo compatível, linha: %d\n", id, line);
+      break;
+
+  }
+  exit(1);
+}
+
+void build_expression_type(struct node *node) {
+  if (node->node1->type == node->node3->type) {
+    node->type = node->node1->type;
+    if (node->node1->type == 2 && node->node3->type == 2 && strcmp(node->node2->value, "+") != 0) {
+      print_semantic_error(node->node1->value, 2);
+    }
+  } else if (node->node1->type == 2) {
+    print_semantic_error(node->node1->value, 3);
+  } else if (node->node3->type == 2) {
+    print_semantic_error(node->node3->value, 3);
+  } else {
+    node->type = 1;
+  }
 }
 
 void yyerror (char *s) {fprintf (stderr, "%s, linha: %d\n", s,line); exit(1);} 

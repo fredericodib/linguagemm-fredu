@@ -1,0 +1,10 @@
+int main() {
+  string string1 = "Nice to meet you";
+  string string2;
+  float result;
+
+  string2 = "do you like blueberries?";
+  result = 5 * 3;
+
+  return(0);
+}
