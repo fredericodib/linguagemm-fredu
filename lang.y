@@ -668,6 +668,37 @@ callFunc:
                                             $$->node2 = add_node1('L', $5);
                                             $$->node2->value = (char *) strdup($3); 
                                             $$->node2->type = get_id_type($3);
+
+                                            if ($$->node1->type != $$->node2->type) {
+                                              if (!($$->node1->type == 1 && $$->node2->type == 0)) {
+                                                print_semantic_error($$->node1->value, 4);
+                                              }
+                                            }
+
+
+                                            free($1);  
+                                            free($3);     
+                                          }
+| ID '(' ')' ';'                          { $$ = add_node0('L');
+                                            $$->value = (char *) strdup($1);  
+                                            $$->type = get_id_type($1);
+                                            free($1);  
+                                          }
+| ID '=' ID '(' ')' ';'                    { $$ = add_node0('A');
+                                            $$->node1 = add_node0('V');
+                                            $$->node1->value = (char *) strdup($1);
+                                            $$->node1->type = get_id_type($1);
+                                            $$->node2 = add_node0('L');
+                                            $$->node2->value = (char *) strdup($3); 
+                                            $$->node2->type = get_id_type($3);
+
+                                            if ($$->node1->type != $$->node2->type) {
+                                              if (!($$->node1->type == 1 && $$->node2->type == 0)) {
+                                                print_semantic_error($$->node1->value, 4);
+                                              }
+                                            }
+
+
                                             free($1);  
                                             free($3);     
                                           }
@@ -943,7 +974,7 @@ void print_tree(struct node *node, int depth) {
         printf("<RETURN> tipo: %d\n", node->type);
         print_tree(node->node1, depth+1);
       } else {
-        printf("<CHAMA FUNÇÃO> %s", node->value);
+        printf("<CHAMA FUNÇÃO> %s\n", node->value);
         for(i=0;i<depth;i++)  {
           printf("-");
         }

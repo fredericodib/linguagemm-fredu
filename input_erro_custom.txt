@@ -1,10 +1,11 @@
-int main() {
-  string string1 = "Nice to meet you";
-  string string2;
-  float result;
+float oi() {
+  return(4);
+}
 
-  string2 = "do you like blueberries?";
-  result = 5 * 3;
+int main() {
+  int result;
+
+  result = oi();
 
   return(0);
 }
