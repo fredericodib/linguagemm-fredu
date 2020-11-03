@@ -1,11 +1,12 @@
-float oi() {
-  return(4);
-}
 
 int main() {
   int result;
 
-  result = oi();
-
+  scan(result, string);
   return(0);
 }
+
+
+/*  to do lists
+- passagem de parametro
+- pegar relatorio atualizado  */

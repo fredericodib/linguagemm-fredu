@@ -593,6 +593,9 @@ scan:
                                           $$->node1 = add_node0('V');
                                           $$->node1->value = (char *) strdup($3);   
                                           $$->node1->type = get_id_type($3);
+                                          if ($$->type != $$->node1->type) {
+                                            print_semantic_error($$->node1->value, 6);
+                                          }
                                           free($3);  
                                           free($5);  
                                         }
@@ -602,6 +605,9 @@ scan:
                                           $$->node1 = add_node0('V');
                                           $$->node1->value = (char *) strdup($3); 
                                           $$->node1->type = get_id_type($3); 
+                                          if ($$->type != $$->node1->type) {
+                                            print_semantic_error($$->node1->value, 6);
+                                          }
                                           free($3);  
                                           free($5);     
                                         }
@@ -611,6 +617,9 @@ scan:
                                           $$->node1 = add_node0('V');
                                           $$->node1->value = (char *) strdup($3); 
                                           $$->node1->type = get_id_type($3); 
+                                          if ($$->type != $$->node1->type) {
+                                            print_semantic_error($$->node1->value, 6);
+                                          }
                                           free($3);  
                                           free($5);     
                                         }
@@ -624,6 +633,9 @@ return:
                             $$->node1 = add_node0('V');
                             $$->node1->value = (char *) strdup($3);   
                             $$->node1->type = get_id_type($3); 
+                            if ($$->type != $$->node1->type) {
+                              print_semantic_error($$->node1->value, 5);
+                            }
                             free($3); 
                           }
 | RETURN '(' STR ')' ';'  { $$ = add_node0('L');
@@ -632,7 +644,10 @@ return:
                             $$->value = (char *) strdup("RETURN");
                             $$->node1 = add_node0('S');
                             $$->node1->type = 2;
-                            $$->node1->value = (char *) strdup($3);  
+                            $$->node1->value = (char *) strdup($3); 
+                            if ($$->type != $$->node1->type) {
+                              print_semantic_error($$->node1->value, 5);
+                            } 
                             free($3);   
                           }
 | RETURN '(' INT ')' ';'  { $$ = add_node0('L');
@@ -642,6 +657,9 @@ return:
                             $$->node1 = add_node0('I');
                             $$->node1->type = 0;
                             $$->node1->value = (char *) strdup($3);  
+                            if ($$->type != $$->node1->type) {
+                              print_semantic_error($$->node1->value, 5);
+                            }
                             free($3);   
                           }
 | RETURN '(' DEC ')' ';'  { $$ = add_node0('L');
@@ -651,6 +669,9 @@ return:
                             $$->node1 = add_node0('D');
                             $$->node1->type = 1;
                             $$->node1->value = (char *) strdup($3);  
+                            if ($$->type != $$->node1->type) {
+                              print_semantic_error($$->node1->value, 5);
+                            }
                             free($3);   
                           }
 ;
@@ -1192,6 +1213,14 @@ void print_semantic_error(char *id, int type) {
     // Atribuir um valor incorreto a variavel
     case 4: 
       printf("A variavel %s deve receber um valor de  tipo compatível, linha: %d\n", id, line);
+      break;
+    // Retorno de funcao
+    case 5: 
+      printf("O retorno %s não corresponde ao tipo da função, linha: %d\n", id, line);
+      break;
+    // Scan
+    case 6: 
+      printf("O scan da variavel %s não corresponde ao tipo da função, linha: %d\n", id, line);
       break;
 
   }
