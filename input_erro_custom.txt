@@ -1,12 +1,19 @@
 
-int main() {
+int oi(int frfrfr, float ffff, int ffrfr) {
   int result;
 
   scan(result, int);
   return(0);
 }
 
-int oi() {
+int oi2(float ffff) {
+  int result;
+
+  scan(result, int);
+  return(0);
+}
+
+int main() {
   int result;
 
   scan(result, int);

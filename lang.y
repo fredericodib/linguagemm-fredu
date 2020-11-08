@@ -77,11 +77,19 @@ struct func_params {
   UT_hash_handle hh;
 };
 
+void add_func_params(char *id);
+void add_params(int type);
+void print_func_table();
+void print_params(struct params *params, int count);
+void free_func_table();
+void free_params(struct params *params);
+
 int hasMain = 0;
 int hasReturn = 0;
 struct node* tree = NULL;
 struct scope* scope_stack = NULL;
 struct symbol_node* symbol_table = NULL;
+struct func_params* func_table = NULL;
 
 struct node* add_node3(char node_type, struct node *node1, struct node *node2, struct node *node3);
 struct node* add_node2(char node_type, struct node *node1, struct node *node2);
@@ -239,6 +247,7 @@ func:
   TYPESTRING ID                                         { 
                                                           add_symbol_table($2, 2); add_scope($2, 2); 
                                                           hasReturn = 0;
+                                                          add_func_params($2);
                                                         }
   '(' paramsList ')'                                    {;}
   '{' contentList '}'                                   { 
@@ -253,7 +262,9 @@ func:
                                                           free($2); 
                                                         } 
 
-| TYPEFLOAT ID                                          { add_symbol_table($2, 1); add_scope($2, 1); hasReturn = 0; }
+| TYPEFLOAT ID                                          { add_symbol_table($2, 1); add_scope($2, 1); hasReturn = 0;
+                                                          add_func_params($2); 
+                                                        }
 '(' paramsList ')'                                      {;}
 '{' contentList '}'                                     {  
                                                           $$ = add_node2('F', $5, $9); 
@@ -273,6 +284,7 @@ func:
                                                             hasMain = 1;
                                                           }
                                                           hasReturn = 0;
+                                                          add_func_params($2);
                                                         }
 '(' paramsList ')'                                      {;}
 '{' contentList '}'                                     {
@@ -303,6 +315,7 @@ param:
                             $$->type = 0;
                             $$->value = (char *) strdup($2); 
                             add_symbol_table($2, 0); 
+                            add_params(0);
                             free($1);
                             free($2); 
                           } 
@@ -310,6 +323,7 @@ param:
                             $$->type = 1;
                             $$->value = (char *) strdup($2);    
                             add_symbol_table($2, 1);
+                            add_params(1);
                             free($1);
                             free($2);  
                           } 
@@ -317,6 +331,7 @@ param:
                             $$->type = 2;
                             $$->value = (char *) strdup($2);
                             add_symbol_table($2, 2);
+                            add_params(2);
                             free($1);
                             free($2);      
                           } 
@@ -840,11 +855,14 @@ int main(int argc, char **argv) {
   print_tree(tree, 0);
   printf("\n\n########## Tabela de Símbolos ##########\n");
   print_symbol_table();
+  printf("\n\n########## Tabela de Parametros ##########\n");
+  print_func_table();
 
 
   yylex_destroy();
   free_tree(tree);
   free_symbol_table();
+  free_func_table();
   return 0;
 }
 
@@ -1050,6 +1068,72 @@ void print_tree(struct node *node, int depth) {
       break;
     defaut:
       break;
+  }
+}
+
+void add_func_params(char *id) {
+  struct func_params* func_params = (struct func_params*)calloc(1, sizeof(struct func_params));
+  char* func_name = (char *) strdup(id);
+  func_params->func_name = (char *) strdup(id);
+  func_params->n_params = 0;
+
+  HASH_ADD_STR(func_table, func_name, func_params);
+  free(func_name);
+}
+
+void add_params(int type) {
+  struct params* new_params = (struct params*)calloc(1, sizeof(struct params));
+  struct params* params;
+  struct func_params* func_params;
+  new_params->type = type;
+
+  struct scope* last_scope;
+  last_scope = get_last_scope();
+
+  HASH_FIND_STR(func_table, last_scope->scope_name, func_params);
+
+  func_params->n_params = func_params->n_params + 1;
+
+  params = func_params->first;
+  if (params == NULL) {
+    func_params->first = new_params;
+  } else {
+    while(params->next != NULL) {
+      params = params->next;
+    }
+    params->next = new_params;
+  }
+}
+
+void print_func_table() {
+  struct func_params *s;
+  for(s=func_table; s != NULL; s=s->hh.next) {
+    printf("funcao: %s, numero de parametros: %d\n", s->func_name, s->n_params);
+    if (s->first) {
+      print_params(s->first, 1);
+    }
+  }
+}
+void print_params(struct params *params, int count) {
+  printf("-- PARAMETRO %d, tipo: %d\n", count, params->type);
+  if (params->next) {
+    print_params(params->next, count + 1);
+  }
+}
+
+void free_func_table() {
+  struct func_params *s;
+  for(s=func_table; s != NULL; s=s->hh.next) {
+    free(s->func_name);
+    if (s->first) {
+      free_params(s->first);
+    }
+  }
+}
+void free_params(struct params *params) {
+  if (params != NULL) {
+    free_params(params->next);
+    free(params);
   }
 }
 
