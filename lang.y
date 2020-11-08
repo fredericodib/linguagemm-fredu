@@ -65,6 +65,20 @@ struct symbol_node {
   UT_hash_handle hh;
 };
 
+struct params {
+  int type; // 0 = int, 1 = float, 2 = string
+  struct params *next;
+};
+
+struct func_params {
+  struct params *first;
+  char *func_name; // nome da  funcao
+  int n_params; // numero de parametros 
+  UT_hash_handle hh;
+};
+
+int hasMain = 0;
+int hasReturn = 0;
 struct node* tree = NULL;
 struct scope* scope_stack = NULL;
 struct symbol_node* symbol_table = NULL;
@@ -114,7 +128,12 @@ void build_expression_type(struct node *node);
 %%
 
 prog:
-  globalList { tree = $1; }
+  globalList { 
+    tree = $1;
+    if (hasMain == 0) {
+      print_semantic_error(NULL, 7);
+    }
+  }
 ;
 
 globalList:
@@ -217,34 +236,52 @@ var:
 ;
 
 func:
-  TYPESTRING ID                                         { add_symbol_table($2, 2); add_scope($2, 2); }
+  TYPESTRING ID                                         { 
+                                                          add_symbol_table($2, 2); add_scope($2, 2); 
+                                                          hasReturn = 0;
+                                                        }
   '(' paramsList ')'                                    {;}
   '{' contentList '}'                                   { 
                                                           $$ = add_node2('F', $5, $9); 
                                                           $$->type = 2;
                                                           $$->value = (char *) strdup($2); 
+                                                          if (hasReturn == 0) {
+                                                            print_semantic_error($2, 8);
+                                                          }
                                                           remove_scope();   
                                                           free($1);
                                                           free($2); 
                                                         } 
 
-| TYPEFLOAT ID                                          { add_symbol_table($2, 1); add_scope($2, 1); }
+| TYPEFLOAT ID                                          { add_symbol_table($2, 1); add_scope($2, 1); hasReturn = 0; }
 '(' paramsList ')'                                      {;}
 '{' contentList '}'                                     {  
                                                           $$ = add_node2('F', $5, $9); 
                                                           $$->type = 1;
-                                                          $$->value = (char *) strdup($2);     
+                                                          $$->value = (char *) strdup($2);   
+                                                          if (hasReturn == 0) {
+                                                            print_semantic_error($2, 8);
+                                                          }  
                                                           remove_scope();
                                                           free($1);
                                                           free($2);
                                                         } 
 
-| TYPEINT ID                                            { add_symbol_table($2, 0); add_scope($2, 0); }
+| TYPEINT ID                                            { 
+                                                          add_symbol_table($2, 0); add_scope($2, 0);
+                                                          if (strcmp($2, "main") == 0) {
+                                                            hasMain = 1;
+                                                          }
+                                                          hasReturn = 0;
+                                                        }
 '(' paramsList ')'                                      {;}
 '{' contentList '}'                                     {
                                                           $$ = add_node2('F', $5, $9); 
                                                           $$->type = 0;
                                                           $$->value = (char *) strdup($2);
+                                                          if (hasReturn == 0) {
+                                                            print_semantic_error($2, 8);
+                                                          }
                                                           remove_scope();
                                                           free($1);
                                                           free($2);
@@ -636,6 +673,7 @@ return:
                             if ($$->type != $$->node1->type) {
                               print_semantic_error($$->node1->value, 5);
                             }
+                            hasReturn = 1;
                             free($3); 
                           }
 | RETURN '(' STR ')' ';'  { $$ = add_node0('L');
@@ -648,6 +686,7 @@ return:
                             if ($$->type != $$->node1->type) {
                               print_semantic_error($$->node1->value, 5);
                             } 
+                            hasReturn = 1;
                             free($3);   
                           }
 | RETURN '(' INT ')' ';'  { $$ = add_node0('L');
@@ -660,6 +699,7 @@ return:
                             if ($$->type != $$->node1->type) {
                               print_semantic_error($$->node1->value, 5);
                             }
+                            hasReturn = 1;
                             free($3);   
                           }
 | RETURN '(' DEC ')' ';'  { $$ = add_node0('L');
@@ -672,6 +712,7 @@ return:
                             if ($$->type != $$->node1->type) {
                               print_semantic_error($$->node1->value, 5);
                             }
+                            hasReturn = 1;
                             free($3);   
                           }
 ;
@@ -1221,6 +1262,14 @@ void print_semantic_error(char *id, int type) {
     // Scan
     case 6: 
       printf("O scan da variavel %s não corresponde ao tipo da função, linha: %d\n", id, line);
+      break;
+    // main
+    case 7: 
+      printf("O programa não possui uma função main do tipo inteiro\n");
+      break;
+    // possui return
+    case 8: 
+      printf("A função %s, não possui return\n", id);
       break;
 
   }

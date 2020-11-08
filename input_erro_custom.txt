@@ -2,11 +2,14 @@
 int main() {
   int result;
 
-  scan(result, string);
+  scan(result, int);
   return(0);
 }
 
+int oi() {
+  int result;
 
-/*  to do lists
-- passagem de parametro
-- pegar relatorio atualizado  */
+  scan(result, int);
+  return(0);
+}
+
