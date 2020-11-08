@@ -77,12 +77,22 @@ struct func_params {
   UT_hash_handle hh;
 };
 
+struct current_params {
+  struct params *first;
+  int n_params; // numero de parametros 
+};
+struct current_params *current_params;
+
+
 void add_func_params(char *id);
 void add_params(int type);
 void print_func_table();
 void print_params(struct params *params, int count);
 void free_func_table();
 void free_params(struct params *params);
+void add_current_params(int type);
+void free_current_params();
+void compare_params(char *id);
 
 int hasMain = 0;
 int hasReturn = 0;
@@ -736,6 +746,9 @@ callFunc:
   ID '(' callFuncParams ')' ';'           { $$ = add_node1('L', $3);
                                             $$->value = (char *) strdup($1);  
                                             $$->type = get_id_type($1);
+
+                                            compare_params($1);
+                                            free_current_params();
                                             free($1);  
                                           }
 | ID '=' ID '(' callFuncParams ')' ';'    { $$ = add_node0('A');
@@ -752,13 +765,17 @@ callFunc:
                                               }
                                             }
 
-
+                                            compare_params($3);
+                                            free_current_params();
                                             free($1);  
                                             free($3);     
                                           }
 | ID '(' ')' ';'                          { $$ = add_node0('L');
                                             $$->value = (char *) strdup($1);  
                                             $$->type = get_id_type($1);
+
+                                            compare_params($1);
+                                            free_current_params();
                                             free($1);  
                                           }
 | ID '=' ID '(' ')' ';'                    { $$ = add_node0('A');
@@ -775,7 +792,8 @@ callFunc:
                                               }
                                             }
 
-
+                                            compare_params($3);
+                                            free_current_params();
                                             free($1);  
                                             free($3);     
                                           }
@@ -785,21 +803,25 @@ callFuncParams:
   ID                          { $$ = add_node0('V');
                                 $$->value = (char *) strdup($1); 
                                 $$->type = get_id_type($1);  
+                                add_current_params($$->type); 
                                 free($1);  
                               }
 | INT                         { $$ = add_node0('I');
                                 $$->type = 0;
                                 $$->value = (char *) strdup($1);  
+                                add_current_params($$->type); 
                                 free($1);   
                               }
 | DEC                         { $$ = add_node0('D');
                                 $$->type = 1;
                                 $$->value = (char *) strdup($1);    
+                                add_current_params($$->type); 
                                 free($1); 
                               }
 | STR                         { $$ = add_node0('S');
                                 $$->type = 2;
-                                $$->value = (char *) strdup($1);    
+                                $$->value = (char *) strdup($1);  
+                                add_current_params($$->type);  
                                 free($1); 
                               }
 | ID ',' callFuncParams       { $$ = add_node0('R');
@@ -809,6 +831,7 @@ callFuncParams:
                                 $$->node1->type = get_id_type($1); 
 
                                 $$->node2 = $3;
+                                add_current_params($$->node1->type);
                                 free($1);
                               }
 | INT ',' callFuncParams      { $$ = add_node0('R');
@@ -818,6 +841,7 @@ callFuncParams:
                                 $$->node1->value = (char *) strdup($1); 
 
                                 $$->node2 = $3;  
+                                add_current_params($$->node1->type);
                                 free($1);  
                               }
 | DEC ',' callFuncParams      { $$ = add_node0('R');
@@ -827,6 +851,7 @@ callFuncParams:
                                 $$->node1->value = (char *) strdup($1);  
 
                                 $$->node2 = $3;
+                                add_current_params($$->node1->type);
                                 free($1);   
                               }
 | STR ',' callFuncParams      { $$ = add_node0('R');
@@ -836,6 +861,7 @@ callFuncParams:
                                 $$->node1->value = (char *) strdup($1);     
 
                                 $$->node2 = $3;
+                                add_current_params($$->node1->type);
                                 free($1);
                               }
 ;
@@ -1137,6 +1163,69 @@ void free_params(struct params *params) {
   }
 }
 
+void add_current_params(int type) {
+  struct params* new_params = (struct params*)calloc(1, sizeof(struct params));
+  struct params* params;
+  new_params->type = type;
+
+  if (current_params == NULL) {
+    current_params = (struct current_params*)calloc(1, sizeof(struct current_params));
+    current_params->n_params = 1;
+  } else {
+    current_params->n_params = current_params->n_params + 1;
+  }
+
+  if (current_params->first == NULL) {
+    current_params->first = new_params;
+  } else {
+    params = current_params->first;
+    current_params->first = new_params;
+    new_params->next = params;
+  }
+}
+
+void free_current_params() {
+  if (current_params != NULL) {
+    free_params(current_params->first);
+    free(current_params);
+    current_params = NULL;
+  }
+}
+
+void compare_params(char *id) {
+  struct func_params* func_params;
+  HASH_FIND_STR(func_table, id, func_params);
+
+  struct params* params1;
+  struct params* params2;
+
+  if (current_params == NULL) {
+    if (func_params->n_params != 0) {
+      printf("###########1 %d %d", params1->type, params2->type);
+      print_semantic_error(id, 10);
+    }
+  } else {
+    if (func_params->n_params != current_params->n_params) {
+      printf("###########2 %d %d", params1->type, params2->type);
+      print_semantic_error(id, 10);
+    }
+    params1 = current_params->first;
+    params2 = func_params->first;
+    if (params1->type != params2->type) {
+      printf("###########3 %d %d", params1->type, params2->type);
+      print_semantic_error(id, 10);
+    }
+    while (params1->next != NULL) {
+      params1 = params1->next;
+      params2 = params2->next;
+      if (params1->type != params2->type) {
+        printf("###########4 %d %d", params1->type, params2->type);
+        print_semantic_error(id, 10);
+      }
+    }
+  }
+}
+
 void add_symbol_table(char *id, int type) {
   struct symbol_node* symbol_node = (struct symbol_node*)calloc(1, sizeof(struct symbol_node));
 
@@ -1368,6 +1457,10 @@ void print_semantic_error(char *id, int type) {
     // variável já existe
     case 9: 
       printf("ID %s, já foi declarado, linha: %d\n", id, line);
+      break;
+    // parametros n compativel
+    case 10: 
+      printf("parametros não compativeis na chamada da funcao: %s, linha: %d\n", id, line);
       break;
 
   }

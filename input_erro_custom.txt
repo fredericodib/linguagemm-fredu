@@ -13,8 +13,28 @@ int oi2(float ffff) {
   return(0);
 }
 
+int oi3(float ffff, int deede) {
+  int result;
+
+  scan(result, int);
+  return(0);
+}
+
+int oi4() {
+  int result;
+
+  scan(result, int);
+  return(0);
+}
+
 int main() {
   int result;
+  oi(3,3.2,3);
+  oi(3,3.3,3);
+  oi(3,3.5,3);
+  oi2(3.5);
+  oi4();
+  oi3(3.2, 4);
 
   scan(result, int);
   return(0);
