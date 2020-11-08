@@ -3115,6 +3115,13 @@ void print_tree(struct node *node, int depth) {
 
 void add_symbol_table(char *id, int type) {
   struct symbol_node* symbol_node = (struct symbol_node*)calloc(1, sizeof(struct symbol_node));
+
+  struct symbol_node* symbol_node_check;
+  symbol_node_check = find_symbol_table(id);
+  if (symbol_node_check != NULL) {
+    print_semantic_error(id, 9);
+  }
+
   struct scope* last_scope;
   last_scope = get_last_scope();
   char* key;
@@ -3128,6 +3135,9 @@ void add_symbol_table(char *id, int type) {
   }
 
   free(key);
+
+
+
 
   HASH_ADD_STR(symbol_table, key, symbol_node);
 }
@@ -3330,6 +3340,10 @@ void print_semantic_error(char *id, int type) {
     // possui return
     case 8: 
       printf("A função %s, não possui return\n", id);
+      break;
+    // variável já existe
+    case 9: 
+      printf("ID %s, já foi declarado, linha: %d\n", id, line);
       break;
 
   }
