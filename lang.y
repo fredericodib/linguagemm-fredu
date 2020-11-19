@@ -1201,25 +1201,21 @@ void compare_params(char *id) {
 
   if (current_params == NULL) {
     if (func_params->n_params != 0) {
-      printf("###########1 %d %d", params1->type, params2->type);
       print_semantic_error(id, 10);
     }
   } else {
     if (func_params->n_params != current_params->n_params) {
-      printf("###########2 %d %d", params1->type, params2->type);
       print_semantic_error(id, 10);
     }
     params1 = current_params->first;
     params2 = func_params->first;
     if (params1->type != params2->type) {
-      printf("###########3 %d %d", params1->type, params2->type);
       print_semantic_error(id, 10);
     }
     while (params1->next != NULL) {
       params1 = params1->next;
       params2 = params2->next;
       if (params1->type != params2->type) {
-        printf("###########4 %d %d", params1->type, params2->type);
         print_semantic_error(id, 10);
       }
     }
