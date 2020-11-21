@@ -1092,7 +1092,7 @@ void print_tree(struct node *node, int depth) {
         printf("FIM PARAMETROS\n");
       }
       break;
-    defaut:
+    default:
       break;
   }
 }

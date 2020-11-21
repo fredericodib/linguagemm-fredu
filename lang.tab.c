@@ -265,7 +265,7 @@ typedef union YYSTYPE
   struct node *node;
 }
 /* Line 193 of yacc.c.  */
-#line 269 "y.tab.c"
+#line 269 "lang.tab.c"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -290,7 +290,7 @@ typedef struct YYLTYPE
 
 
 /* Line 216 of yacc.c.  */
-#line 294 "y.tab.c"
+#line 294 "lang.tab.c"
 
 #ifdef short
 # undef short
@@ -1687,27 +1687,27 @@ yyreduce:
     if (hasMain == 0) {
       print_semantic_error(NULL, 7);
     }
-  }
+  ;}
     break;
 
   case 3:
 #line 158 "lang.y"
-    { (yyval.node) = add_node2('R', (yyvsp[(1) - (2)].node), (yyvsp[(2) - (2)].node)); }
+    { (yyval.node) = add_node2('R', (yyvsp[(1) - (2)].node), (yyvsp[(2) - (2)].node)); ;}
     break;
 
   case 4:
 #line 159 "lang.y"
-    { (yyval.node) = (yyvsp[(1) - (1)].node); }
+    { (yyval.node) = (yyvsp[(1) - (1)].node); ;}
     break;
 
   case 5:
 #line 160 "lang.y"
-    { (yyval.node) = (yyvsp[(1) - (1)].node); }
+    { (yyval.node) = (yyvsp[(1) - (1)].node); ;}
     break;
 
   case 6:
 #line 161 "lang.y"
-    { (yyval.node) = add_node2('R', (yyvsp[(1) - (2)].node), (yyvsp[(2) - (2)].node)); }
+    { (yyval.node) = add_node2('R', (yyvsp[(1) - (2)].node), (yyvsp[(2) - (2)].node)); ;}
     break;
 
   case 7:
@@ -1718,7 +1718,7 @@ yyreduce:
                             add_symbol_table((yyvsp[(2) - (3)].id), 0);  
                             free((yyvsp[(1) - (3)].type));
                             free((yyvsp[(2) - (3)].id)); 
-                          }
+                          ;}
     break;
 
   case 8:
@@ -1739,7 +1739,7 @@ yyreduce:
                             free((yyvsp[(1) - (5)].type));
                             free((yyvsp[(2) - (5)].id)); 
                             free((yyvsp[(4) - (5)].num)); 
-                          }
+                          ;}
     break;
 
   case 9:
@@ -1750,7 +1750,7 @@ yyreduce:
                             add_symbol_table((yyvsp[(2) - (3)].id), 1);
                             free((yyvsp[(1) - (3)].type));
                             free((yyvsp[(2) - (3)].id)); 
-                          }
+                          ;}
     break;
 
   case 10:
@@ -1771,7 +1771,7 @@ yyreduce:
                             free((yyvsp[(1) - (5)].type));
                             free((yyvsp[(2) - (5)].id)); 
                             free((yyvsp[(4) - (5)].num)); 
-                          }
+                          ;}
     break;
 
   case 11:
@@ -1792,7 +1792,7 @@ yyreduce:
                             free((yyvsp[(1) - (5)].type));
                             free((yyvsp[(2) - (5)].id)); 
                             free((yyvsp[(4) - (5)].num)); 
-                          }
+                          ;}
     break;
 
   case 12:
@@ -1803,7 +1803,7 @@ yyreduce:
                             add_symbol_table((yyvsp[(2) - (3)].id), 2);
                             free((yyvsp[(1) - (3)].type));
                             free((yyvsp[(2) - (3)].id)); 
-                          }
+                          ;}
     break;
 
   case 13:
@@ -1824,7 +1824,7 @@ yyreduce:
                             free((yyvsp[(1) - (5)].type));
                             free((yyvsp[(2) - (5)].id)); 
                             free((yyvsp[(4) - (5)].str)); 
-                          }
+                          ;}
     break;
 
   case 14:
@@ -1833,12 +1833,12 @@ yyreduce:
                                                           add_symbol_table((yyvsp[(2) - (2)].id), 2); add_scope((yyvsp[(2) - (2)].id), 2); 
                                                           hasReturn = 0;
                                                           add_func_params((yyvsp[(2) - (2)].id));
-                                                        }
+                                                        ;}
     break;
 
   case 15:
 #line 262 "lang.y"
-    {;}
+    {;;}
     break;
 
   case 16:
@@ -1853,19 +1853,19 @@ yyreduce:
                                                           remove_scope();   
                                                           free((yyvsp[(1) - (10)].type));
                                                           free((yyvsp[(2) - (10)].id)); 
-                                                        }
+                                                        ;}
     break;
 
   case 17:
 #line 275 "lang.y"
     { add_symbol_table((yyvsp[(2) - (2)].id), 1); add_scope((yyvsp[(2) - (2)].id), 1); hasReturn = 0;
                                                           add_func_params((yyvsp[(2) - (2)].id)); 
-                                                        }
+                                                        ;}
     break;
 
   case 18:
 #line 278 "lang.y"
-    {;}
+    {;;}
     break;
 
   case 19:
@@ -1880,7 +1880,7 @@ yyreduce:
                                                           remove_scope();
                                                           free((yyvsp[(1) - (10)].type));
                                                           free((yyvsp[(2) - (10)].id));
-                                                        }
+                                                        ;}
     break;
 
   case 20:
@@ -1892,12 +1892,12 @@ yyreduce:
                                                           }
                                                           hasReturn = 0;
                                                           add_func_params((yyvsp[(2) - (2)].id));
-                                                        }
+                                                        ;}
     break;
 
   case 21:
 #line 299 "lang.y"
-    {;}
+    {;;}
     break;
 
   case 22:
@@ -1912,27 +1912,27 @@ yyreduce:
                                                           remove_scope();
                                                           free((yyvsp[(1) - (10)].type));
                                                           free((yyvsp[(2) - (10)].id));
-                                                        }
+                                                        ;}
     break;
 
   case 23:
 #line 314 "lang.y"
-    { (yyval.node) = (yyvsp[(1) - (1)].node); }
+    { (yyval.node) = (yyvsp[(1) - (1)].node); ;}
     break;
 
   case 24:
 #line 315 "lang.y"
-    { (yyval.node) = NULL; }
+    { (yyval.node) = NULL; ;}
     break;
 
   case 25:
 #line 319 "lang.y"
-    { (yyval.node) = (yyvsp[(1) - (1)].node); }
+    { (yyval.node) = (yyvsp[(1) - (1)].node); ;}
     break;
 
   case 26:
 #line 320 "lang.y"
-    { (yyval.node) = add_node2('R', (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node)); }
+    { (yyval.node) = add_node2('R', (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node)); ;}
     break;
 
   case 27:
@@ -1944,7 +1944,7 @@ yyreduce:
                             add_params(0);
                             free((yyvsp[(1) - (2)].type));
                             free((yyvsp[(2) - (2)].id)); 
-                          }
+                          ;}
     break;
 
   case 28:
@@ -1956,7 +1956,7 @@ yyreduce:
                             add_params(1);
                             free((yyvsp[(1) - (2)].type));
                             free((yyvsp[(2) - (2)].id));  
-                          }
+                          ;}
     break;
 
   case 29:
@@ -1968,52 +1968,52 @@ yyreduce:
                             add_params(2);
                             free((yyvsp[(1) - (2)].type));
                             free((yyvsp[(2) - (2)].id));      
-                          }
+                          ;}
     break;
 
   case 30:
 #line 351 "lang.y"
-    { (yyval.node) = add_node2('R', (yyvsp[(1) - (2)].node), (yyvsp[(2) - (2)].node)); }
+    { (yyval.node) = add_node2('R', (yyvsp[(1) - (2)].node), (yyvsp[(2) - (2)].node)); ;}
     break;
 
   case 31:
 #line 352 "lang.y"
-    { (yyval.node) = NULL; }
+    { (yyval.node) = NULL; ;}
     break;
 
   case 32:
 #line 356 "lang.y"
-    { (yyval.node) = (yyvsp[(1) - (1)].node); }
+    { (yyval.node) = (yyvsp[(1) - (1)].node); ;}
     break;
 
   case 33:
 #line 357 "lang.y"
-    { (yyval.node) = (yyvsp[(1) - (1)].node); }
+    { (yyval.node) = (yyvsp[(1) - (1)].node); ;}
     break;
 
   case 34:
 #line 358 "lang.y"
-    { (yyval.node) = (yyvsp[(1) - (1)].node); }
+    { (yyval.node) = (yyvsp[(1) - (1)].node); ;}
     break;
 
   case 35:
 #line 359 "lang.y"
-    { (yyval.node) = (yyvsp[(1) - (1)].node); }
+    { (yyval.node) = (yyvsp[(1) - (1)].node); ;}
     break;
 
   case 36:
 #line 360 "lang.y"
-    { (yyval.node) = (yyvsp[(1) - (1)].node); }
+    { (yyval.node) = (yyvsp[(1) - (1)].node); ;}
     break;
 
   case 37:
 #line 361 "lang.y"
-    { (yyval.node) = (yyvsp[(1) - (1)].node); }
+    { (yyval.node) = (yyvsp[(1) - (1)].node); ;}
     break;
 
   case 38:
 #line 362 "lang.y"
-    { (yyval.node) = (yyvsp[(1) - (1)].node); }
+    { (yyval.node) = (yyvsp[(1) - (1)].node); ;}
     break;
 
   case 39:
@@ -2031,7 +2031,7 @@ yyreduce:
                               }
                             }
                             free((yyvsp[(1) - (4)].id));
-                          }
+                          ;}
     break;
 
   case 40:
@@ -2040,7 +2040,7 @@ yyreduce:
                             (yyval.node)->value = (char *) strdup((yyvsp[(1) - (1)].id));   
                             (yyval.node)->type = get_id_type((yyvsp[(1) - (1)].id));
                             free((yyvsp[(1) - (1)].id));  
-                          }
+                          ;}
     break;
 
   case 41:
@@ -2049,7 +2049,7 @@ yyreduce:
                             (yyval.node)->type = 0;
                             (yyval.node)->value = (char *) strdup((yyvsp[(1) - (1)].num));    
                             free((yyvsp[(1) - (1)].num)); 
-                          }
+                          ;}
     break;
 
   case 42:
@@ -2058,7 +2058,7 @@ yyreduce:
                             (yyval.node)->type = 1;
                             (yyval.node)->value = (char *) strdup((yyvsp[(1) - (1)].num));  
                             free((yyvsp[(1) - (1)].num));   
-                          }
+                          ;}
     break;
 
   case 43:
@@ -2067,7 +2067,7 @@ yyreduce:
                             (yyval.node)->type = 2;
                             (yyval.node)->value = (char *) strdup((yyvsp[(1) - (1)].str));  
                             free((yyvsp[(1) - (1)].str));   
-                          }
+                          ;}
     break;
 
   case 44:
@@ -2082,7 +2082,7 @@ yyreduce:
                             (yyval.node)->node3 = (yyvsp[(3) - (3)].node);
                             build_expression_type((yyval.node));
                             free((yyvsp[(1) - (3)].id));
-                          }
+                          ;}
     break;
 
   case 45:
@@ -2097,7 +2097,7 @@ yyreduce:
                             (yyval.node)->node3 = (yyvsp[(3) - (3)].node);
                             build_expression_type((yyval.node));
                             free((yyvsp[(1) - (3)].num));
-                          }
+                          ;}
     break;
 
   case 46:
@@ -2112,7 +2112,7 @@ yyreduce:
                             (yyval.node)->node3 = (yyvsp[(3) - (3)].node);
                             build_expression_type((yyval.node));
                             free((yyvsp[(1) - (3)].num));
-                          }
+                          ;}
     break;
 
   case 47:
@@ -2127,50 +2127,50 @@ yyreduce:
                             (yyval.node)->node3 = (yyvsp[(3) - (3)].node);
                             build_expression_type((yyval.node));
                             free((yyvsp[(1) - (3)].str));
-                          }
+                          ;}
     break;
 
   case 48:
 #line 450 "lang.y"
     { (yyval.node) = add_node0('B'); 
           (yyval.node)->value = (char *) strdup("+");     
-        }
+        ;}
     break;
 
   case 49:
 #line 453 "lang.y"
     { (yyval.node) = add_node0('B'); 
           (yyval.node)->value = (char *) strdup("-");     
-        }
+        ;}
     break;
 
   case 50:
 #line 456 "lang.y"
     { (yyval.node) = add_node0('B'); 
           (yyval.node)->value = (char *) strdup("/");     
-        }
+        ;}
     break;
 
   case 51:
 #line 459 "lang.y"
     { (yyval.node) = add_node0('B'); 
           (yyval.node)->value = (char *) strdup("*");     
-        }
+        ;}
     break;
 
   case 52:
 #line 465 "lang.y"
-    { (yyval.node) = add_node2('C', (yyvsp[(3) - (7)].node), (yyvsp[(6) - (7)].node)); }
+    { (yyval.node) = add_node2('C', (yyvsp[(3) - (7)].node), (yyvsp[(6) - (7)].node)); ;}
     break;
 
   case 53:
 #line 466 "lang.y"
-    { (yyval.node) = add_node3('C', (yyvsp[(3) - (11)].node), (yyvsp[(6) - (11)].node), (yyvsp[(10) - (11)].node)); }
+    { (yyval.node) = add_node3('C', (yyvsp[(3) - (11)].node), (yyvsp[(6) - (11)].node), (yyvsp[(10) - (11)].node)); ;}
     break;
 
   case 54:
 #line 467 "lang.y"
-    { (yyval.node) = add_node2('W', (yyvsp[(3) - (7)].node), (yyvsp[(6) - (7)].node)); }
+    { (yyval.node) = add_node2('W', (yyvsp[(3) - (7)].node), (yyvsp[(6) - (7)].node)); ;}
     break;
 
   case 55:
@@ -2188,7 +2188,7 @@ yyreduce:
                     (yyval.node)->node3->type = get_id_type((yyvsp[(3) - (3)].id));
                     free((yyvsp[(1) - (3)].id));
                     free((yyvsp[(3) - (3)].id));
-                  }
+                  ;}
     break;
 
   case 56:
@@ -2206,7 +2206,7 @@ yyreduce:
                     (yyval.node)->node3->value = (char *) strdup((yyvsp[(3) - (3)].num));
                     free((yyvsp[(1) - (3)].id));
                     free((yyvsp[(3) - (3)].num));
-                  }
+                  ;}
     break;
 
   case 57:
@@ -2224,7 +2224,7 @@ yyreduce:
                     (yyval.node)->node3->value = (char *) strdup((yyvsp[(3) - (3)].num));
                     free((yyvsp[(1) - (3)].id));
                     free((yyvsp[(3) - (3)].num));
-                  }
+                  ;}
     break;
 
   case 58:
@@ -2242,7 +2242,7 @@ yyreduce:
                     (yyval.node)->node3->type = get_id_type((yyvsp[(3) - (3)].id));
                     free((yyvsp[(1) - (3)].num));
                     free((yyvsp[(3) - (3)].id));
-                  }
+                  ;}
     break;
 
   case 59:
@@ -2260,7 +2260,7 @@ yyreduce:
                     (yyval.node)->node3->value = (char *) strdup((yyvsp[(3) - (3)].num));
                     free((yyvsp[(1) - (3)].num));
                     free((yyvsp[(3) - (3)].num));
-                  }
+                  ;}
     break;
 
   case 60:
@@ -2278,7 +2278,7 @@ yyreduce:
                     (yyval.node)->node3->value = (char *) strdup((yyvsp[(3) - (3)].num));
                     free((yyvsp[(1) - (3)].num));
                     free((yyvsp[(3) - (3)].num));
-                  }
+                  ;}
     break;
 
   case 61:
@@ -2296,7 +2296,7 @@ yyreduce:
                     (yyval.node)->node3->type = get_id_type((yyvsp[(3) - (3)].id));
                     free((yyvsp[(1) - (3)].num));
                     free((yyvsp[(3) - (3)].id));
-                  }
+                  ;}
     break;
 
   case 62:
@@ -2314,7 +2314,7 @@ yyreduce:
                     (yyval.node)->node3->value = (char *) strdup((yyvsp[(3) - (3)].num));
                     free((yyvsp[(1) - (3)].num));
                     free((yyvsp[(3) - (3)].num));
-                  }
+                  ;}
     break;
 
   case 63:
@@ -2332,49 +2332,49 @@ yyreduce:
                     (yyval.node)->node3->value = (char *) strdup((yyvsp[(3) - (3)].num));
                     free((yyvsp[(1) - (3)].num));
                     free((yyvsp[(3) - (3)].num));
-                  }
+                  ;}
     break;
 
   case 64:
 #line 600 "lang.y"
     { (yyval.node) = add_node0('B'); 
           (yyval.node)->value = (char *) strdup("CGE");     
-        }
+        ;}
     break;
 
   case 65:
 #line 603 "lang.y"
     { (yyval.node) = add_node0('B'); 
           (yyval.node)->value = (char *) strdup("CGT");     
-        }
+        ;}
     break;
 
   case 66:
 #line 606 "lang.y"
     { (yyval.node) = add_node0('B'); 
           (yyval.node)->value = (char *) strdup("CLE");     
-        }
+        ;}
     break;
 
   case 67:
 #line 609 "lang.y"
     { (yyval.node) = add_node0('B'); 
           (yyval.node)->value = (char *) strdup("CLT");     
-        }
+        ;}
     break;
 
   case 68:
 #line 612 "lang.y"
     { (yyval.node) = add_node0('B'); 
           (yyval.node)->value = (char *) strdup("CNE");     
-        }
+        ;}
     break;
 
   case 69:
 #line 615 "lang.y"
     { (yyval.node) = add_node0('B'); 
           (yyval.node)->value = (char *) strdup("CEQ");     
-        }
+        ;}
     break;
 
   case 70:
@@ -2385,7 +2385,7 @@ yyreduce:
                             (yyval.node)->node1->value = (char *) strdup((yyvsp[(3) - (5)].id)); 
                             (yyval.node)->node1->type = get_id_type((yyvsp[(3) - (5)].id));
                             free((yyvsp[(3) - (5)].id));    
-                          }
+                          ;}
     break;
 
   case 71:
@@ -2396,7 +2396,7 @@ yyreduce:
                             (yyval.node)->node1->type = 2;
                             (yyval.node)->node1->value = (char *) strdup((yyvsp[(3) - (5)].str)); 
                             free((yyvsp[(3) - (5)].str));    
-                          }
+                          ;}
     break;
 
   case 72:
@@ -2407,7 +2407,7 @@ yyreduce:
                             (yyval.node)->node1->type = 0;
                             (yyval.node)->node1->value = (char *) strdup((yyvsp[(3) - (5)].num)); 
                             free((yyvsp[(3) - (5)].num));    
-                          }
+                          ;}
     break;
 
   case 73:
@@ -2418,7 +2418,7 @@ yyreduce:
                             (yyval.node)->node1->type = 1;
                             (yyval.node)->node1->value = (char *) strdup((yyvsp[(3) - (5)].num));     
                             free((yyvsp[(3) - (5)].num));
-                          }
+                          ;}
     break;
 
   case 74:
@@ -2434,7 +2434,7 @@ yyreduce:
                                           }
                                           free((yyvsp[(3) - (7)].id));  
                                           free((yyvsp[(5) - (7)].type));  
-                                        }
+                                        ;}
     break;
 
   case 75:
@@ -2450,7 +2450,7 @@ yyreduce:
                                           }
                                           free((yyvsp[(3) - (7)].id));  
                                           free((yyvsp[(5) - (7)].type));     
-                                        }
+                                        ;}
     break;
 
   case 76:
@@ -2466,7 +2466,7 @@ yyreduce:
                                           }
                                           free((yyvsp[(3) - (7)].id));  
                                           free((yyvsp[(5) - (7)].type));     
-                                        }
+                                        ;}
     break;
 
   case 77:
@@ -2483,7 +2483,7 @@ yyreduce:
                             }
                             hasReturn = 1;
                             free((yyvsp[(3) - (5)].id)); 
-                          }
+                          ;}
     break;
 
   case 78:
@@ -2500,7 +2500,7 @@ yyreduce:
                             } 
                             hasReturn = 1;
                             free((yyvsp[(3) - (5)].str));   
-                          }
+                          ;}
     break;
 
   case 79:
@@ -2517,7 +2517,7 @@ yyreduce:
                             }
                             hasReturn = 1;
                             free((yyvsp[(3) - (5)].num));   
-                          }
+                          ;}
     break;
 
   case 80:
@@ -2534,7 +2534,7 @@ yyreduce:
                             }
                             hasReturn = 1;
                             free((yyvsp[(3) - (5)].num));   
-                          }
+                          ;}
     break;
 
   case 81:
@@ -2546,7 +2546,7 @@ yyreduce:
                                             compare_params((yyvsp[(1) - (5)].id));
                                             free_current_params();
                                             free((yyvsp[(1) - (5)].id));  
-                                          }
+                                          ;}
     break;
 
   case 82:
@@ -2569,7 +2569,7 @@ yyreduce:
                                             free_current_params();
                                             free((yyvsp[(1) - (7)].id));  
                                             free((yyvsp[(3) - (7)].id));     
-                                          }
+                                          ;}
     break;
 
   case 83:
@@ -2581,7 +2581,7 @@ yyreduce:
                                             compare_params((yyvsp[(1) - (4)].id));
                                             free_current_params();
                                             free((yyvsp[(1) - (4)].id));  
-                                          }
+                                          ;}
     break;
 
   case 84:
@@ -2604,7 +2604,7 @@ yyreduce:
                                             free_current_params();
                                             free((yyvsp[(1) - (6)].id));  
                                             free((yyvsp[(3) - (6)].id));     
-                                          }
+                                          ;}
     break;
 
   case 85:
@@ -2614,7 +2614,7 @@ yyreduce:
                                 (yyval.node)->type = get_id_type((yyvsp[(1) - (1)].id));  
                                 add_current_params((yyval.node)->type); 
                                 free((yyvsp[(1) - (1)].id));  
-                              }
+                              ;}
     break;
 
   case 86:
@@ -2624,7 +2624,7 @@ yyreduce:
                                 (yyval.node)->value = (char *) strdup((yyvsp[(1) - (1)].num));  
                                 add_current_params((yyval.node)->type); 
                                 free((yyvsp[(1) - (1)].num));   
-                              }
+                              ;}
     break;
 
   case 87:
@@ -2634,7 +2634,7 @@ yyreduce:
                                 (yyval.node)->value = (char *) strdup((yyvsp[(1) - (1)].num));    
                                 add_current_params((yyval.node)->type); 
                                 free((yyvsp[(1) - (1)].num)); 
-                              }
+                              ;}
     break;
 
   case 88:
@@ -2644,7 +2644,7 @@ yyreduce:
                                 (yyval.node)->value = (char *) strdup((yyvsp[(1) - (1)].str));  
                                 add_current_params((yyval.node)->type);  
                                 free((yyvsp[(1) - (1)].str)); 
-                              }
+                              ;}
     break;
 
   case 89:
@@ -2658,7 +2658,7 @@ yyreduce:
                                 (yyval.node)->node2 = (yyvsp[(3) - (3)].node);
                                 add_current_params((yyval.node)->node1->type);
                                 free((yyvsp[(1) - (3)].id));
-                              }
+                              ;}
     break;
 
   case 90:
@@ -2672,7 +2672,7 @@ yyreduce:
                                 (yyval.node)->node2 = (yyvsp[(3) - (3)].node);  
                                 add_current_params((yyval.node)->node1->type);
                                 free((yyvsp[(1) - (3)].num));  
-                              }
+                              ;}
     break;
 
   case 91:
@@ -2686,7 +2686,7 @@ yyreduce:
                                 (yyval.node)->node2 = (yyvsp[(3) - (3)].node);
                                 add_current_params((yyval.node)->node1->type);
                                 free((yyvsp[(1) - (3)].num));   
-                              }
+                              ;}
     break;
 
   case 92:
@@ -2700,12 +2700,12 @@ yyreduce:
                                 (yyval.node)->node2 = (yyvsp[(3) - (3)].node);
                                 add_current_params((yyval.node)->node1->type);
                                 free((yyvsp[(1) - (3)].str));
-                              }
+                              ;}
     break;
 
 
 /* Line 1267 of yacc.c.  */
-#line 2709 "y.tab.c"
+#line 2709 "lang.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -3152,7 +3152,7 @@ void print_tree(struct node *node, int depth) {
         printf("FIM PARAMETROS\n");
       }
       break;
-    defaut:
+    default:
       break;
   }
 }
@@ -3261,25 +3261,21 @@ void compare_params(char *id) {
 
   if (current_params == NULL) {
     if (func_params->n_params != 0) {
-      printf("###########1 %d %d", params1->type, params2->type);
       print_semantic_error(id, 10);
     }
   } else {
     if (func_params->n_params != current_params->n_params) {
-      printf("###########2 %d %d", params1->type, params2->type);
       print_semantic_error(id, 10);
     }
     params1 = current_params->first;
     params2 = func_params->first;
     if (params1->type != params2->type) {
-      printf("###########3 %d %d", params1->type, params2->type);
       print_semantic_error(id, 10);
     }
     while (params1->next != NULL) {
       params1 = params1->next;
       params2 = params2->next;
       if (params1->type != params2->type) {
-        printf("###########4 %d %d", params1->type, params2->type);
         print_semantic_error(id, 10);
       }
     }

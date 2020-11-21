@@ -95,7 +95,7 @@ typedef union YYSTYPE
   struct node *node;
 }
 /* Line 1529 of yacc.c.  */
-#line 99 "y.tab.h"
+#line 99 "lang.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

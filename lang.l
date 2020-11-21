@@ -1,7 +1,9 @@
 %option noyywrap
+%option nounput
+%option noinput
 
 %{
-#include "y.tab.h"
+#include "lang.tab.h"
 #include "global_variable.h"
 #include <math.h>
 #include <string.h>

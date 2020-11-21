@@ -510,8 +510,9 @@ int yy_flex_debug = 0;
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
 #line 1 "lang.l"
-#line 4 "lang.l"
-#include "y.tab.h"
+#define YY_NO_INPUT 1
+#line 6 "lang.l"
+#include "lang.tab.h"
 #include "global_variable.h"
 #include <math.h>
 #include <string.h>
@@ -549,7 +550,7 @@ void printError() {
 }
 
 
-#line 553 "lex.yy.c"
+#line 554 "lex.yy.c"
 
 #define INITIAL 0
 #define C_COMMENT 1
@@ -609,8 +610,6 @@ extern int yywrap (void );
 #endif
 #endif
 
-    static void yyunput (int c,char *buf_ptr  );
-    
 #ifndef yytext_ptr
 static void yy_flex_strncpy (char *,yyconst char *,int );
 #endif
@@ -732,10 +731,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 80 "lang.l"
+#line 82 "lang.l"
 
 
-#line 739 "lex.yy.c"
+#line 738 "lex.yy.c"
 
 	if ( !(yy_init) )
 		{
@@ -820,7 +819,7 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 82 "lang.l"
+#line 84 "lang.l"
 { 
     word_position += 1;
     printf("typeInt (%s)\n", yytext);
@@ -830,7 +829,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 89 "lang.l"
+#line 91 "lang.l"
 { 
     word_position += 1;
     printf("typeFloat (%s)\n", yytext);
@@ -840,7 +839,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 96 "lang.l"
+#line 98 "lang.l"
 { 
     word_position += 1;
     printf("typeString (%s)\n", yytext);
@@ -850,7 +849,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 103 "lang.l"
+#line 105 "lang.l"
 {
     strcpy(errors[errors_num].word, yytext);
     strcpy(errors[errors_num].message, "id iniciado com numero");
@@ -864,7 +863,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 114 "lang.l"
+#line 116 "lang.l"
 { 
     word_position += 1;
     printf("dec (%s)\n", yytext); 
@@ -874,7 +873,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 121 "lang.l"
+#line 123 "lang.l"
 { 
     word_position += 1;
     printf("num (%s)\n", yytext); 
@@ -885,7 +884,7 @@ YY_RULE_SETUP
 case 7:
 /* rule 7 can match eol */
 YY_RULE_SETUP
-#line 128 "lang.l"
+#line 130 "lang.l"
 {
     word_position += 1;
     printf("STR (%s)\n", yytext); 
@@ -895,7 +894,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 135 "lang.l"
+#line 137 "lang.l"
 { 
     word_position += 1;
     BEGIN(C_COMMENT); 
@@ -903,7 +902,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 139 "lang.l"
+#line 141 "lang.l"
 { 
     word_position += 1;
     BEGIN(INITIAL); 
@@ -911,14 +910,14 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 144 "lang.l"
+#line 146 "lang.l"
 { 
     word_position += 1;
 }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 148 "lang.l"
+#line 150 "lang.l"
 {
     word_position += 1;
     printf("plus (%s)\n", yytext);
@@ -927,7 +926,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 154 "lang.l"
+#line 156 "lang.l"
 {
     word_position += 1;
     printf("minus (%s)\n", yytext);
@@ -936,7 +935,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 160 "lang.l"
+#line 162 "lang.l"
 {
     word_position += 1;
     printf("mult (%s)\n", yytext);
@@ -945,7 +944,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 166 "lang.l"
+#line 168 "lang.l"
 {
     word_position += 1;
     printf("div (%s)\n", yytext);
@@ -954,7 +953,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 172 "lang.l"
+#line 174 "lang.l"
 {
     word_position += 1;
     printf("eq (%s)\n", yytext);
@@ -963,7 +962,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 178 "lang.l"
+#line 180 "lang.l"
 {
     word_position += 1;
     printf("ceq (%s)\n", yytext);
@@ -972,7 +971,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 183 "lang.l"
+#line 185 "lang.l"
 {
     word_position += 1;
     printf("cne (%s)\n", yytext);
@@ -981,7 +980,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 188 "lang.l"
+#line 190 "lang.l"
 {
     word_position += 1;
     printf("clt (%s)\n", yytext);
@@ -990,7 +989,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 193 "lang.l"
+#line 195 "lang.l"
 {
     word_position += 1;
     printf("cle (%s)\n", yytext);
@@ -999,7 +998,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 198 "lang.l"
+#line 200 "lang.l"
 {
     word_position += 1;
     printf("cgt (%s)\n", yytext);
@@ -1008,7 +1007,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 203 "lang.l"
+#line 205 "lang.l"
 {
     word_position += 1;
     printf("cge (%s)\n", yytext);
@@ -1017,7 +1016,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 209 "lang.l"
+#line 211 "lang.l"
 {
     word_position += 1;
     printf("if (%s)\n", yytext);
@@ -1026,7 +1025,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 214 "lang.l"
+#line 216 "lang.l"
 {
     word_position += 1;
     printf("while (%s)\n", yytext);
@@ -1035,7 +1034,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 219 "lang.l"
+#line 221 "lang.l"
 {
     word_position += 1;
     printf("else (%s)\n", yytext);
@@ -1044,7 +1043,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 224 "lang.l"
+#line 226 "lang.l"
 {
     word_position += 1;
     printf("return (%s)\n", yytext);
@@ -1053,7 +1052,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 229 "lang.l"
+#line 231 "lang.l"
 {
     word_position += 1;
     printf("print (%s)\n", yytext);
@@ -1062,7 +1061,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 234 "lang.l"
+#line 236 "lang.l"
 {
     word_position += 1;
     printf("scan (%s)\n", yytext);
@@ -1071,7 +1070,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 240 "lang.l"
+#line 242 "lang.l"
 {
     word_position += 1;
     printf(",\n");
@@ -1080,7 +1079,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 245 "lang.l"
+#line 247 "lang.l"
 {
     word_position += 1;
     printf(";\n");
@@ -1089,7 +1088,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 250 "lang.l"
+#line 252 "lang.l"
 {
     word_position += 1;
     printf("{\n");
@@ -1098,7 +1097,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 255 "lang.l"
+#line 257 "lang.l"
 {
     word_position += 1;
     printf("}\n");
@@ -1107,7 +1106,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 260 "lang.l"
+#line 262 "lang.l"
 {
     word_position += 1;
     printf("(\n");
@@ -1116,7 +1115,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 265 "lang.l"
+#line 267 "lang.l"
 {
     word_position += 1;
     printf(")\n");
@@ -1126,7 +1125,7 @@ YY_RULE_SETUP
 case 34:
 /* rule 34 can match eol */
 YY_RULE_SETUP
-#line 271 "lang.l"
+#line 273 "lang.l"
 {
     line++;
     word_position = 1;
@@ -1134,17 +1133,17 @@ YY_RULE_SETUP
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 276 "lang.l"
+#line 278 "lang.l"
 {}
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 278 "lang.l"
+#line 280 "lang.l"
 {}
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 280 "lang.l"
+#line 282 "lang.l"
 {
     word_position += 1;
     printf("id (%s)\n", yytext);
@@ -1157,7 +1156,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 290 "lang.l"
+#line 292 "lang.l"
 { 
     strcpy(errors[errors_num].word, yytext);
     strcpy(errors[errors_num].message, "Simbolo nao permitido");
@@ -1171,10 +1170,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 301 "lang.l"
+#line 303 "lang.l"
 ECHO;
 	YY_BREAK
-#line 1178 "lex.yy.c"
+#line 1177 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(C_COMMENT):
 	yyterminate();
@@ -1502,43 +1501,6 @@ static int yy_get_next_buffer (void)
 	yy_is_jam = (yy_current_state == 86);
 
 	return yy_is_jam ? 0 : yy_current_state;
-}
-
-    static void yyunput (int c, register char * yy_bp )
-{
-	register char *yy_cp;
-    
-    yy_cp = (yy_c_buf_p);
-
-	/* undo effects of setting up yytext */
-	*yy_cp = (yy_hold_char);
-
-	if ( yy_cp < YY_CURRENT_BUFFER_LVALUE->yy_ch_buf + 2 )
-		{ /* need to shift things up to make room */
-		/* +2 for EOB chars. */
-		register yy_size_t number_to_move = (yy_n_chars) + 2;
-		register char *dest = &YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[
-					YY_CURRENT_BUFFER_LVALUE->yy_buf_size + 2];
-		register char *source =
-				&YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[number_to_move];
-
-		while ( source > YY_CURRENT_BUFFER_LVALUE->yy_ch_buf )
-			*--dest = *--source;
-
-		yy_cp += (int) (dest - source);
-		yy_bp += (int) (dest - source);
-		YY_CURRENT_BUFFER_LVALUE->yy_n_chars =
-			(yy_n_chars) = YY_CURRENT_BUFFER_LVALUE->yy_buf_size;
-
-		if ( yy_cp < YY_CURRENT_BUFFER_LVALUE->yy_ch_buf + 2 )
-			YY_FATAL_ERROR( "flex scanner push-back overflow" );
-		}
-
-	*--yy_cp = (char) c;
-
-	(yytext_ptr) = yy_bp;
-	(yy_hold_char) = *yy_cp;
-	(yy_c_buf_p) = yy_cp;
 }
 
 #ifndef YY_NO_INPUT
@@ -2172,7 +2134,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 301 "lang.l"
+#line 303 "lang.l"
 
 
 

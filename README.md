@@ -10,9 +10,9 @@ Target: x86_64-apple-darwin19.2.0
 Thread model: posix
 
 Instruções de Copilação:
-lex lang.l
-yacc -d lang.y
-gcc -g lex.yy.c y.tab.c -ll -o lang
+flex lang.l
+bison -vdt --graph lang.y
+gcc -g lex.yy.c lang.tab.c -Wall -o lang
 
 Instruções de Execução:
 ./lang input_correto1.txt
