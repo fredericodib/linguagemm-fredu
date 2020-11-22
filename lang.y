@@ -1311,9 +1311,9 @@ void print_symbol_table() {
   struct symbol_node *s;
   for(s=symbol_table; s != NULL; s=s->hh.next) {
     if (s->scope_name) {
-      printf("Simbolo: %s, Tipo: %d, Scopo: %s, key: %s\n", s->id, s->type, s->scope_name, s->key);
+      printf("Simbolo: %s, Tipo: %d, Escopo: %s, key: %s\n", s->id, s->type, s->scope_name, s->key);
     } else {
-      printf("Simbolo: %s, Tipo: %d, Scopo: Global, key: %s\n", s->id, s->type, s->key);
+      printf("Simbolo: %s, Tipo: %d, Escopo: Global, key: %s\n", s->id, s->type, s->key);
     }
   }
   printf("\n");
@@ -1460,6 +1460,8 @@ void print_semantic_error(char *id, int type) {
       break;
 
   }
+  printf("\n\n########## Tabela de Símbolos ##########\n");
+  print_symbol_table();
   exit(1);
 }
 
@@ -1478,4 +1480,7 @@ void build_expression_type(struct node *node) {
   }
 }
 
-void yyerror (char *s) {fprintf (stderr, "%s, linha: %d, posição: %d\n", s,line,word_position); exit(1);} 
+void yyerror (char *s) {
+  printf("\n######## ERRO ########\n");
+  fprintf (stderr, "%s, linha: %d, posição: %d\n", s,line,word_position);
+} 

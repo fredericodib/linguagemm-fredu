@@ -16,7 +16,7 @@ int main() {
   result = string1 + ", " + string2;
   print(result);
 
-  functionReturn = test(4,5);  
+  functionReturn = test(4,5.4);  
   print(functionReturn);
 
   if (functionReturn >= 20 {

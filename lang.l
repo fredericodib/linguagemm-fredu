@@ -12,24 +12,13 @@
 
 int line = 1;
 int word_position = 1;
-int errors_num = 0;
 
-struct ErrorStruct {
-    char word[50];
-    char message[100];
-    int line;
-    int word_position;
-};
-
-struct ErrorStruct errors[700];
-
-void printError() {
+void printError(char *word, char *message) {
     printf("\n######### ERROR #########\n");
-    printf("Número do erro: %d\n", errors_num);
-    printf("Palavra: %s\n", errors[errors_num-1].word);
-    printf("Mensagem do erro: %s\n", errors[errors_num-1].message);
-    printf("Line: %d\n", errors[errors_num-1].line);
-    printf("Posição: %d\n", errors[errors_num-1].word_position);
+    printf("Palavra: %s\n", word);
+    printf("Mensagem do erro: %s\n", message);
+    printf("Line: %d\n", line);
+    printf("Posição: %d\n", word_position);
     printf("##################\n\n");
 }
 
@@ -269,12 +258,7 @@ typeString "string"
 }
 
 . { 
-    strcpy(errors[errors_num].word, yytext);
-    strcpy(errors[errors_num].message, "Simbolo nao permitido");
-    errors[errors_num].line = line;
-    errors[errors_num].word_position = word_position;
-    errors_num++;
-    printError();
+    printError(yytext, "Simbolo nao permitido");
     word_position += strlen(yytext);
     exit(1);
 }
