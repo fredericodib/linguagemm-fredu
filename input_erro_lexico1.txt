@@ -1,6 +1,6 @@
 /* Isso é um comentario */
 
-string 5string1 = "Nice to meet you";
+string stri!ng1 = "Nice to meet you";
 string string2;
 string result;
 

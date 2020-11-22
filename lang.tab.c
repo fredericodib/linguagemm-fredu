@@ -3538,4 +3538,4 @@ void build_expression_type(struct node *node) {
   }
 }
 
-void yyerror (char *s) {fprintf (stderr, "%s, linha: %d\n", s,line); exit(1);} 
+void yyerror (char *s) {fprintf (stderr, "%s, linha: %d, posição: %d\n", s,line,word_position); exit(1);} 
