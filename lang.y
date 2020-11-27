@@ -1,9 +1,9 @@
-%error-verbose
+%define parse.error verbose
 %debug
 %locations
 
 %{
-void yyerror (char *s);
+void yyerror (const char *s);
 int yylex();
 #include "global_variable.h"
 #include <stdio.h>
@@ -1480,7 +1480,7 @@ void build_expression_type(struct node *node) {
   }
 }
 
-void yyerror (char *s) {
+void yyerror (const char *s) {
   printf("\n######## ERRO ########\n");
   fprintf (stderr, "%s, linha: %d, posição: %d\n", s,line,word_position);
 } 

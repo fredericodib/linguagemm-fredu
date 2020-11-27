@@ -2,7 +2,7 @@ Versão do flex:
 flex 2.5.35 Apple(flex-32)
 
 Versão do Bison:
-bison (GNU Bison) 2.3
+bison (GNU Bison) 3.7.4
 
 Versão do GCC:
 Apple clang version 11.0.3 (clang-1103.0.32.62)

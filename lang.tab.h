@@ -1,14 +1,14 @@
-/* A Bison parser, made by GNU Bison 2.3.  */
+/* A Bison parser, made by GNU Bison 3.7.4.  */
 
-/* Skeleton interface for Bison's Yacc-like parsers in C
+/* Bison interface for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989, 1990, 2000, 2001, 2002, 2003, 2004, 2005, 2006
-   Free Software Foundation, Inc.
+   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2020 Free Software Foundation,
+   Inc.
 
-   This program is free software; you can redistribute it and/or modify
+   This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2, or (at your option)
-   any later version.
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
 
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,9 +16,7 @@
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.  */
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
 /* As a special exception, you may create a larger work that contains
    part or all of the Bison parser skeleton and distribute that work
@@ -33,88 +31,89 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-/* Tokens.  */
+/* DO NOT RELY ON FEATURES THAT ARE NOT DOCUMENTED in the manual,
+   especially those whose name start with YY_ or yy_.  They are
+   private implementation details that can be changed or removed.  */
+
+#ifndef YY_YY_LANG_TAB_H_INCLUDED
+# define YY_YY_LANG_TAB_H_INCLUDED
+/* Debug traces.  */
+#ifndef YYDEBUG
+# define YYDEBUG 1
+#endif
+#if YYDEBUG
+extern int yydebug;
+#endif
+
+/* Token kinds.  */
 #ifndef YYTOKENTYPE
 # define YYTOKENTYPE
-   /* Put the tokens into the symbol table, so that GDB and other debuggers
-      know about them.  */
-   enum yytokentype {
-     ID = 258,
-     TYPEINT = 259,
-     TYPEFLOAT = 260,
-     TYPESTRING = 261,
-     INT = 262,
-     DEC = 263,
-     STR = 264,
-     WHILE = 265,
-     IF = 266,
-     ELSE = 267,
-     RETURN = 268,
-     PRINT = 269,
-     SCAN = 270,
-     CGE = 271,
-     CGT = 272,
-     CLE = 273,
-     CLT = 274,
-     CNE = 275,
-     CEQ = 276
-   };
+  enum yytokentype
+  {
+    YYEMPTY = -2,
+    YYEOF = 0,                     /* "end of file"  */
+    YYerror = 256,                 /* error  */
+    YYUNDEF = 257,                 /* "invalid token"  */
+    ID = 258,                      /* ID  */
+    TYPEINT = 259,                 /* TYPEINT  */
+    TYPEFLOAT = 260,               /* TYPEFLOAT  */
+    TYPESTRING = 261,              /* TYPESTRING  */
+    INT = 262,                     /* INT  */
+    DEC = 263,                     /* DEC  */
+    STR = 264,                     /* STR  */
+    WHILE = 265,                   /* WHILE  */
+    IF = 266,                      /* IF  */
+    ELSE = 267,                    /* ELSE  */
+    RETURN = 268,                  /* RETURN  */
+    PRINT = 269,                   /* PRINT  */
+    SCAN = 270,                    /* SCAN  */
+    CGE = 271,                     /* CGE  */
+    CGT = 272,                     /* CGT  */
+    CLE = 273,                     /* CLE  */
+    CLT = 274,                     /* CLT  */
+    CNE = 275,                     /* CNE  */
+    CEQ = 276                      /* CEQ  */
+  };
+  typedef enum yytokentype yytoken_kind_t;
 #endif
-/* Tokens.  */
-#define ID 258
-#define TYPEINT 259
-#define TYPEFLOAT 260
-#define TYPESTRING 261
-#define INT 262
-#define DEC 263
-#define STR 264
-#define WHILE 265
-#define IF 266
-#define ELSE 267
-#define RETURN 268
-#define PRINT 269
-#define SCAN 270
-#define CGE 271
-#define CGT 272
-#define CLE 273
-#define CLT 274
-#define CNE 275
-#define CEQ 276
 
-
-
-
+/* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef union YYSTYPE
-#line 128 "lang.y"
+union YYSTYPE
 {
+#line 128 "lang.y"
+
   char *id;
   char *num;
   char *type;
   char *str;
   struct node *node;
-}
-/* Line 1529 of yacc.c.  */
-#line 99 "lang.tab.h"
-	YYSTYPE;
-# define yystype YYSTYPE /* obsolescent; will be withdrawn */
-# define YYSTYPE_IS_DECLARED 1
+
+#line 93 "lang.tab.h"
+
+};
+typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
+# define YYSTYPE_IS_DECLARED 1
 #endif
 
-extern YYSTYPE yylval;
-
+/* Location type.  */
 #if ! defined YYLTYPE && ! defined YYLTYPE_IS_DECLARED
-typedef struct YYLTYPE
+typedef struct YYLTYPE YYLTYPE;
+struct YYLTYPE
 {
   int first_line;
   int first_column;
   int last_line;
   int last_column;
-} YYLTYPE;
-# define yyltype YYLTYPE /* obsolescent; will be withdrawn */
+};
 # define YYLTYPE_IS_DECLARED 1
 # define YYLTYPE_IS_TRIVIAL 1
 #endif
 
+
+extern YYSTYPE yylval;
 extern YYLTYPE yylloc;
+int yyparse (void);
+
+#endif /* !YY_YY_LANG_TAB_H_INCLUDED  */

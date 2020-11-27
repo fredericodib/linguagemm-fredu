@@ -17,26 +17,26 @@ Grammar
    11    | TYPESTRING ID ';'
    12    | TYPESTRING ID '=' STR ';'
 
-   13 @1: /* empty */
+   13 $@1: %empty
 
-   14 @2: /* empty */
+   14 $@2: %empty
 
-   15 func: TYPESTRING ID @1 '(' paramsList ')' @2 '{' contentList '}'
+   15 func: TYPESTRING ID $@1 '(' paramsList ')' $@2 '{' contentList '}'
 
-   16 @3: /* empty */
+   16 $@3: %empty
 
-   17 @4: /* empty */
+   17 $@4: %empty
 
-   18 func: TYPEFLOAT ID @3 '(' paramsList ')' @4 '{' contentList '}'
+   18 func: TYPEFLOAT ID $@3 '(' paramsList ')' $@4 '{' contentList '}'
 
-   19 @5: /* empty */
+   19 $@5: %empty
 
-   20 @6: /* empty */
+   20 $@6: %empty
 
-   21 func: TYPEINT ID @5 '(' paramsList ')' @6 '{' contentList '}'
+   21 func: TYPEINT ID $@5 '(' paramsList ')' $@6 '{' contentList '}'
 
    22 paramsList: params
-   23           | /* empty */
+   23           | %empty
 
    24 params: param
    25       | param ',' params
@@ -46,7 +46,7 @@ Grammar
    28      | TYPESTRING ID
 
    29 contentList: content contentList
-   30            | /* empty */
+   30            | %empty
 
    31 content: var
    32        | addValue
@@ -124,105 +124,127 @@ Grammar
 
 Terminals, with rules where they appear
 
-$end (0) 0
-'(' (40) 15 18 21 51 52 53 69 70 71 72 73 74 75 76 77 78 79 80 81 82
-    83
-')' (41) 15 18 21 51 52 53 69 70 71 72 73 74 75 76 77 78 79 80 81 82
-    83
-'*' (42) 50
-'+' (43) 47
-',' (44) 25 73 74 75 88 89 90 91
-'-' (45) 48
-'/' (47) 49
-';' (59) 6 7 8 9 10 11 12 38 69 70 71 72 73 74 75 76 77 78 79 80 81
-    82 83
-'=' (61) 7 9 10 12 38 81 83
-'{' (123) 15 18 21 51 52 53
-'}' (125) 15 18 21 51 52 53
-error (256)
-ID (258) 6 7 8 9 10 11 12 15 18 21 26 27 28 38 39 43 54 55 56 57 60
-    69 73 74 75 76 80 81 82 83 84 88
-TYPEINT (259) 6 7 21 26 73
-TYPEFLOAT (260) 8 9 10 18 27 74
-TYPESTRING (261) 11 12 15 28 75
-INT (262) 7 9 40 44 55 57 58 59 61 71 78 85 89
-DEC (263) 10 41 45 56 59 60 61 62 72 79 86 90
-STR (264) 12 42 46 70 77 87 91
-WHILE (265) 53
-IF (266) 51 52
-ELSE (267) 52
-RETURN (268) 76 77 78 79
-PRINT (269) 69 70 71 72
-SCAN (270) 73 74 75
-CGE (271) 63
-CGT (272) 64
-CLE (273) 65
-CLT (274) 66
-CNE (275) 67
-CEQ (276) 68
+    $end (0) 0
+    '(' (40) 15 18 21 51 52 53 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83
+    ')' (41) 15 18 21 51 52 53 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83
+    '*' (42) 50
+    '+' (43) 47
+    ',' (44) 25 73 74 75 88 89 90 91
+    '-' (45) 48
+    '/' (47) 49
+    ';' (59) 6 7 8 9 10 11 12 38 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83
+    '=' (61) 7 9 10 12 38 81 83
+    '{' (123) 15 18 21 51 52 53
+    '}' (125) 15 18 21 51 52 53
+    error (256)
+    ID <id> (258) 6 7 8 9 10 11 12 15 18 21 26 27 28 38 39 43 54 55 56 57 60 69 73 74 75 76 80 81 82 83 84 88
+    TYPEINT <type> (259) 6 7 21 26 73
+    TYPEFLOAT <type> (260) 8 9 10 18 27 74
+    TYPESTRING <type> (261) 11 12 15 28 75
+    INT <num> (262) 7 9 40 44 55 57 58 59 61 71 78 85 89
+    DEC <num> (263) 10 41 45 56 59 60 61 62 72 79 86 90
+    STR <str> (264) 12 42 46 70 77 87 91
+    WHILE (265) 53
+    IF (266) 51 52
+    ELSE (267) 52
+    RETURN (268) 76 77 78 79
+    PRINT (269) 69 70 71 72
+    SCAN (270) 73 74 75
+    CGE (271) 63
+    CGT (272) 64
+    CLE (273) 65
+    CLT (274) 66
+    CNE (275) 67
+    CEQ (276) 68
 
 
 Nonterminals, with rules where they appear
 
-$accept (33)
-    on left: 0
-prog (34)
-    on left: 1, on right: 0
-globalList (35)
-    on left: 2 3 4 5, on right: 1 2 5
-var (36)
-    on left: 6 7 8 9 10 11 12, on right: 2 3 31
-func (37)
-    on left: 15 18 21, on right: 4 5
-@1 (38)
-    on left: 13, on right: 15
-@2 (39)
-    on left: 14, on right: 15
-@3 (40)
-    on left: 16, on right: 18
-@4 (41)
-    on left: 17, on right: 18
-@5 (42)
-    on left: 19, on right: 21
-@6 (43)
-    on left: 20, on right: 21
-paramsList (44)
-    on left: 22 23, on right: 15 18 21
-params (45)
-    on left: 24 25, on right: 22 25
-param (46)
-    on left: 26 27 28, on right: 24 25
-contentList (47)
-    on left: 29 30, on right: 15 18 21 29 51 52 53
-content (48)
-    on left: 31 32 33 34 35 36 37, on right: 29
-addValue (49)
-    on left: 38, on right: 32
-expression (50)
-    on left: 39 40 41 42 43 44 45 46, on right: 38 43 44 45 46
-op (51)
-    on left: 47 48 49 50, on right: 43 44 45 46
-comand (52)
-    on left: 51 52 53, on right: 33
-condition (53)
-    on left: 54 55 56 57 58 59 60 61 62, on right: 51 52 53
-cond (54)
-    on left: 63 64 65 66 67 68, on right: 54 55 56 57 58 59 60 61 62
-print (55)
-    on left: 69 70 71 72, on right: 34
-scan (56)
-    on left: 73 74 75, on right: 35
-return (57)
-    on left: 76 77 78 79, on right: 36
-callFunc (58)
-    on left: 80 81 82 83, on right: 37
-callFuncParams (59)
-    on left: 84 85 86 87 88 89 90 91, on right: 80 81 88 89 90 91
+    $accept (33)
+        on left: 0
+    prog <node> (34)
+        on left: 1
+        on right: 0
+    globalList <node> (35)
+        on left: 2 3 4 5
+        on right: 1 2 5
+    var <node> (36)
+        on left: 6 7 8 9 10 11 12
+        on right: 2 3 31
+    func <node> (37)
+        on left: 15 18 21
+        on right: 4 5
+    $@1 (38)
+        on left: 13
+        on right: 15
+    $@2 (39)
+        on left: 14
+        on right: 15
+    $@3 (40)
+        on left: 16
+        on right: 18
+    $@4 (41)
+        on left: 17
+        on right: 18
+    $@5 (42)
+        on left: 19
+        on right: 21
+    $@6 (43)
+        on left: 20
+        on right: 21
+    paramsList <node> (44)
+        on left: 22 23
+        on right: 15 18 21
+    params <node> (45)
+        on left: 24 25
+        on right: 22 25
+    param <node> (46)
+        on left: 26 27 28
+        on right: 24 25
+    contentList <node> (47)
+        on left: 29 30
+        on right: 15 18 21 29 51 52 53
+    content <node> (48)
+        on left: 31 32 33 34 35 36 37
+        on right: 29
+    addValue <node> (49)
+        on left: 38
+        on right: 32
+    expression <node> (50)
+        on left: 39 40 41 42 43 44 45 46
+        on right: 38 43 44 45 46
+    op <node> (51)
+        on left: 47 48 49 50
+        on right: 43 44 45 46
+    comand <node> (52)
+        on left: 51 52 53
+        on right: 33
+    condition <node> (53)
+        on left: 54 55 56 57 58 59 60 61 62
+        on right: 51 52 53
+    cond <node> (54)
+        on left: 63 64 65 66 67 68
+        on right: 54 55 56 57 58 59 60 61 62
+    print <node> (55)
+        on left: 69 70 71 72
+        on right: 34
+    scan <node> (56)
+        on left: 73 74 75
+        on right: 35
+    return <node> (57)
+        on left: 76 77 78 79
+        on right: 36
+    callFunc <node> (58)
+        on left: 80 81 82 83
+        on right: 37
+    callFuncParams <node> (59)
+        on left: 84 85 86 87 88 89 90 91
+        on right: 80 81 88 89 90 91
 
 
-state 0
+State 0
 
-    0 $accept: . prog $end
+    0 $accept: • prog $end
 
     TYPEINT     shift, and go to state 1
     TYPEFLOAT   shift, and go to state 2
@@ -234,46 +256,46 @@ state 0
     func        go to state 7
 
 
-state 1
+State 1
 
-    6 var: TYPEINT . ID ';'
-    7    | TYPEINT . ID '=' INT ';'
-   21 func: TYPEINT . ID @5 '(' paramsList ')' @6 '{' contentList '}'
+    6 var: TYPEINT • ID ';'
+    7    | TYPEINT • ID '=' INT ';'
+   21 func: TYPEINT • ID $@5 '(' paramsList ')' $@6 '{' contentList '}'
 
     ID  shift, and go to state 8
 
 
-state 2
+State 2
 
-    8 var: TYPEFLOAT . ID ';'
-    9    | TYPEFLOAT . ID '=' INT ';'
-   10    | TYPEFLOAT . ID '=' DEC ';'
-   18 func: TYPEFLOAT . ID @3 '(' paramsList ')' @4 '{' contentList '}'
+    8 var: TYPEFLOAT • ID ';'
+    9    | TYPEFLOAT • ID '=' INT ';'
+   10    | TYPEFLOAT • ID '=' DEC ';'
+   18 func: TYPEFLOAT • ID $@3 '(' paramsList ')' $@4 '{' contentList '}'
 
     ID  shift, and go to state 9
 
 
-state 3
+State 3
 
-   11 var: TYPESTRING . ID ';'
-   12    | TYPESTRING . ID '=' STR ';'
-   15 func: TYPESTRING . ID @1 '(' paramsList ')' @2 '{' contentList '}'
+   11 var: TYPESTRING • ID ';'
+   12    | TYPESTRING • ID '=' STR ';'
+   15 func: TYPESTRING • ID $@1 '(' paramsList ')' $@2 '{' contentList '}'
 
     ID  shift, and go to state 10
 
 
-state 4
+State 4
 
-    0 $accept: prog . $end
+    0 $accept: prog • $end
 
     $end  shift, and go to state 11
 
 
-state 5
+State 5
 
-    1 prog: globalList .
-    2 globalList: globalList . var
-    5           | globalList . func
+    1 prog: globalList •
+    2 globalList: globalList • var
+    5           | globalList • func
 
     TYPEINT     shift, and go to state 1
     TYPEFLOAT   shift, and go to state 2
@@ -285,159 +307,159 @@ state 5
     func  go to state 13
 
 
-state 6
+State 6
 
-    3 globalList: var .
+    3 globalList: var •
 
     $default  reduce using rule 3 (globalList)
 
 
-state 7
+State 7
 
-    4 globalList: func .
+    4 globalList: func •
 
     $default  reduce using rule 4 (globalList)
 
 
-state 8
+State 8
 
-    6 var: TYPEINT ID . ';'
-    7    | TYPEINT ID . '=' INT ';'
-   21 func: TYPEINT ID . @5 '(' paramsList ')' @6 '{' contentList '}'
+    6 var: TYPEINT ID • ';'
+    7    | TYPEINT ID • '=' INT ';'
+   21 func: TYPEINT ID • $@5 '(' paramsList ')' $@6 '{' contentList '}'
 
     ';'  shift, and go to state 14
     '='  shift, and go to state 15
 
-    $default  reduce using rule 19 (@5)
+    $default  reduce using rule 19 ($@5)
 
-    @5  go to state 16
+    $@5  go to state 16
 
 
-state 9
+State 9
 
-    8 var: TYPEFLOAT ID . ';'
-    9    | TYPEFLOAT ID . '=' INT ';'
-   10    | TYPEFLOAT ID . '=' DEC ';'
-   18 func: TYPEFLOAT ID . @3 '(' paramsList ')' @4 '{' contentList '}'
+    8 var: TYPEFLOAT ID • ';'
+    9    | TYPEFLOAT ID • '=' INT ';'
+   10    | TYPEFLOAT ID • '=' DEC ';'
+   18 func: TYPEFLOAT ID • $@3 '(' paramsList ')' $@4 '{' contentList '}'
 
     ';'  shift, and go to state 17
     '='  shift, and go to state 18
 
-    $default  reduce using rule 16 (@3)
+    $default  reduce using rule 16 ($@3)
 
-    @3  go to state 19
+    $@3  go to state 19
 
 
-state 10
+State 10
 
-   11 var: TYPESTRING ID . ';'
-   12    | TYPESTRING ID . '=' STR ';'
-   15 func: TYPESTRING ID . @1 '(' paramsList ')' @2 '{' contentList '}'
+   11 var: TYPESTRING ID • ';'
+   12    | TYPESTRING ID • '=' STR ';'
+   15 func: TYPESTRING ID • $@1 '(' paramsList ')' $@2 '{' contentList '}'
 
     ';'  shift, and go to state 20
     '='  shift, and go to state 21
 
-    $default  reduce using rule 13 (@1)
+    $default  reduce using rule 13 ($@1)
 
-    @1  go to state 22
+    $@1  go to state 22
 
 
-state 11
+State 11
 
-    0 $accept: prog $end .
+    0 $accept: prog $end •
 
     $default  accept
 
 
-state 12
+State 12
 
-    2 globalList: globalList var .
+    2 globalList: globalList var •
 
     $default  reduce using rule 2 (globalList)
 
 
-state 13
+State 13
 
-    5 globalList: globalList func .
+    5 globalList: globalList func •
 
     $default  reduce using rule 5 (globalList)
 
 
-state 14
+State 14
 
-    6 var: TYPEINT ID ';' .
+    6 var: TYPEINT ID ';' •
 
     $default  reduce using rule 6 (var)
 
 
-state 15
+State 15
 
-    7 var: TYPEINT ID '=' . INT ';'
+    7 var: TYPEINT ID '=' • INT ';'
 
     INT  shift, and go to state 23
 
 
-state 16
+State 16
 
-   21 func: TYPEINT ID @5 . '(' paramsList ')' @6 '{' contentList '}'
+   21 func: TYPEINT ID $@5 • '(' paramsList ')' $@6 '{' contentList '}'
 
     '('  shift, and go to state 24
 
 
-state 17
+State 17
 
-    8 var: TYPEFLOAT ID ';' .
+    8 var: TYPEFLOAT ID ';' •
 
     $default  reduce using rule 8 (var)
 
 
-state 18
+State 18
 
-    9 var: TYPEFLOAT ID '=' . INT ';'
-   10    | TYPEFLOAT ID '=' . DEC ';'
+    9 var: TYPEFLOAT ID '=' • INT ';'
+   10    | TYPEFLOAT ID '=' • DEC ';'
 
     INT  shift, and go to state 25
     DEC  shift, and go to state 26
 
 
-state 19
+State 19
 
-   18 func: TYPEFLOAT ID @3 . '(' paramsList ')' @4 '{' contentList '}'
+   18 func: TYPEFLOAT ID $@3 • '(' paramsList ')' $@4 '{' contentList '}'
 
     '('  shift, and go to state 27
 
 
-state 20
+State 20
 
-   11 var: TYPESTRING ID ';' .
+   11 var: TYPESTRING ID ';' •
 
     $default  reduce using rule 11 (var)
 
 
-state 21
+State 21
 
-   12 var: TYPESTRING ID '=' . STR ';'
+   12 var: TYPESTRING ID '=' • STR ';'
 
     STR  shift, and go to state 28
 
 
-state 22
+State 22
 
-   15 func: TYPESTRING ID @1 . '(' paramsList ')' @2 '{' contentList '}'
+   15 func: TYPESTRING ID $@1 • '(' paramsList ')' $@2 '{' contentList '}'
 
     '('  shift, and go to state 29
 
 
-state 23
+State 23
 
-    7 var: TYPEINT ID '=' INT . ';'
+    7 var: TYPEINT ID '=' INT • ';'
 
     ';'  shift, and go to state 30
 
 
-state 24
+State 24
 
-   21 func: TYPEINT ID @5 '(' . paramsList ')' @6 '{' contentList '}'
+   21 func: TYPEINT ID $@5 '(' • paramsList ')' $@6 '{' contentList '}'
 
     TYPEINT     shift, and go to state 31
     TYPEFLOAT   shift, and go to state 32
@@ -450,23 +472,23 @@ state 24
     param       go to state 36
 
 
-state 25
+State 25
 
-    9 var: TYPEFLOAT ID '=' INT . ';'
+    9 var: TYPEFLOAT ID '=' INT • ';'
 
     ';'  shift, and go to state 37
 
 
-state 26
+State 26
 
-   10 var: TYPEFLOAT ID '=' DEC . ';'
+   10 var: TYPEFLOAT ID '=' DEC • ';'
 
     ';'  shift, and go to state 38
 
 
-state 27
+State 27
 
-   18 func: TYPEFLOAT ID @3 '(' . paramsList ')' @4 '{' contentList '}'
+   18 func: TYPEFLOAT ID $@3 '(' • paramsList ')' $@4 '{' contentList '}'
 
     TYPEINT     shift, and go to state 31
     TYPEFLOAT   shift, and go to state 32
@@ -479,16 +501,16 @@ state 27
     param       go to state 36
 
 
-state 28
+State 28
 
-   12 var: TYPESTRING ID '=' STR . ';'
+   12 var: TYPESTRING ID '=' STR • ';'
 
     ';'  shift, and go to state 40
 
 
-state 29
+State 29
 
-   15 func: TYPESTRING ID @1 '(' . paramsList ')' @2 '{' contentList '}'
+   15 func: TYPESTRING ID $@1 '(' • paramsList ')' $@2 '{' contentList '}'
 
     TYPEINT     shift, and go to state 31
     TYPEFLOAT   shift, and go to state 32
@@ -501,126 +523,126 @@ state 29
     param       go to state 36
 
 
-state 30
+State 30
 
-    7 var: TYPEINT ID '=' INT ';' .
+    7 var: TYPEINT ID '=' INT ';' •
 
     $default  reduce using rule 7 (var)
 
 
-state 31
+State 31
 
-   26 param: TYPEINT . ID
+   26 param: TYPEINT • ID
 
     ID  shift, and go to state 42
 
 
-state 32
+State 32
 
-   27 param: TYPEFLOAT . ID
+   27 param: TYPEFLOAT • ID
 
     ID  shift, and go to state 43
 
 
-state 33
+State 33
 
-   28 param: TYPESTRING . ID
+   28 param: TYPESTRING • ID
 
     ID  shift, and go to state 44
 
 
-state 34
+State 34
 
-   21 func: TYPEINT ID @5 '(' paramsList . ')' @6 '{' contentList '}'
+   21 func: TYPEINT ID $@5 '(' paramsList • ')' $@6 '{' contentList '}'
 
     ')'  shift, and go to state 45
 
 
-state 35
+State 35
 
-   22 paramsList: params .
+   22 paramsList: params •
 
     $default  reduce using rule 22 (paramsList)
 
 
-state 36
+State 36
 
-   24 params: param .
-   25       | param . ',' params
+   24 params: param •
+   25       | param • ',' params
 
     ','  shift, and go to state 46
 
     $default  reduce using rule 24 (params)
 
 
-state 37
+State 37
 
-    9 var: TYPEFLOAT ID '=' INT ';' .
+    9 var: TYPEFLOAT ID '=' INT ';' •
 
     $default  reduce using rule 9 (var)
 
 
-state 38
+State 38
 
-   10 var: TYPEFLOAT ID '=' DEC ';' .
+   10 var: TYPEFLOAT ID '=' DEC ';' •
 
     $default  reduce using rule 10 (var)
 
 
-state 39
+State 39
 
-   18 func: TYPEFLOAT ID @3 '(' paramsList . ')' @4 '{' contentList '}'
+   18 func: TYPEFLOAT ID $@3 '(' paramsList • ')' $@4 '{' contentList '}'
 
     ')'  shift, and go to state 47
 
 
-state 40
+State 40
 
-   12 var: TYPESTRING ID '=' STR ';' .
+   12 var: TYPESTRING ID '=' STR ';' •
 
     $default  reduce using rule 12 (var)
 
 
-state 41
+State 41
 
-   15 func: TYPESTRING ID @1 '(' paramsList . ')' @2 '{' contentList '}'
+   15 func: TYPESTRING ID $@1 '(' paramsList • ')' $@2 '{' contentList '}'
 
     ')'  shift, and go to state 48
 
 
-state 42
+State 42
 
-   26 param: TYPEINT ID .
+   26 param: TYPEINT ID •
 
     $default  reduce using rule 26 (param)
 
 
-state 43
+State 43
 
-   27 param: TYPEFLOAT ID .
+   27 param: TYPEFLOAT ID •
 
     $default  reduce using rule 27 (param)
 
 
-state 44
+State 44
 
-   28 param: TYPESTRING ID .
+   28 param: TYPESTRING ID •
 
     $default  reduce using rule 28 (param)
 
 
-state 45
+State 45
 
-   21 func: TYPEINT ID @5 '(' paramsList ')' . @6 '{' contentList '}'
+   21 func: TYPEINT ID $@5 '(' paramsList ')' • $@6 '{' contentList '}'
 
-    $default  reduce using rule 20 (@6)
+    $default  reduce using rule 20 ($@6)
 
-    @6  go to state 49
+    $@6  go to state 49
 
 
-state 46
+State 46
 
-   25 params: param ',' . params
+   25 params: param ',' • params
 
     TYPEINT     shift, and go to state 31
     TYPEFLOAT   shift, and go to state 32
@@ -630,55 +652,55 @@ state 46
     param   go to state 36
 
 
-state 47
+State 47
 
-   18 func: TYPEFLOAT ID @3 '(' paramsList ')' . @4 '{' contentList '}'
+   18 func: TYPEFLOAT ID $@3 '(' paramsList ')' • $@4 '{' contentList '}'
 
-    $default  reduce using rule 17 (@4)
+    $default  reduce using rule 17 ($@4)
 
-    @4  go to state 51
-
-
-state 48
-
-   15 func: TYPESTRING ID @1 '(' paramsList ')' . @2 '{' contentList '}'
-
-    $default  reduce using rule 14 (@2)
-
-    @2  go to state 52
+    $@4  go to state 51
 
 
-state 49
+State 48
 
-   21 func: TYPEINT ID @5 '(' paramsList ')' @6 . '{' contentList '}'
+   15 func: TYPESTRING ID $@1 '(' paramsList ')' • $@2 '{' contentList '}'
+
+    $default  reduce using rule 14 ($@2)
+
+    $@2  go to state 52
+
+
+State 49
+
+   21 func: TYPEINT ID $@5 '(' paramsList ')' $@6 • '{' contentList '}'
 
     '{'  shift, and go to state 53
 
 
-state 50
+State 50
 
-   25 params: param ',' params .
+   25 params: param ',' params •
 
     $default  reduce using rule 25 (params)
 
 
-state 51
+State 51
 
-   18 func: TYPEFLOAT ID @3 '(' paramsList ')' @4 . '{' contentList '}'
+   18 func: TYPEFLOAT ID $@3 '(' paramsList ')' $@4 • '{' contentList '}'
 
     '{'  shift, and go to state 54
 
 
-state 52
+State 52
 
-   15 func: TYPESTRING ID @1 '(' paramsList ')' @2 . '{' contentList '}'
+   15 func: TYPESTRING ID $@1 '(' paramsList ')' $@2 • '{' contentList '}'
 
     '{'  shift, and go to state 55
 
 
-state 53
+State 53
 
-   21 func: TYPEINT ID @5 '(' paramsList ')' @6 '{' . contentList '}'
+   21 func: TYPEINT ID $@5 '(' paramsList ')' $@6 '{' • contentList '}'
 
     ID          shift, and go to state 56
     TYPEINT     shift, and go to state 57
@@ -703,9 +725,9 @@ state 53
     callFunc     go to state 73
 
 
-state 54
+State 54
 
-   18 func: TYPEFLOAT ID @3 '(' paramsList ')' @4 '{' . contentList '}'
+   18 func: TYPEFLOAT ID $@3 '(' paramsList ')' $@4 '{' • contentList '}'
 
     ID          shift, and go to state 56
     TYPEINT     shift, and go to state 57
@@ -730,9 +752,9 @@ state 54
     callFunc     go to state 73
 
 
-state 55
+State 55
 
-   15 func: TYPESTRING ID @1 '(' paramsList ')' @2 '{' . contentList '}'
+   15 func: TYPESTRING ID $@1 '(' paramsList ')' $@2 '{' • contentList '}'
 
     ID          shift, and go to state 56
     TYPEINT     shift, and go to state 57
@@ -757,104 +779,104 @@ state 55
     callFunc     go to state 73
 
 
-state 56
+State 56
 
-   38 addValue: ID . '=' expression ';'
-   80 callFunc: ID . '(' callFuncParams ')' ';'
-   81         | ID . '=' ID '(' callFuncParams ')' ';'
-   82         | ID . '(' ')' ';'
-   83         | ID . '=' ID '(' ')' ';'
+   38 addValue: ID • '=' expression ';'
+   80 callFunc: ID • '(' callFuncParams ')' ';'
+   81         | ID • '=' ID '(' callFuncParams ')' ';'
+   82         | ID • '(' ')' ';'
+   83         | ID • '=' ID '(' ')' ';'
 
     '='  shift, and go to state 76
     '('  shift, and go to state 77
 
 
-state 57
+State 57
 
-    6 var: TYPEINT . ID ';'
-    7    | TYPEINT . ID '=' INT ';'
+    6 var: TYPEINT • ID ';'
+    7    | TYPEINT • ID '=' INT ';'
 
     ID  shift, and go to state 78
 
 
-state 58
+State 58
 
-    8 var: TYPEFLOAT . ID ';'
-    9    | TYPEFLOAT . ID '=' INT ';'
-   10    | TYPEFLOAT . ID '=' DEC ';'
+    8 var: TYPEFLOAT • ID ';'
+    9    | TYPEFLOAT • ID '=' INT ';'
+   10    | TYPEFLOAT • ID '=' DEC ';'
 
     ID  shift, and go to state 79
 
 
-state 59
+State 59
 
-   11 var: TYPESTRING . ID ';'
-   12    | TYPESTRING . ID '=' STR ';'
+   11 var: TYPESTRING • ID ';'
+   12    | TYPESTRING • ID '=' STR ';'
 
     ID  shift, and go to state 80
 
 
-state 60
+State 60
 
-   53 comand: WHILE . '(' condition ')' '{' contentList '}'
+   53 comand: WHILE • '(' condition ')' '{' contentList '}'
 
     '('  shift, and go to state 81
 
 
-state 61
+State 61
 
-   51 comand: IF . '(' condition ')' '{' contentList '}'
-   52       | IF . '(' condition ')' '{' contentList '}' ELSE '{' contentList '}'
+   51 comand: IF • '(' condition ')' '{' contentList '}'
+   52       | IF • '(' condition ')' '{' contentList '}' ELSE '{' contentList '}'
 
     '('  shift, and go to state 82
 
 
-state 62
+State 62
 
-   76 return: RETURN . '(' ID ')' ';'
-   77       | RETURN . '(' STR ')' ';'
-   78       | RETURN . '(' INT ')' ';'
-   79       | RETURN . '(' DEC ')' ';'
+   76 return: RETURN • '(' ID ')' ';'
+   77       | RETURN • '(' STR ')' ';'
+   78       | RETURN • '(' INT ')' ';'
+   79       | RETURN • '(' DEC ')' ';'
 
     '('  shift, and go to state 83
 
 
-state 63
+State 63
 
-   69 print: PRINT . '(' ID ')' ';'
-   70      | PRINT . '(' STR ')' ';'
-   71      | PRINT . '(' INT ')' ';'
-   72      | PRINT . '(' DEC ')' ';'
+   69 print: PRINT • '(' ID ')' ';'
+   70      | PRINT • '(' STR ')' ';'
+   71      | PRINT • '(' INT ')' ';'
+   72      | PRINT • '(' DEC ')' ';'
 
     '('  shift, and go to state 84
 
 
-state 64
+State 64
 
-   73 scan: SCAN . '(' ID ',' TYPEINT ')' ';'
-   74     | SCAN . '(' ID ',' TYPEFLOAT ')' ';'
-   75     | SCAN . '(' ID ',' TYPESTRING ')' ';'
+   73 scan: SCAN • '(' ID ',' TYPEINT ')' ';'
+   74     | SCAN • '(' ID ',' TYPEFLOAT ')' ';'
+   75     | SCAN • '(' ID ',' TYPESTRING ')' ';'
 
     '('  shift, and go to state 85
 
 
-state 65
+State 65
 
-   31 content: var .
+   31 content: var •
 
     $default  reduce using rule 31 (content)
 
 
-state 66
+State 66
 
-   21 func: TYPEINT ID @5 '(' paramsList ')' @6 '{' contentList . '}'
+   21 func: TYPEINT ID $@5 '(' paramsList ')' $@6 '{' contentList • '}'
 
     '}'  shift, and go to state 86
 
 
-state 67
+State 67
 
-   29 contentList: content . contentList
+   29 contentList: content • contentList
 
     ID          shift, and go to state 56
     TYPEINT     shift, and go to state 57
@@ -879,67 +901,67 @@ state 67
     callFunc     go to state 73
 
 
-state 68
+State 68
 
-   32 content: addValue .
+   32 content: addValue •
 
     $default  reduce using rule 32 (content)
 
 
-state 69
+State 69
 
-   33 content: comand .
+   33 content: comand •
 
     $default  reduce using rule 33 (content)
 
 
-state 70
+State 70
 
-   34 content: print .
+   34 content: print •
 
     $default  reduce using rule 34 (content)
 
 
-state 71
+State 71
 
-   35 content: scan .
+   35 content: scan •
 
     $default  reduce using rule 35 (content)
 
 
-state 72
+State 72
 
-   36 content: return .
+   36 content: return •
 
     $default  reduce using rule 36 (content)
 
 
-state 73
+State 73
 
-   37 content: callFunc .
+   37 content: callFunc •
 
     $default  reduce using rule 37 (content)
 
 
-state 74
+State 74
 
-   18 func: TYPEFLOAT ID @3 '(' paramsList ')' @4 '{' contentList . '}'
+   18 func: TYPEFLOAT ID $@3 '(' paramsList ')' $@4 '{' contentList • '}'
 
     '}'  shift, and go to state 88
 
 
-state 75
+State 75
 
-   15 func: TYPESTRING ID @1 '(' paramsList ')' @2 '{' contentList . '}'
+   15 func: TYPESTRING ID $@1 '(' paramsList ')' $@2 '{' contentList • '}'
 
     '}'  shift, and go to state 89
 
 
-state 76
+State 76
 
-   38 addValue: ID '=' . expression ';'
-   81 callFunc: ID '=' . ID '(' callFuncParams ')' ';'
-   83         | ID '=' . ID '(' ')' ';'
+   38 addValue: ID '=' • expression ';'
+   81 callFunc: ID '=' • ID '(' callFuncParams ')' ';'
+   83         | ID '=' • ID '(' ')' ';'
 
     ID   shift, and go to state 90
     INT  shift, and go to state 91
@@ -949,10 +971,10 @@ state 76
     expression  go to state 94
 
 
-state 77
+State 77
 
-   80 callFunc: ID '(' . callFuncParams ')' ';'
-   82         | ID '(' . ')' ';'
+   80 callFunc: ID '(' • callFuncParams ')' ';'
+   82         | ID '(' • ')' ';'
 
     ID   shift, and go to state 95
     INT  shift, and go to state 96
@@ -963,37 +985,37 @@ state 77
     callFuncParams  go to state 100
 
 
-state 78
+State 78
 
-    6 var: TYPEINT ID . ';'
-    7    | TYPEINT ID . '=' INT ';'
+    6 var: TYPEINT ID • ';'
+    7    | TYPEINT ID • '=' INT ';'
 
     ';'  shift, and go to state 14
     '='  shift, and go to state 15
 
 
-state 79
+State 79
 
-    8 var: TYPEFLOAT ID . ';'
-    9    | TYPEFLOAT ID . '=' INT ';'
-   10    | TYPEFLOAT ID . '=' DEC ';'
+    8 var: TYPEFLOAT ID • ';'
+    9    | TYPEFLOAT ID • '=' INT ';'
+   10    | TYPEFLOAT ID • '=' DEC ';'
 
     ';'  shift, and go to state 17
     '='  shift, and go to state 18
 
 
-state 80
+State 80
 
-   11 var: TYPESTRING ID . ';'
-   12    | TYPESTRING ID . '=' STR ';'
+   11 var: TYPESTRING ID • ';'
+   12    | TYPESTRING ID • '=' STR ';'
 
     ';'  shift, and go to state 20
     '='  shift, and go to state 21
 
 
-state 81
+State 81
 
-   53 comand: WHILE '(' . condition ')' '{' contentList '}'
+   53 comand: WHILE '(' • condition ')' '{' contentList '}'
 
     ID   shift, and go to state 101
     INT  shift, and go to state 102
@@ -1002,10 +1024,10 @@ state 81
     condition  go to state 104
 
 
-state 82
+State 82
 
-   51 comand: IF '(' . condition ')' '{' contentList '}'
-   52       | IF '(' . condition ')' '{' contentList '}' ELSE '{' contentList '}'
+   51 comand: IF '(' • condition ')' '{' contentList '}'
+   52       | IF '(' • condition ')' '{' contentList '}' ELSE '{' contentList '}'
 
     ID   shift, and go to state 101
     INT  shift, and go to state 102
@@ -1014,12 +1036,12 @@ state 82
     condition  go to state 105
 
 
-state 83
+State 83
 
-   76 return: RETURN '(' . ID ')' ';'
-   77       | RETURN '(' . STR ')' ';'
-   78       | RETURN '(' . INT ')' ';'
-   79       | RETURN '(' . DEC ')' ';'
+   76 return: RETURN '(' • ID ')' ';'
+   77       | RETURN '(' • STR ')' ';'
+   78       | RETURN '(' • INT ')' ';'
+   79       | RETURN '(' • DEC ')' ';'
 
     ID   shift, and go to state 106
     INT  shift, and go to state 107
@@ -1027,12 +1049,12 @@ state 83
     STR  shift, and go to state 109
 
 
-state 84
+State 84
 
-   69 print: PRINT '(' . ID ')' ';'
-   70      | PRINT '(' . STR ')' ';'
-   71      | PRINT '(' . INT ')' ';'
-   72      | PRINT '(' . DEC ')' ';'
+   69 print: PRINT '(' • ID ')' ';'
+   70      | PRINT '(' • STR ')' ';'
+   71      | PRINT '(' • INT ')' ';'
+   72      | PRINT '(' • DEC ')' ';'
 
     ID   shift, and go to state 110
     INT  shift, and go to state 111
@@ -1040,49 +1062,49 @@ state 84
     STR  shift, and go to state 113
 
 
-state 85
+State 85
 
-   73 scan: SCAN '(' . ID ',' TYPEINT ')' ';'
-   74     | SCAN '(' . ID ',' TYPEFLOAT ')' ';'
-   75     | SCAN '(' . ID ',' TYPESTRING ')' ';'
+   73 scan: SCAN '(' • ID ',' TYPEINT ')' ';'
+   74     | SCAN '(' • ID ',' TYPEFLOAT ')' ';'
+   75     | SCAN '(' • ID ',' TYPESTRING ')' ';'
 
     ID  shift, and go to state 114
 
 
-state 86
+State 86
 
-   21 func: TYPEINT ID @5 '(' paramsList ')' @6 '{' contentList '}' .
+   21 func: TYPEINT ID $@5 '(' paramsList ')' $@6 '{' contentList '}' •
 
     $default  reduce using rule 21 (func)
 
 
-state 87
+State 87
 
-   29 contentList: content contentList .
+   29 contentList: content contentList •
 
     $default  reduce using rule 29 (contentList)
 
 
-state 88
+State 88
 
-   18 func: TYPEFLOAT ID @3 '(' paramsList ')' @4 '{' contentList '}' .
+   18 func: TYPEFLOAT ID $@3 '(' paramsList ')' $@4 '{' contentList '}' •
 
     $default  reduce using rule 18 (func)
 
 
-state 89
+State 89
 
-   15 func: TYPESTRING ID @1 '(' paramsList ')' @2 '{' contentList '}' .
+   15 func: TYPESTRING ID $@1 '(' paramsList ')' $@2 '{' contentList '}' •
 
     $default  reduce using rule 15 (func)
 
 
-state 90
+State 90
 
-   39 expression: ID .
-   43           | ID . op expression
-   81 callFunc: ID '=' ID . '(' callFuncParams ')' ';'
-   83         | ID '=' ID . '(' ')' ';'
+   39 expression: ID •
+   43           | ID • op expression
+   81 callFunc: ID '=' ID • '(' callFuncParams ')' ';'
+   83         | ID '=' ID • '(' ')' ';'
 
     '('  shift, and go to state 115
     '+'  shift, and go to state 116
@@ -1095,10 +1117,10 @@ state 90
     op  go to state 120
 
 
-state 91
+State 91
 
-   40 expression: INT .
-   44           | INT . op expression
+   40 expression: INT •
+   44           | INT • op expression
 
     '+'  shift, and go to state 116
     '-'  shift, and go to state 117
@@ -1110,10 +1132,10 @@ state 91
     op  go to state 121
 
 
-state 92
+State 92
 
-   41 expression: DEC .
-   45           | DEC . op expression
+   41 expression: DEC •
+   45           | DEC • op expression
 
     '+'  shift, and go to state 116
     '-'  shift, and go to state 117
@@ -1125,10 +1147,10 @@ state 92
     op  go to state 122
 
 
-state 93
+State 93
 
-   42 expression: STR .
-   46           | STR . op expression
+   42 expression: STR •
+   46           | STR • op expression
 
     '+'  shift, and go to state 116
     '-'  shift, and go to state 117
@@ -1140,72 +1162,72 @@ state 93
     op  go to state 123
 
 
-state 94
+State 94
 
-   38 addValue: ID '=' expression . ';'
+   38 addValue: ID '=' expression • ';'
 
     ';'  shift, and go to state 124
 
 
-state 95
+State 95
 
-   84 callFuncParams: ID .
-   88               | ID . ',' callFuncParams
+   84 callFuncParams: ID •
+   88               | ID • ',' callFuncParams
 
     ','  shift, and go to state 125
 
     $default  reduce using rule 84 (callFuncParams)
 
 
-state 96
+State 96
 
-   85 callFuncParams: INT .
-   89               | INT . ',' callFuncParams
+   85 callFuncParams: INT •
+   89               | INT • ',' callFuncParams
 
     ','  shift, and go to state 126
 
     $default  reduce using rule 85 (callFuncParams)
 
 
-state 97
+State 97
 
-   86 callFuncParams: DEC .
-   90               | DEC . ',' callFuncParams
+   86 callFuncParams: DEC •
+   90               | DEC • ',' callFuncParams
 
     ','  shift, and go to state 127
 
     $default  reduce using rule 86 (callFuncParams)
 
 
-state 98
+State 98
 
-   87 callFuncParams: STR .
-   91               | STR . ',' callFuncParams
+   87 callFuncParams: STR •
+   91               | STR • ',' callFuncParams
 
     ','  shift, and go to state 128
 
     $default  reduce using rule 87 (callFuncParams)
 
 
-state 99
+State 99
 
-   82 callFunc: ID '(' ')' . ';'
+   82 callFunc: ID '(' ')' • ';'
 
     ';'  shift, and go to state 129
 
 
-state 100
+State 100
 
-   80 callFunc: ID '(' callFuncParams . ')' ';'
+   80 callFunc: ID '(' callFuncParams • ')' ';'
 
     ')'  shift, and go to state 130
 
 
-state 101
+State 101
 
-   54 condition: ID . cond ID
-   55          | ID . cond INT
-   56          | ID . cond DEC
+   54 condition: ID • cond ID
+   55          | ID • cond INT
+   56          | ID • cond DEC
 
     CGE  shift, and go to state 131
     CGT  shift, and go to state 132
@@ -1217,11 +1239,11 @@ state 101
     cond  go to state 137
 
 
-state 102
+State 102
 
-   57 condition: INT . cond ID
-   58          | INT . cond INT
-   59          | INT . cond DEC
+   57 condition: INT • cond ID
+   58          | INT • cond INT
+   59          | INT • cond DEC
 
     CGE  shift, and go to state 131
     CGT  shift, and go to state 132
@@ -1233,11 +1255,11 @@ state 102
     cond  go to state 138
 
 
-state 103
+State 103
 
-   60 condition: DEC . cond ID
-   61          | DEC . cond INT
-   62          | DEC . cond DEC
+   60 condition: DEC • cond ID
+   61          | DEC • cond INT
+   62          | DEC • cond DEC
 
     CGE  shift, and go to state 131
     CGT  shift, and go to state 132
@@ -1249,90 +1271,90 @@ state 103
     cond  go to state 139
 
 
-state 104
+State 104
 
-   53 comand: WHILE '(' condition . ')' '{' contentList '}'
+   53 comand: WHILE '(' condition • ')' '{' contentList '}'
 
     ')'  shift, and go to state 140
 
 
-state 105
+State 105
 
-   51 comand: IF '(' condition . ')' '{' contentList '}'
-   52       | IF '(' condition . ')' '{' contentList '}' ELSE '{' contentList '}'
+   51 comand: IF '(' condition • ')' '{' contentList '}'
+   52       | IF '(' condition • ')' '{' contentList '}' ELSE '{' contentList '}'
 
     ')'  shift, and go to state 141
 
 
-state 106
+State 106
 
-   76 return: RETURN '(' ID . ')' ';'
+   76 return: RETURN '(' ID • ')' ';'
 
     ')'  shift, and go to state 142
 
 
-state 107
+State 107
 
-   78 return: RETURN '(' INT . ')' ';'
+   78 return: RETURN '(' INT • ')' ';'
 
     ')'  shift, and go to state 143
 
 
-state 108
+State 108
 
-   79 return: RETURN '(' DEC . ')' ';'
+   79 return: RETURN '(' DEC • ')' ';'
 
     ')'  shift, and go to state 144
 
 
-state 109
+State 109
 
-   77 return: RETURN '(' STR . ')' ';'
+   77 return: RETURN '(' STR • ')' ';'
 
     ')'  shift, and go to state 145
 
 
-state 110
+State 110
 
-   69 print: PRINT '(' ID . ')' ';'
+   69 print: PRINT '(' ID • ')' ';'
 
     ')'  shift, and go to state 146
 
 
-state 111
+State 111
 
-   71 print: PRINT '(' INT . ')' ';'
+   71 print: PRINT '(' INT • ')' ';'
 
     ')'  shift, and go to state 147
 
 
-state 112
+State 112
 
-   72 print: PRINT '(' DEC . ')' ';'
+   72 print: PRINT '(' DEC • ')' ';'
 
     ')'  shift, and go to state 148
 
 
-state 113
+State 113
 
-   70 print: PRINT '(' STR . ')' ';'
+   70 print: PRINT '(' STR • ')' ';'
 
     ')'  shift, and go to state 149
 
 
-state 114
+State 114
 
-   73 scan: SCAN '(' ID . ',' TYPEINT ')' ';'
-   74     | SCAN '(' ID . ',' TYPEFLOAT ')' ';'
-   75     | SCAN '(' ID . ',' TYPESTRING ')' ';'
+   73 scan: SCAN '(' ID • ',' TYPEINT ')' ';'
+   74     | SCAN '(' ID • ',' TYPEFLOAT ')' ';'
+   75     | SCAN '(' ID • ',' TYPESTRING ')' ';'
 
     ','  shift, and go to state 150
 
 
-state 115
+State 115
 
-   81 callFunc: ID '=' ID '(' . callFuncParams ')' ';'
-   83         | ID '=' ID '(' . ')' ';'
+   81 callFunc: ID '=' ID '(' • callFuncParams ')' ';'
+   83         | ID '=' ID '(' • ')' ';'
 
     ID   shift, and go to state 95
     INT  shift, and go to state 96
@@ -1343,37 +1365,37 @@ state 115
     callFuncParams  go to state 152
 
 
-state 116
+State 116
 
-   47 op: '+' .
+   47 op: '+' •
 
     $default  reduce using rule 47 (op)
 
 
-state 117
+State 117
 
-   48 op: '-' .
+   48 op: '-' •
 
     $default  reduce using rule 48 (op)
 
 
-state 118
+State 118
 
-   49 op: '/' .
+   49 op: '/' •
 
     $default  reduce using rule 49 (op)
 
 
-state 119
+State 119
 
-   50 op: '*' .
+   50 op: '*' •
 
     $default  reduce using rule 50 (op)
 
 
-state 120
+State 120
 
-   43 expression: ID op . expression
+   43 expression: ID op • expression
 
     ID   shift, and go to state 153
     INT  shift, and go to state 91
@@ -1383,9 +1405,9 @@ state 120
     expression  go to state 154
 
 
-state 121
+State 121
 
-   44 expression: INT op . expression
+   44 expression: INT op • expression
 
     ID   shift, and go to state 153
     INT  shift, and go to state 91
@@ -1395,9 +1417,9 @@ state 121
     expression  go to state 155
 
 
-state 122
+State 122
 
-   45 expression: DEC op . expression
+   45 expression: DEC op • expression
 
     ID   shift, and go to state 153
     INT  shift, and go to state 91
@@ -1407,9 +1429,9 @@ state 122
     expression  go to state 156
 
 
-state 123
+State 123
 
-   46 expression: STR op . expression
+   46 expression: STR op • expression
 
     ID   shift, and go to state 153
     INT  shift, and go to state 91
@@ -1419,16 +1441,16 @@ state 123
     expression  go to state 157
 
 
-state 124
+State 124
 
-   38 addValue: ID '=' expression ';' .
+   38 addValue: ID '=' expression ';' •
 
     $default  reduce using rule 38 (addValue)
 
 
-state 125
+State 125
 
-   88 callFuncParams: ID ',' . callFuncParams
+   88 callFuncParams: ID ',' • callFuncParams
 
     ID   shift, and go to state 95
     INT  shift, and go to state 96
@@ -1438,9 +1460,9 @@ state 125
     callFuncParams  go to state 158
 
 
-state 126
+State 126
 
-   89 callFuncParams: INT ',' . callFuncParams
+   89 callFuncParams: INT ',' • callFuncParams
 
     ID   shift, and go to state 95
     INT  shift, and go to state 96
@@ -1450,9 +1472,9 @@ state 126
     callFuncParams  go to state 159
 
 
-state 127
+State 127
 
-   90 callFuncParams: DEC ',' . callFuncParams
+   90 callFuncParams: DEC ',' • callFuncParams
 
     ID   shift, and go to state 95
     INT  shift, and go to state 96
@@ -1462,9 +1484,9 @@ state 127
     callFuncParams  go to state 160
 
 
-state 128
+State 128
 
-   91 callFuncParams: STR ',' . callFuncParams
+   91 callFuncParams: STR ',' • callFuncParams
 
     ID   shift, and go to state 95
     INT  shift, and go to state 96
@@ -1474,195 +1496,195 @@ state 128
     callFuncParams  go to state 161
 
 
-state 129
+State 129
 
-   82 callFunc: ID '(' ')' ';' .
+   82 callFunc: ID '(' ')' ';' •
 
     $default  reduce using rule 82 (callFunc)
 
 
-state 130
+State 130
 
-   80 callFunc: ID '(' callFuncParams ')' . ';'
+   80 callFunc: ID '(' callFuncParams ')' • ';'
 
     ';'  shift, and go to state 162
 
 
-state 131
+State 131
 
-   63 cond: CGE .
+   63 cond: CGE •
 
     $default  reduce using rule 63 (cond)
 
 
-state 132
+State 132
 
-   64 cond: CGT .
+   64 cond: CGT •
 
     $default  reduce using rule 64 (cond)
 
 
-state 133
+State 133
 
-   65 cond: CLE .
+   65 cond: CLE •
 
     $default  reduce using rule 65 (cond)
 
 
-state 134
+State 134
 
-   66 cond: CLT .
+   66 cond: CLT •
 
     $default  reduce using rule 66 (cond)
 
 
-state 135
+State 135
 
-   67 cond: CNE .
+   67 cond: CNE •
 
     $default  reduce using rule 67 (cond)
 
 
-state 136
+State 136
 
-   68 cond: CEQ .
+   68 cond: CEQ •
 
     $default  reduce using rule 68 (cond)
 
 
-state 137
+State 137
 
-   54 condition: ID cond . ID
-   55          | ID cond . INT
-   56          | ID cond . DEC
+   54 condition: ID cond • ID
+   55          | ID cond • INT
+   56          | ID cond • DEC
 
     ID   shift, and go to state 163
     INT  shift, and go to state 164
     DEC  shift, and go to state 165
 
 
-state 138
+State 138
 
-   57 condition: INT cond . ID
-   58          | INT cond . INT
-   59          | INT cond . DEC
+   57 condition: INT cond • ID
+   58          | INT cond • INT
+   59          | INT cond • DEC
 
     ID   shift, and go to state 166
     INT  shift, and go to state 167
     DEC  shift, and go to state 168
 
 
-state 139
+State 139
 
-   60 condition: DEC cond . ID
-   61          | DEC cond . INT
-   62          | DEC cond . DEC
+   60 condition: DEC cond • ID
+   61          | DEC cond • INT
+   62          | DEC cond • DEC
 
     ID   shift, and go to state 169
     INT  shift, and go to state 170
     DEC  shift, and go to state 171
 
 
-state 140
+State 140
 
-   53 comand: WHILE '(' condition ')' . '{' contentList '}'
+   53 comand: WHILE '(' condition ')' • '{' contentList '}'
 
     '{'  shift, and go to state 172
 
 
-state 141
+State 141
 
-   51 comand: IF '(' condition ')' . '{' contentList '}'
-   52       | IF '(' condition ')' . '{' contentList '}' ELSE '{' contentList '}'
+   51 comand: IF '(' condition ')' • '{' contentList '}'
+   52       | IF '(' condition ')' • '{' contentList '}' ELSE '{' contentList '}'
 
     '{'  shift, and go to state 173
 
 
-state 142
+State 142
 
-   76 return: RETURN '(' ID ')' . ';'
+   76 return: RETURN '(' ID ')' • ';'
 
     ';'  shift, and go to state 174
 
 
-state 143
+State 143
 
-   78 return: RETURN '(' INT ')' . ';'
+   78 return: RETURN '(' INT ')' • ';'
 
     ';'  shift, and go to state 175
 
 
-state 144
+State 144
 
-   79 return: RETURN '(' DEC ')' . ';'
+   79 return: RETURN '(' DEC ')' • ';'
 
     ';'  shift, and go to state 176
 
 
-state 145
+State 145
 
-   77 return: RETURN '(' STR ')' . ';'
+   77 return: RETURN '(' STR ')' • ';'
 
     ';'  shift, and go to state 177
 
 
-state 146
+State 146
 
-   69 print: PRINT '(' ID ')' . ';'
+   69 print: PRINT '(' ID ')' • ';'
 
     ';'  shift, and go to state 178
 
 
-state 147
+State 147
 
-   71 print: PRINT '(' INT ')' . ';'
+   71 print: PRINT '(' INT ')' • ';'
 
     ';'  shift, and go to state 179
 
 
-state 148
+State 148
 
-   72 print: PRINT '(' DEC ')' . ';'
+   72 print: PRINT '(' DEC ')' • ';'
 
     ';'  shift, and go to state 180
 
 
-state 149
+State 149
 
-   70 print: PRINT '(' STR ')' . ';'
+   70 print: PRINT '(' STR ')' • ';'
 
     ';'  shift, and go to state 181
 
 
-state 150
+State 150
 
-   73 scan: SCAN '(' ID ',' . TYPEINT ')' ';'
-   74     | SCAN '(' ID ',' . TYPEFLOAT ')' ';'
-   75     | SCAN '(' ID ',' . TYPESTRING ')' ';'
+   73 scan: SCAN '(' ID ',' • TYPEINT ')' ';'
+   74     | SCAN '(' ID ',' • TYPEFLOAT ')' ';'
+   75     | SCAN '(' ID ',' • TYPESTRING ')' ';'
 
     TYPEINT     shift, and go to state 182
     TYPEFLOAT   shift, and go to state 183
     TYPESTRING  shift, and go to state 184
 
 
-state 151
+State 151
 
-   83 callFunc: ID '=' ID '(' ')' . ';'
+   83 callFunc: ID '=' ID '(' ')' • ';'
 
     ';'  shift, and go to state 185
 
 
-state 152
+State 152
 
-   81 callFunc: ID '=' ID '(' callFuncParams . ')' ';'
+   81 callFunc: ID '=' ID '(' callFuncParams • ')' ';'
 
     ')'  shift, and go to state 186
 
 
-state 153
+State 153
 
-   39 expression: ID .
-   43           | ID . op expression
+   39 expression: ID •
+   43           | ID • op expression
 
     '+'  shift, and go to state 116
     '-'  shift, and go to state 117
@@ -1674,135 +1696,135 @@ state 153
     op  go to state 120
 
 
-state 154
+State 154
 
-   43 expression: ID op expression .
+   43 expression: ID op expression •
 
     $default  reduce using rule 43 (expression)
 
 
-state 155
+State 155
 
-   44 expression: INT op expression .
+   44 expression: INT op expression •
 
     $default  reduce using rule 44 (expression)
 
 
-state 156
+State 156
 
-   45 expression: DEC op expression .
+   45 expression: DEC op expression •
 
     $default  reduce using rule 45 (expression)
 
 
-state 157
+State 157
 
-   46 expression: STR op expression .
+   46 expression: STR op expression •
 
     $default  reduce using rule 46 (expression)
 
 
-state 158
+State 158
 
-   88 callFuncParams: ID ',' callFuncParams .
+   88 callFuncParams: ID ',' callFuncParams •
 
     $default  reduce using rule 88 (callFuncParams)
 
 
-state 159
+State 159
 
-   89 callFuncParams: INT ',' callFuncParams .
+   89 callFuncParams: INT ',' callFuncParams •
 
     $default  reduce using rule 89 (callFuncParams)
 
 
-state 160
+State 160
 
-   90 callFuncParams: DEC ',' callFuncParams .
+   90 callFuncParams: DEC ',' callFuncParams •
 
     $default  reduce using rule 90 (callFuncParams)
 
 
-state 161
+State 161
 
-   91 callFuncParams: STR ',' callFuncParams .
+   91 callFuncParams: STR ',' callFuncParams •
 
     $default  reduce using rule 91 (callFuncParams)
 
 
-state 162
+State 162
 
-   80 callFunc: ID '(' callFuncParams ')' ';' .
+   80 callFunc: ID '(' callFuncParams ')' ';' •
 
     $default  reduce using rule 80 (callFunc)
 
 
-state 163
+State 163
 
-   54 condition: ID cond ID .
+   54 condition: ID cond ID •
 
     $default  reduce using rule 54 (condition)
 
 
-state 164
+State 164
 
-   55 condition: ID cond INT .
+   55 condition: ID cond INT •
 
     $default  reduce using rule 55 (condition)
 
 
-state 165
+State 165
 
-   56 condition: ID cond DEC .
+   56 condition: ID cond DEC •
 
     $default  reduce using rule 56 (condition)
 
 
-state 166
+State 166
 
-   57 condition: INT cond ID .
+   57 condition: INT cond ID •
 
     $default  reduce using rule 57 (condition)
 
 
-state 167
+State 167
 
-   58 condition: INT cond INT .
+   58 condition: INT cond INT •
 
     $default  reduce using rule 58 (condition)
 
 
-state 168
+State 168
 
-   59 condition: INT cond DEC .
+   59 condition: INT cond DEC •
 
     $default  reduce using rule 59 (condition)
 
 
-state 169
+State 169
 
-   60 condition: DEC cond ID .
+   60 condition: DEC cond ID •
 
     $default  reduce using rule 60 (condition)
 
 
-state 170
+State 170
 
-   61 condition: DEC cond INT .
+   61 condition: DEC cond INT •
 
     $default  reduce using rule 61 (condition)
 
 
-state 171
+State 171
 
-   62 condition: DEC cond DEC .
+   62 condition: DEC cond DEC •
 
     $default  reduce using rule 62 (condition)
 
 
-state 172
+State 172
 
-   53 comand: WHILE '(' condition ')' '{' . contentList '}'
+   53 comand: WHILE '(' condition ')' '{' • contentList '}'
 
     ID          shift, and go to state 56
     TYPEINT     shift, and go to state 57
@@ -1827,10 +1849,10 @@ state 172
     callFunc     go to state 73
 
 
-state 173
+State 173
 
-   51 comand: IF '(' condition ')' '{' . contentList '}'
-   52       | IF '(' condition ')' '{' . contentList '}' ELSE '{' contentList '}'
+   51 comand: IF '(' condition ')' '{' • contentList '}'
+   52       | IF '(' condition ')' '{' • contentList '}' ELSE '{' contentList '}'
 
     ID          shift, and go to state 56
     TYPEINT     shift, and go to state 57
@@ -1855,188 +1877,188 @@ state 173
     callFunc     go to state 73
 
 
-state 174
+State 174
 
-   76 return: RETURN '(' ID ')' ';' .
+   76 return: RETURN '(' ID ')' ';' •
 
     $default  reduce using rule 76 (return)
 
 
-state 175
+State 175
 
-   78 return: RETURN '(' INT ')' ';' .
+   78 return: RETURN '(' INT ')' ';' •
 
     $default  reduce using rule 78 (return)
 
 
-state 176
+State 176
 
-   79 return: RETURN '(' DEC ')' ';' .
+   79 return: RETURN '(' DEC ')' ';' •
 
     $default  reduce using rule 79 (return)
 
 
-state 177
+State 177
 
-   77 return: RETURN '(' STR ')' ';' .
+   77 return: RETURN '(' STR ')' ';' •
 
     $default  reduce using rule 77 (return)
 
 
-state 178
+State 178
 
-   69 print: PRINT '(' ID ')' ';' .
+   69 print: PRINT '(' ID ')' ';' •
 
     $default  reduce using rule 69 (print)
 
 
-state 179
+State 179
 
-   71 print: PRINT '(' INT ')' ';' .
+   71 print: PRINT '(' INT ')' ';' •
 
     $default  reduce using rule 71 (print)
 
 
-state 180
+State 180
 
-   72 print: PRINT '(' DEC ')' ';' .
+   72 print: PRINT '(' DEC ')' ';' •
 
     $default  reduce using rule 72 (print)
 
 
-state 181
+State 181
 
-   70 print: PRINT '(' STR ')' ';' .
+   70 print: PRINT '(' STR ')' ';' •
 
     $default  reduce using rule 70 (print)
 
 
-state 182
+State 182
 
-   73 scan: SCAN '(' ID ',' TYPEINT . ')' ';'
+   73 scan: SCAN '(' ID ',' TYPEINT • ')' ';'
 
     ')'  shift, and go to state 189
 
 
-state 183
+State 183
 
-   74 scan: SCAN '(' ID ',' TYPEFLOAT . ')' ';'
+   74 scan: SCAN '(' ID ',' TYPEFLOAT • ')' ';'
 
     ')'  shift, and go to state 190
 
 
-state 184
+State 184
 
-   75 scan: SCAN '(' ID ',' TYPESTRING . ')' ';'
+   75 scan: SCAN '(' ID ',' TYPESTRING • ')' ';'
 
     ')'  shift, and go to state 191
 
 
-state 185
+State 185
 
-   83 callFunc: ID '=' ID '(' ')' ';' .
+   83 callFunc: ID '=' ID '(' ')' ';' •
 
     $default  reduce using rule 83 (callFunc)
 
 
-state 186
+State 186
 
-   81 callFunc: ID '=' ID '(' callFuncParams ')' . ';'
+   81 callFunc: ID '=' ID '(' callFuncParams ')' • ';'
 
     ';'  shift, and go to state 192
 
 
-state 187
+State 187
 
-   53 comand: WHILE '(' condition ')' '{' contentList . '}'
+   53 comand: WHILE '(' condition ')' '{' contentList • '}'
 
     '}'  shift, and go to state 193
 
 
-state 188
+State 188
 
-   51 comand: IF '(' condition ')' '{' contentList . '}'
-   52       | IF '(' condition ')' '{' contentList . '}' ELSE '{' contentList '}'
+   51 comand: IF '(' condition ')' '{' contentList • '}'
+   52       | IF '(' condition ')' '{' contentList • '}' ELSE '{' contentList '}'
 
     '}'  shift, and go to state 194
 
 
-state 189
+State 189
 
-   73 scan: SCAN '(' ID ',' TYPEINT ')' . ';'
+   73 scan: SCAN '(' ID ',' TYPEINT ')' • ';'
 
     ';'  shift, and go to state 195
 
 
-state 190
+State 190
 
-   74 scan: SCAN '(' ID ',' TYPEFLOAT ')' . ';'
+   74 scan: SCAN '(' ID ',' TYPEFLOAT ')' • ';'
 
     ';'  shift, and go to state 196
 
 
-state 191
+State 191
 
-   75 scan: SCAN '(' ID ',' TYPESTRING ')' . ';'
+   75 scan: SCAN '(' ID ',' TYPESTRING ')' • ';'
 
     ';'  shift, and go to state 197
 
 
-state 192
+State 192
 
-   81 callFunc: ID '=' ID '(' callFuncParams ')' ';' .
+   81 callFunc: ID '=' ID '(' callFuncParams ')' ';' •
 
     $default  reduce using rule 81 (callFunc)
 
 
-state 193
+State 193
 
-   53 comand: WHILE '(' condition ')' '{' contentList '}' .
+   53 comand: WHILE '(' condition ')' '{' contentList '}' •
 
     $default  reduce using rule 53 (comand)
 
 
-state 194
+State 194
 
-   51 comand: IF '(' condition ')' '{' contentList '}' .
-   52       | IF '(' condition ')' '{' contentList '}' . ELSE '{' contentList '}'
+   51 comand: IF '(' condition ')' '{' contentList '}' •
+   52       | IF '(' condition ')' '{' contentList '}' • ELSE '{' contentList '}'
 
     ELSE  shift, and go to state 198
 
     $default  reduce using rule 51 (comand)
 
 
-state 195
+State 195
 
-   73 scan: SCAN '(' ID ',' TYPEINT ')' ';' .
+   73 scan: SCAN '(' ID ',' TYPEINT ')' ';' •
 
     $default  reduce using rule 73 (scan)
 
 
-state 196
+State 196
 
-   74 scan: SCAN '(' ID ',' TYPEFLOAT ')' ';' .
+   74 scan: SCAN '(' ID ',' TYPEFLOAT ')' ';' •
 
     $default  reduce using rule 74 (scan)
 
 
-state 197
+State 197
 
-   75 scan: SCAN '(' ID ',' TYPESTRING ')' ';' .
+   75 scan: SCAN '(' ID ',' TYPESTRING ')' ';' •
 
     $default  reduce using rule 75 (scan)
 
 
-state 198
+State 198
 
-   52 comand: IF '(' condition ')' '{' contentList '}' ELSE . '{' contentList '}'
+   52 comand: IF '(' condition ')' '{' contentList '}' ELSE • '{' contentList '}'
 
     '{'  shift, and go to state 199
 
 
-state 199
+State 199
 
-   52 comand: IF '(' condition ')' '{' contentList '}' ELSE '{' . contentList '}'
+   52 comand: IF '(' condition ')' '{' contentList '}' ELSE '{' • contentList '}'
 
     ID          shift, and go to state 56
     TYPEINT     shift, and go to state 57
@@ -2061,15 +2083,15 @@ state 199
     callFunc     go to state 73
 
 
-state 200
+State 200
 
-   52 comand: IF '(' condition ')' '{' contentList '}' ELSE '{' contentList . '}'
+   52 comand: IF '(' condition ')' '{' contentList '}' ELSE '{' contentList • '}'
 
     '}'  shift, and go to state 201
 
 
-state 201
+State 201
 
-   52 comand: IF '(' condition ')' '{' contentList '}' ELSE '{' contentList '}' .
+   52 comand: IF '(' condition ')' '{' contentList '}' ELSE '{' contentList '}' •
 
     $default  reduce using rule 52 (comand)
