@@ -1,4 +1,4 @@
-/* A Bison parser, made by GNU Bison 3.7.4.  */
+/* A Bison parser, made by GNU Bison 3.5.1.  */
 
 /* Bison interface for Yacc-like parsers in C
 
@@ -31,9 +31,8 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-/* DO NOT RELY ON FEATURES THAT ARE NOT DOCUMENTED in the manual,
-   especially those whose name start with YY_ or yy_.  They are
-   private implementation details that can be changed or removed.  */
+/* Undocumented macros, especially those whose name start with YY_,
+   are private implementation details.  Do not rely on them.  */
 
 #ifndef YY_YY_LANG_TAB_H_INCLUDED
 # define YY_YY_LANG_TAB_H_INCLUDED
@@ -45,36 +44,31 @@
 extern int yydebug;
 #endif
 
-/* Token kinds.  */
+/* Token type.  */
 #ifndef YYTOKENTYPE
 # define YYTOKENTYPE
   enum yytokentype
   {
-    YYEMPTY = -2,
-    YYEOF = 0,                     /* "end of file"  */
-    YYerror = 256,                 /* error  */
-    YYUNDEF = 257,                 /* "invalid token"  */
-    ID = 258,                      /* ID  */
-    TYPEINT = 259,                 /* TYPEINT  */
-    TYPEFLOAT = 260,               /* TYPEFLOAT  */
-    TYPESTRING = 261,              /* TYPESTRING  */
-    INT = 262,                     /* INT  */
-    DEC = 263,                     /* DEC  */
-    STR = 264,                     /* STR  */
-    WHILE = 265,                   /* WHILE  */
-    IF = 266,                      /* IF  */
-    ELSE = 267,                    /* ELSE  */
-    RETURN = 268,                  /* RETURN  */
-    PRINT = 269,                   /* PRINT  */
-    SCAN = 270,                    /* SCAN  */
-    CGE = 271,                     /* CGE  */
-    CGT = 272,                     /* CGT  */
-    CLE = 273,                     /* CLE  */
-    CLT = 274,                     /* CLT  */
-    CNE = 275,                     /* CNE  */
-    CEQ = 276                      /* CEQ  */
+    ID = 258,
+    TYPEINT = 259,
+    TYPEFLOAT = 260,
+    TYPESTRING = 261,
+    INT = 262,
+    DEC = 263,
+    STR = 264,
+    WHILE = 265,
+    IF = 266,
+    ELSE = 267,
+    RETURN = 268,
+    PRINT = 269,
+    SCAN = 270,
+    CGE = 271,
+    CGT = 272,
+    CLE = 273,
+    CLT = 274,
+    CNE = 275,
+    CEQ = 276
   };
-  typedef enum yytokentype yytoken_kind_t;
 #endif
 
 /* Value type.  */
@@ -89,7 +83,7 @@ union YYSTYPE
   char *str;
   struct node *node;
 
-#line 93 "lang.tab.h"
+#line 87 "lang.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
