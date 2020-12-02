@@ -20,6 +20,7 @@ struct node {
   char *value;
   char node_type;
   int type;
+  char *addr;
   struct node *node1;
   struct node *node2;
   struct node *node3;
@@ -62,7 +63,13 @@ struct symbol_node {
   char *id; // variável
   char *scope_name; // nome do scopo
   int type; // 0 = int, 1 = float, 2 = string
+  char *addr;
   UT_hash_handle hh;
+};
+
+struct code_line {
+  UT_string *line;
+  struct code_line *next;
 };
 
 struct params {
@@ -96,15 +103,28 @@ void compare_params(char *id);
 
 int hasMain = 0;
 int hasReturn = 0;
+int registerCount = 1;
+char* addRegisterCount();
+char* getLastRegisterCount();
 struct node* tree = NULL;
 struct scope* scope_stack = NULL;
 struct symbol_node* symbol_table = NULL;
 struct func_params* func_table = NULL;
 
+struct code_line* new_code = NULL;
+void print_new_code();
+void free_new_code(struct code_line* code_line);
+
 struct node* add_node3(char node_type, struct node *node1, struct node *node2, struct node *node3);
 struct node* add_node2(char node_type, struct node *node1, struct node *node2);
 struct node* add_node1(char node_type, struct node *node1);
 struct node* add_node0(char node_type);
+
+void add_function(char * label);
+void add_instruct0(char * label);
+void add_instruct1(char * label, char *addr1);
+void add_instruct2(char * label, char *addr1, char *addr2);
+void add_instruct3(char * label, char *addr1, char *addr2, char *addr3);
 
 void add_scope(char* scope_name, int type);
 void remove_scope();
@@ -114,6 +134,7 @@ void add_symbol_table(char *id, int type);
 struct symbol_node* find_symbol_table(char *id);
 char* generate_symbol_key(char *id); // Gera uma chave concatenando scope_name + @ + id
 int get_id_type(char *id);
+char* get_id_addr(char *id);
 
 void print_symbol_table();
 void free_symbol_table();
@@ -164,13 +185,16 @@ globalList:
 var:
   TYPEINT ID ';'          { $$ = add_node0('v'); 
                             $$->type = 0;
+                            $$->addr = getLastRegisterCount();
                             $$->value = (char *) strdup($2);   
+                            add_instruct2("mov", getLastRegisterCount(), "0");
                             add_symbol_table($2, 0);  
                             free($1);
                             free($2); 
                           } 
 | TYPEINT ID '=' INT ';' {  $$ = add_node0('v'); 
                             $$->type = 0;
+                            $$->addr = getLastRegisterCount();
                             $$->value = (char *) strdup($2);
 
                             $$->node1 = add_node0('A');
@@ -181,6 +205,7 @@ var:
                             $$->node1->node2 = add_node0('I');
                             $$->node1->node2->type = 0;
                             $$->node1->node2->value = (char *) strdup($4);
+                            add_instruct2("mov", getLastRegisterCount(), $4);
                             add_symbol_table($2, 0);
                             free($1);
                             free($2); 
@@ -188,13 +213,16 @@ var:
                           } 
 | TYPEFLOAT ID ';'        { $$ = add_node0('v'); 
                             $$->type = 1;
+                            $$->addr = getLastRegisterCount();
                             $$->value = (char *) strdup($2);  
+                            add_instruct2("mov", getLastRegisterCount(), "0");
                             add_symbol_table($2, 1);
                             free($1);
                             free($2); 
                           } 
 | TYPEFLOAT ID '=' INT ';'  {  $$ = add_node0('v'); 
                             $$->type = 1;
+                            $$->addr = getLastRegisterCount();
                             $$->value = (char *) strdup($2);
 
                             $$->node1 = add_node0('A');
@@ -205,6 +233,7 @@ var:
                             $$->node1->node2 = add_node0('I');
                             $$->node1->node2->type = 0;
                             $$->node1->node2->value = (char *) strdup($4);
+                            add_instruct2("mov", getLastRegisterCount(), $4);
                             add_symbol_table($2, 1);
                             free($1);
                             free($2); 
@@ -212,6 +241,7 @@ var:
                           }
 | TYPEFLOAT ID '=' DEC ';'{  $$ = add_node0('v'); 
                             $$->type = 1;
+                            $$->addr = getLastRegisterCount();
                             $$->value = (char *) strdup($2);
 
                             $$->node1 = add_node0('A');
@@ -222,6 +252,7 @@ var:
                             $$->node1->node2 = add_node0('D');
                             $$->node1->node2->type = 1;
                             $$->node1->node2->value = (char *) strdup($4);
+                            add_instruct2("mov", getLastRegisterCount(), $4);
                             add_symbol_table($2, 1);
                             free($1);
                             free($2); 
@@ -229,6 +260,7 @@ var:
                           }
 | TYPESTRING ID ';'       { $$ = add_node0('v'); 
                             $$->type = 2;
+                            $$->addr = getLastRegisterCount();
                             $$->value = (char *) strdup($2);    
                             add_symbol_table($2, 2);
                             free($1);
@@ -236,6 +268,7 @@ var:
                           } 
 | TYPESTRING ID '=' STR ';' {  $$ = add_node0('v'); 
                             $$->type = 2;
+                            $$->addr = getLastRegisterCount();
                             $$->value = (char *) strdup($2);
 
                             $$->node1 = add_node0('A');
@@ -258,6 +291,7 @@ func:
                                                           add_symbol_table($2, 2); add_scope($2, 2); 
                                                           hasReturn = 0;
                                                           add_func_params($2);
+                                                          add_function($2);
                                                         }
   '(' paramsList ')'                                    {;}
   '{' contentList '}'                                   { 
@@ -274,6 +308,7 @@ func:
 
 | TYPEFLOAT ID                                          { add_symbol_table($2, 1); add_scope($2, 1); hasReturn = 0;
                                                           add_func_params($2); 
+                                                          add_function($2);
                                                         }
 '(' paramsList ')'                                      {;}
 '{' contentList '}'                                     {  
@@ -295,6 +330,7 @@ func:
                                                           }
                                                           hasReturn = 0;
                                                           add_func_params($2);
+                                                          add_function($2);
                                                         }
 '(' paramsList ')'                                      {;}
 '{' contentList '}'                                     {
@@ -366,6 +402,7 @@ addValue:
 ID '=' expression ';'      { 
                             $$ = add_node0('A');
                             $$->type = get_id_type($1);
+                            $$->addr = get_id_addr($1);
                             $$->node1 = add_node0('V');
                             $$->node1->type = get_id_type($1);
                             $$->node1->value = (char *) strdup($1);
@@ -383,6 +420,7 @@ expression:
 ID                        { $$ = add_node0('V'); 
                             $$->value = (char *) strdup($1);   
                             $$->type = get_id_type($1);
+                            $$->addr = get_id_addr($1);
                             free($1);  
                           }
 | INT                     { $$ = add_node0('I');
@@ -404,6 +442,7 @@ ID                        { $$ = add_node0('V');
 
                             $$->node1 = add_node0('V');
                             $$->node1->value = (char *) strdup($1);
+                            $$->node1->addr = get_id_addr($1);
                             $$->node1->type = get_id_type($1);
 
                             $$->node2 = $2;
@@ -473,12 +512,14 @@ condition:
                     $$->node1 = add_node0('V');
                     $$->node1->value = (char *) strdup($1);
                     $$->node1->type = get_id_type($1);
+                    $$->node1->addr = get_id_addr($1);
 
                     $$->node2 = $2;
                     
                     $$->node3 = add_node0('V');
                     $$->node3->value = (char *) strdup($3);
                     $$->node3->type = get_id_type($3);
+                    $$->node3->addr = get_id_addr($3);
                     free($1);
                     free($3);
                   }
@@ -487,6 +528,7 @@ condition:
                     $$->node1 = add_node0('V');
                     $$->node1->value = (char *) strdup($1);
                     $$->node1->type = get_id_type($1);
+                    $$->node1->addr = get_id_addr($1);
 
                     $$->node2 = $2;
                     
@@ -501,6 +543,7 @@ condition:
                     $$->node1 = add_node0('V');
                     $$->node1->value = (char *) strdup($1);
                     $$->node1->type = get_id_type($1);
+                    $$->node1->addr = get_id_addr($1);
 
                     $$->node2 = $2;
                     
@@ -521,6 +564,7 @@ condition:
                     $$->node3 = add_node0('V');
                     $$->node3->value = (char *) strdup($3);
                     $$->node3->type = get_id_type($3);
+                    $$->node3->addr = get_id_addr($3);
                     free($1);
                     free($3);
                   }
@@ -563,6 +607,7 @@ condition:
                     $$->node3 = add_node0('V');
                     $$->node3->value = (char *) strdup($3);
                     $$->node3->type = get_id_type($3);
+                    $$->node3->addr = get_id_addr($3);
                     free($1);
                     free($3);
                   }
@@ -623,6 +668,7 @@ print:
                             $$->node1 = add_node0('V');
                             $$->node1->value = (char *) strdup($3); 
                             $$->node1->type = get_id_type($3);
+                            $$->node1->addr = get_id_addr($3);
                             free($3);    
                           }
 | PRINT '(' STR ')' ';'   { $$ = add_node0('L');
@@ -655,6 +701,7 @@ scan:
                                           $$->node1 = add_node0('V');
                                           $$->node1->value = (char *) strdup($3);   
                                           $$->node1->type = get_id_type($3);
+                                          $$->node1->addr = get_id_addr($3);
                                           if ($$->type != $$->node1->type) {
                                             print_semantic_error($$->node1->value, 6);
                                           }
@@ -667,6 +714,7 @@ scan:
                                           $$->node1 = add_node0('V');
                                           $$->node1->value = (char *) strdup($3); 
                                           $$->node1->type = get_id_type($3); 
+                                          $$->node1->addr = get_id_addr($3);
                                           if ($$->type != $$->node1->type) {
                                             print_semantic_error($$->node1->value, 6);
                                           }
@@ -679,6 +727,7 @@ scan:
                                           $$->node1 = add_node0('V');
                                           $$->node1->value = (char *) strdup($3); 
                                           $$->node1->type = get_id_type($3); 
+                                          $$->node1->addr = get_id_addr($3);
                                           if ($$->type != $$->node1->type) {
                                             print_semantic_error($$->node1->value, 6);
                                           }
@@ -695,6 +744,7 @@ return:
                             $$->node1 = add_node0('V');
                             $$->node1->value = (char *) strdup($3);   
                             $$->node1->type = get_id_type($3); 
+                            $$->node1->addr = get_id_addr($3);
                             if ($$->type != $$->node1->type) {
                               print_semantic_error($$->node1->value, 5);
                             }
@@ -746,6 +796,7 @@ callFunc:
   ID '(' callFuncParams ')' ';'           { $$ = add_node1('L', $3);
                                             $$->value = (char *) strdup($1);  
                                             $$->type = get_id_type($1);
+                                            $$->addr = get_id_addr($1);
 
                                             compare_params($1);
                                             free_current_params();
@@ -755,9 +806,11 @@ callFunc:
                                             $$->node1 = add_node0('V');
                                             $$->node1->value = (char *) strdup($1);
                                             $$->node1->type = get_id_type($1);
+                                            $$->node1->addr = get_id_addr($1);
                                             $$->node2 = add_node1('L', $5);
                                             $$->node2->value = (char *) strdup($3); 
                                             $$->node2->type = get_id_type($3);
+                                            $$->node2->addr = get_id_addr($3);
 
                                             if ($$->node1->type != $$->node2->type) {
                                               if (!($$->node1->type == 1 && $$->node2->type == 0)) {
@@ -773,6 +826,7 @@ callFunc:
 | ID '(' ')' ';'                          { $$ = add_node0('L');
                                             $$->value = (char *) strdup($1);  
                                             $$->type = get_id_type($1);
+                                            $$->addr = get_id_addr($1);
 
                                             compare_params($1);
                                             free_current_params();
@@ -782,9 +836,11 @@ callFunc:
                                             $$->node1 = add_node0('V');
                                             $$->node1->value = (char *) strdup($1);
                                             $$->node1->type = get_id_type($1);
+                                            $$->node1->addr = get_id_addr($1);
                                             $$->node2 = add_node0('L');
                                             $$->node2->value = (char *) strdup($3); 
                                             $$->node2->type = get_id_type($3);
+                                            $$->node2->addr = get_id_addr($3);
 
                                             if ($$->node1->type != $$->node2->type) {
                                               if (!($$->node1->type == 1 && $$->node2->type == 0)) {
@@ -883,10 +939,13 @@ int main(int argc, char **argv) {
   print_symbol_table();
   printf("\n\n########## Tabela de Parametros ##########\n");
   print_func_table();
+  printf("\n\n########## Código Intermediário ##########\n");
+  print_new_code();
 
 
   yylex_destroy();
   free_tree(tree);
+  free_new_code(new_code);
   free_symbol_table();
   free_func_table();
   return 0;
@@ -954,11 +1013,11 @@ void print_tree(struct node *node, int depth) {
 
   switch (node->node_type) {
     case 'V':
-      printf("<Variavel> %s, tipo: %d\n", node->value, node->type);
+      printf("<Variavel> %s, tipo: %d, addr: %s\n", node->value, node->type, node->addr);
       print_tree(node->node1, depth+1);
       break;
     case 'v':
-      printf("<Declaração de Variavel> %s, tipo: %d\n", node->value, node->type);
+      printf("<Declaração de Variavel> %s, tipo: %d, addr: %s\n", node->value, node->type, node->addr);
       print_tree(node->node1, depth+1);
       break;
     case 'A':
@@ -1239,6 +1298,8 @@ void add_symbol_table(char *id, int type) {
   symbol_node->id = (char *) strdup(id);
   symbol_node->type = type;
   symbol_node->key = (char *) strdup(key);
+  symbol_node->addr = addRegisterCount();
+
   if (last_scope != NULL && last_scope->scope_name != NULL) {
     symbol_node->scope_name = (char *) strdup(last_scope->scope_name);
   }
@@ -1246,9 +1307,22 @@ void add_symbol_table(char *id, int type) {
   free(key);
 
 
-
-
   HASH_ADD_STR(symbol_table, key, symbol_node);
+}
+
+char* addRegisterCount() {
+  UT_string *str;
+  utstring_new(str);
+  utstring_printf(str, "$%d", registerCount);
+  registerCount++;
+  return utstring_body(str);
+}
+
+char* getLastRegisterCount() {
+  UT_string *str;
+  utstring_new(str);
+  utstring_printf(str, "$%d", registerCount);
+  return utstring_body(str);
 }
 
 struct symbol_node* find_symbol_table(char *id) {
@@ -1284,6 +1358,15 @@ int get_id_type(char *id) {
   return symbol_node->type;
 }
 
+char *get_id_addr(char *id) {
+  struct symbol_node* symbol_node;
+  symbol_node = find_symbol_table(id);
+  if (symbol_node == NULL) {
+    print_semantic_error(id, 1);
+  }
+  return symbol_node->addr;
+}
+
 char* generate_symbol_key(char *id) {
   struct scope* last_scope;
   last_scope = get_last_scope();
@@ -1311,12 +1394,122 @@ void print_symbol_table() {
   struct symbol_node *s;
   for(s=symbol_table; s != NULL; s=s->hh.next) {
     if (s->scope_name) {
-      printf("Simbolo: %s, Tipo: %d, Escopo: %s, key: %s\n", s->id, s->type, s->scope_name, s->key);
+      printf("Simbolo: %s, Tipo: %d, Escopo: %s, key: %s, addr: %s\n", s->id, s->type, s->scope_name, s->key, s->addr);
     } else {
-      printf("Simbolo: %s, Tipo: %d, Escopo: Global, key: %s\n", s->id, s->type, s->key);
+      printf("Simbolo: %s, Tipo: %d, Escopo: Global, key: %s, addr: %s\n", s->id, s->type, s->key, s->addr);
     }
   }
   printf("\n");
+}
+
+void add_function(char * label) {
+  struct code_line* code_line = (struct code_line*)calloc(1, sizeof(struct code_line));
+  utstring_new(code_line->line);
+  utstring_printf(code_line->line, "%s:\n", label);
+
+
+  struct code_line* code_temp;
+  if (new_code == NULL) {
+    new_code = code_line;
+  } else {
+    code_temp = new_code;
+    while (code_temp->next != NULL) {
+      code_temp = code_temp->next;
+    }
+    code_temp->next = code_line;
+  }
+}
+void add_instruct0(char * label) {
+  struct code_line* code_line = (struct code_line*)calloc(1, sizeof(struct code_line));
+  utstring_new(code_line->line);
+  utstring_printf(code_line->line, "%s \n", label);
+
+
+  struct code_line* code_temp;
+  if (new_code == NULL) {
+    new_code = code_line;
+  } else {
+    code_temp = new_code;
+    while (code_temp->next != NULL) {
+      code_temp = code_temp->next;
+    }
+    code_temp->next = code_line;
+  }
+}
+void add_instruct1(char * label, char *addr1) {
+  struct code_line* code_line = (struct code_line*)calloc(1, sizeof(struct code_line));
+  utstring_new(code_line->line);
+  utstring_printf(code_line->line, "%s %s\n", label, addr1);
+
+
+  struct code_line* code_temp;
+  if (new_code == NULL) {
+    new_code = code_line;
+  } else {
+    code_temp = new_code;
+    while (code_temp->next != NULL) {
+      code_temp = code_temp->next;
+    }
+    code_temp->next = code_line;
+  }
+}
+void add_instruct2(char * label, char *addr1, char *addr2) {
+  struct code_line* code_line = (struct code_line*)calloc(1, sizeof(struct code_line));
+  utstring_new(code_line->line);
+  utstring_printf(code_line->line, "%s %s, %s\n", label, addr1, addr2);
+
+
+  struct code_line* code_temp;
+  if (new_code == NULL) {
+    new_code = code_line;
+  } else {
+    code_temp = new_code;
+    while (code_temp->next != NULL) {
+      code_temp = code_temp->next;
+    }
+    code_temp->next = code_line;
+  }
+}
+void add_instruct3(char * label, char *addr1, char *addr2, char *addr3) {
+  struct code_line* code_line = (struct code_line*)calloc(1, sizeof(struct code_line));
+  utstring_new(code_line->line);
+  utstring_printf(code_line->line, "%s %s, %s, %s\n", label, addr1, addr2, addr3);
+
+
+  struct code_line* code_temp;
+  if (new_code == NULL) {
+    new_code = code_line;
+  } else {
+    code_temp = new_code;
+    while (code_temp->next != NULL) {
+      code_temp = code_temp->next;
+    }
+    code_temp->next = code_line;
+  }
+}
+
+void print_new_code() {
+  struct code_line* code_line;
+  printf(".table\n");
+  printf(".code\n");
+  if (new_code != NULL) {
+    code_line = new_code;
+    while(code_line != NULL) {
+      printf("%s", utstring_body(code_line->line));
+      code_line = code_line->next;
+    }
+  }
+  printf("nop\n\n");
+}
+
+void free_new_code(struct code_line* code_line) {
+  if (code_line != NULL) {
+    if (code_line->next != NULL) {
+      free_new_code(code_line->next);
+    }
+    free(code_line->line);
+    free(code_line);
+  }
 }
 
 void free_symbol_table() {

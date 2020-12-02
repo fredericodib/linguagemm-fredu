@@ -1,0 +1,19 @@
+float test(int x, float y) {
+  float value;
+  value = x + y * x + 5.5;
+  return (value);
+}
+
+int main() {
+  /* Isso é um comentario */
+
+  int x1;
+  int x2 = 4;
+  float x3 = 5.5;
+  float x4;
+
+  x4 = x3 * x2 + 10;
+  print(x4);
+
+  return(0);
+}
