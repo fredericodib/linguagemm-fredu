@@ -7,13 +7,18 @@ float test(int x, float y) {
 int main() {
   /* Isso é um comentario */
 
-  int x1;
-  int x2 = 4;
-  float x3 = 5.5;
-  float x4;
+  /* int x1; */
+  /* int x2 = 4; */
+  /* float x3 = 5.5; */
+  /* float x4; */
 
-  x4 = x3 * x2 + 10;
-  print(x4);
+  /* x4 = x3 * x2 + 10; */
+  /* print(x2); */
+  /* print(3); */
+  /* print(3.5); */
+
+  string str = "ola";
+  string str2 = "meu nome e fred\n";
 
   return(0);
 }

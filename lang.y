@@ -104,6 +104,7 @@ void compare_params(char *id);
 int hasMain = 0;
 int hasReturn = 0;
 int registerCount = 1;
+int hasSintaxError = 0;
 char* addRegisterCount();
 char* getLastRegisterCount();
 struct node* tree = NULL;
@@ -125,6 +126,9 @@ void add_instruct0(char * label);
 void add_instruct1(char * label, char *addr1);
 void add_instruct2(char * label, char *addr1, char *addr2);
 void add_instruct3(char * label, char *addr1, char *addr2, char *addr3);
+char *str_to_addr(char *str);
+char *print_array(char *addr, char *i);
+char *i_to_str(int i);
 
 void add_scope(char* scope_name, int type);
 void remove_scope();
@@ -280,6 +284,10 @@ var:
                             $$->node1->node2->type = 2;
                             $$->node1->node2->value = (char *) strdup($4);
                             add_symbol_table($2, 2);
+                            
+                            add_instruct2("mov", $$->addr, str_to_addr($4));
+
+
                             free($1);
                             free($2); 
                             free($4); 
@@ -669,6 +677,9 @@ print:
                             $$->node1->value = (char *) strdup($3); 
                             $$->node1->type = get_id_type($3);
                             $$->node1->addr = get_id_addr($3);
+                            if ($$->node1->type != 2) {
+                              add_instruct1("print", $$->node1->addr);
+                            }
                             free($3);    
                           }
 | PRINT '(' STR ')' ';'   { $$ = add_node0('L');
@@ -683,13 +694,15 @@ print:
                             $$->node1 = add_node0('I');
                             $$->node1->type = 0;
                             $$->node1->value = (char *) strdup($3); 
+                            add_instruct1("print", $3);
                             free($3);    
                           }
 | PRINT '(' DEC ')' ';'   { $$ = add_node0('L');
                             $$->value = (char *) strdup("PRINT");
                             $$->node1 = add_node0('D');
                             $$->node1->type = 1;
-                            $$->node1->value = (char *) strdup($3);     
+                            $$->node1->value = (char *) strdup($3);  
+                            add_instruct1("print", $3);   
                             free($3);
                           }
 ;
@@ -939,8 +952,10 @@ int main(int argc, char **argv) {
   print_symbol_table();
   printf("\n\n########## Tabela de Parametros ##########\n");
   print_func_table();
-  printf("\n\n########## Código Intermediário ##########\n");
-  print_new_code();
+  if (hasSintaxError == 0) {
+    printf("\n\n########## Código Intermediário ##########\n");
+    print_new_code();
+  }
 
 
   yylex_destroy();
@@ -1402,6 +1417,47 @@ void print_symbol_table() {
   printf("\n");
 }
 
+char *str_to_addr(char *str) {
+  char *addr = addRegisterCount();
+  int idxToDel;
+  int i;
+
+  idxToDel = 0; 
+  memmove(&str[idxToDel], &str[idxToDel + 1], strlen(str) - idxToDel);
+
+  idxToDel = strlen(str) -1; 
+  memmove(&str[idxToDel], &str[idxToDel + 1], strlen(str) - idxToDel);
+
+  if (str[strlen(str)-1] == 110 && str[strlen(str)-2] == 92) {
+    str[strlen(str)-2] = '\n';
+    str[strlen(str)-1] = '\0';
+  }
+
+  int str_len = strlen(str);
+
+  add_instruct2("mema", addr, i_to_str(str_len + 1));
+  for (i=0;i<str_len;i++) {
+    add_instruct2("mov", print_array(addr, i_to_str(i)), i_to_str(str[i]));
+  }
+  add_instruct2("mov", print_array(addr, i_to_str(i)), "0");
+
+  return addr;
+}
+
+char *print_array(char *addr, char *i) {
+  UT_string *str;
+  utstring_new(str);
+  utstring_printf(str, "%s[%s]", addr, i);
+  return utstring_body(str);
+}
+
+char *i_to_str(int i) {
+  UT_string *str;
+  utstring_new(str);
+  utstring_printf(str, "%d", i);
+  return utstring_body(str);
+}
+
 void add_function(char * label) {
   struct code_line* code_line = (struct code_line*)calloc(1, sizeof(struct code_line));
   utstring_new(code_line->line);
@@ -1676,4 +1732,5 @@ void build_expression_type(struct node *node) {
 void yyerror (const char *s) {
   printf("\n######## ERRO ########\n");
   fprintf (stderr, "%s, linha: %d, posição: %d\n", s,line,word_position);
+  hasSintaxError = 1;
 } 
