@@ -1,24 +1,36 @@
 float test(int x, float y) {
   float value;
-  value = x + y * x + 5.5;
+  value = x + 5.5 + y * x;
   return (value);
 }
 
 int main() {
   /* Isso é um comentario */
 
-  /* int x1; */
-  /* int x2 = 4; */
-  /* float x3 = 5.5; */
-  /* float x4; */
+  int x1;
+  int x2 = 4;
+  float x3 = 5.5;
+  float x4;
 
-  /* x4 = x3 * x2 + 10; */
-  /* print(x2); */
-  /* print(3); */
-  /* print(3.5); */
+  x4 = 10 + x3 * x2;
+
+  print(x2);
+  print("\n");
+  print(3);
+  print("\n");
+  print(3.5);
+  print("\n");
+  print(x4);
+  print("\n");
 
   string str = "ola";
-  string str2 = "meu nome e fred\n";
+  string str2 = "meu nome é fred\n";
+  print(str);
+  print(", ");
+  print(str2);
+
+  string str2 = "Tudo bom? " + str + ", " + str2;
+  print(str4);
 
   return(0);
 }

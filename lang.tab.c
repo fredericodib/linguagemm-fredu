@@ -170,7 +170,9 @@ int hasMain = 0;
 int hasReturn = 0;
 int registerCount = 1;
 int hasSintaxError = 0;
+int labelNum = 1;
 char* addRegisterCount();
+char* addLabelNum();
 char* getLastRegisterCount();
 struct node* tree = NULL;
 struct scope* scope_stack = NULL;
@@ -194,7 +196,7 @@ void add_instruct3(char * label, char *addr1, char *addr2, char *addr3);
 char *str_to_addr(char *str);
 char *print_array(char *addr, char *i);
 char *i_to_str(int i);
-
+void print_str(char *addr);
 void add_scope(char* scope_name, int type);
 void remove_scope();
 struct scope* get_last_scope();
@@ -214,7 +216,7 @@ void print_semantic_error(char *id, int type);
 void build_expression_type(struct node *node);
 
 
-#line 218 "lang.tab.c"
+#line 220 "lang.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -288,7 +290,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 153 "lang.y"
+#line 155 "lang.y"
 
   char *id;
   char *num;
@@ -296,7 +298,7 @@ union YYSTYPE
   char *str;
   struct node *node;
 
-#line 300 "lang.tab.c"
+#line 302 "lang.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -690,16 +692,16 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,   174,   174,   183,   184,   185,   186,   190,   199,   218,
-     227,   246,   265,   273,   298,   304,   298,   317,   321,   317,
-     334,   343,   334,   358,   359,   363,   364,   368,   376,   384,
-     395,   396,   400,   401,   402,   403,   404,   405,   406,   410,
-     428,   434,   439,   444,   449,   461,   472,   483,   497,   500,
-     503,   506,   512,   513,   514,   518,   534,   549,   564,   579,
-     593,   607,   622,   636,   653,   656,   659,   662,   665,   668,
-     674,   685,   692,   700,   711,   724,   737,   753,   767,   780,
-     793,   809,   818,   839,   848,   872,   878,   884,   890,   896,
-     906,   916,   926
+       0,   176,   176,   185,   186,   187,   188,   192,   201,   220,
+     229,   248,   267,   275,   300,   306,   300,   319,   323,   319,
+     336,   345,   336,   360,   361,   365,   366,   370,   378,   386,
+     397,   398,   402,   403,   404,   405,   406,   407,   408,   412,
+     432,   438,   445,   452,   458,   483,   506,   529,   543,   547,
+     551,   555,   562,   563,   564,   568,   584,   599,   614,   629,
+     643,   657,   672,   686,   703,   706,   709,   712,   715,   718,
+     724,   737,   745,   753,   764,   777,   790,   806,   820,   833,
+     846,   862,   871,   892,   901,   925,   931,   937,   943,   949,
+     959,   969,   979
 };
 #endif
 
@@ -1712,42 +1714,42 @@ yyreduce:
   switch (yyn)
     {
   case 2:
-#line 174 "lang.y"
+#line 176 "lang.y"
              { 
     tree = (yyvsp[0].node);
     if (hasMain == 0) {
       print_semantic_error(NULL, 7);
     }
   }
-#line 1723 "lang.tab.c"
+#line 1725 "lang.tab.c"
     break;
 
   case 3:
-#line 183 "lang.y"
+#line 185 "lang.y"
                  { (yyval.node) = add_node2('R', (yyvsp[-1].node), (yyvsp[0].node)); }
-#line 1729 "lang.tab.c"
+#line 1731 "lang.tab.c"
     break;
 
   case 4:
-#line 184 "lang.y"
+#line 186 "lang.y"
                  { (yyval.node) = (yyvsp[0].node); }
-#line 1735 "lang.tab.c"
+#line 1737 "lang.tab.c"
     break;
 
   case 5:
-#line 185 "lang.y"
+#line 187 "lang.y"
                  { (yyval.node) = (yyvsp[0].node); }
-#line 1741 "lang.tab.c"
+#line 1743 "lang.tab.c"
     break;
 
   case 6:
-#line 186 "lang.y"
+#line 188 "lang.y"
                   { (yyval.node) = add_node2('R', (yyvsp[-1].node), (yyvsp[0].node)); }
-#line 1747 "lang.tab.c"
+#line 1749 "lang.tab.c"
     break;
 
   case 7:
-#line 190 "lang.y"
+#line 192 "lang.y"
                           { (yyval.node) = add_node0('v'); 
                             (yyval.node)->type = 0;
                             (yyval.node)->addr = getLastRegisterCount();
@@ -1757,11 +1759,11 @@ yyreduce:
                             free((yyvsp[-2].type));
                             free((yyvsp[-1].id)); 
                           }
-#line 1761 "lang.tab.c"
+#line 1763 "lang.tab.c"
     break;
 
   case 8:
-#line 199 "lang.y"
+#line 201 "lang.y"
                          {  (yyval.node) = add_node0('v'); 
                             (yyval.node)->type = 0;
                             (yyval.node)->addr = getLastRegisterCount();
@@ -1781,11 +1783,11 @@ yyreduce:
                             free((yyvsp[-3].id)); 
                             free((yyvsp[-1].num)); 
                           }
-#line 1785 "lang.tab.c"
+#line 1787 "lang.tab.c"
     break;
 
   case 9:
-#line 218 "lang.y"
+#line 220 "lang.y"
                           { (yyval.node) = add_node0('v'); 
                             (yyval.node)->type = 1;
                             (yyval.node)->addr = getLastRegisterCount();
@@ -1795,11 +1797,11 @@ yyreduce:
                             free((yyvsp[-2].type));
                             free((yyvsp[-1].id)); 
                           }
-#line 1799 "lang.tab.c"
+#line 1801 "lang.tab.c"
     break;
 
   case 10:
-#line 227 "lang.y"
+#line 229 "lang.y"
                             {  (yyval.node) = add_node0('v'); 
                             (yyval.node)->type = 1;
                             (yyval.node)->addr = getLastRegisterCount();
@@ -1819,11 +1821,11 @@ yyreduce:
                             free((yyvsp[-3].id)); 
                             free((yyvsp[-1].num)); 
                           }
-#line 1823 "lang.tab.c"
+#line 1825 "lang.tab.c"
     break;
 
   case 11:
-#line 246 "lang.y"
+#line 248 "lang.y"
                           {  (yyval.node) = add_node0('v'); 
                             (yyval.node)->type = 1;
                             (yyval.node)->addr = getLastRegisterCount();
@@ -1843,11 +1845,11 @@ yyreduce:
                             free((yyvsp[-3].id)); 
                             free((yyvsp[-1].num)); 
                           }
-#line 1847 "lang.tab.c"
+#line 1849 "lang.tab.c"
     break;
 
   case 12:
-#line 265 "lang.y"
+#line 267 "lang.y"
                           { (yyval.node) = add_node0('v'); 
                             (yyval.node)->type = 2;
                             (yyval.node)->addr = getLastRegisterCount();
@@ -1856,11 +1858,11 @@ yyreduce:
                             free((yyvsp[-2].type));
                             free((yyvsp[-1].id)); 
                           }
-#line 1860 "lang.tab.c"
+#line 1862 "lang.tab.c"
     break;
 
   case 13:
-#line 273 "lang.y"
+#line 275 "lang.y"
                             {  (yyval.node) = add_node0('v'); 
                             (yyval.node)->type = 2;
                             (yyval.node)->addr = getLastRegisterCount();
@@ -1883,28 +1885,28 @@ yyreduce:
                             free((yyvsp[-3].id)); 
                             free((yyvsp[-1].str)); 
                           }
-#line 1887 "lang.tab.c"
+#line 1889 "lang.tab.c"
     break;
 
   case 14:
-#line 298 "lang.y"
+#line 300 "lang.y"
                                                         { 
                                                           add_symbol_table((yyvsp[0].id), 2); add_scope((yyvsp[0].id), 2); 
                                                           hasReturn = 0;
                                                           add_func_params((yyvsp[0].id));
                                                           add_function((yyvsp[0].id));
                                                         }
-#line 1898 "lang.tab.c"
+#line 1900 "lang.tab.c"
     break;
 
   case 15:
-#line 304 "lang.y"
+#line 306 "lang.y"
                                                         {;}
-#line 1904 "lang.tab.c"
+#line 1906 "lang.tab.c"
     break;
 
   case 16:
-#line 305 "lang.y"
+#line 307 "lang.y"
                                                         { 
                                                           (yyval.node) = add_node2('F', (yyvsp[-5].node), (yyvsp[-1].node)); 
                                                           (yyval.node)->type = 2;
@@ -1916,26 +1918,26 @@ yyreduce:
                                                           free((yyvsp[-9].type));
                                                           free((yyvsp[-8].id)); 
                                                         }
-#line 1920 "lang.tab.c"
+#line 1922 "lang.tab.c"
     break;
 
   case 17:
-#line 317 "lang.y"
+#line 319 "lang.y"
                                                         { add_symbol_table((yyvsp[0].id), 1); add_scope((yyvsp[0].id), 1); hasReturn = 0;
                                                           add_func_params((yyvsp[0].id)); 
                                                           add_function((yyvsp[0].id));
                                                         }
-#line 1929 "lang.tab.c"
+#line 1931 "lang.tab.c"
     break;
 
   case 18:
-#line 321 "lang.y"
+#line 323 "lang.y"
                                                         {;}
-#line 1935 "lang.tab.c"
+#line 1937 "lang.tab.c"
     break;
 
   case 19:
-#line 322 "lang.y"
+#line 324 "lang.y"
                                                         {  
                                                           (yyval.node) = add_node2('F', (yyvsp[-5].node), (yyvsp[-1].node)); 
                                                           (yyval.node)->type = 1;
@@ -1947,11 +1949,11 @@ yyreduce:
                                                           free((yyvsp[-9].type));
                                                           free((yyvsp[-8].id));
                                                         }
-#line 1951 "lang.tab.c"
+#line 1953 "lang.tab.c"
     break;
 
   case 20:
-#line 334 "lang.y"
+#line 336 "lang.y"
                                                         { 
                                                           add_symbol_table((yyvsp[0].id), 0); add_scope((yyvsp[0].id), 0);
                                                           if (strcmp((yyvsp[0].id), "main") == 0) {
@@ -1961,17 +1963,17 @@ yyreduce:
                                                           add_func_params((yyvsp[0].id));
                                                           add_function((yyvsp[0].id));
                                                         }
-#line 1965 "lang.tab.c"
+#line 1967 "lang.tab.c"
     break;
 
   case 21:
-#line 343 "lang.y"
+#line 345 "lang.y"
                                                         {;}
-#line 1971 "lang.tab.c"
+#line 1973 "lang.tab.c"
     break;
 
   case 22:
-#line 344 "lang.y"
+#line 346 "lang.y"
                                                         {
                                                           (yyval.node) = add_node2('F', (yyvsp[-5].node), (yyvsp[-1].node)); 
                                                           (yyval.node)->type = 0;
@@ -1983,35 +1985,35 @@ yyreduce:
                                                           free((yyvsp[-9].type));
                                                           free((yyvsp[-8].id));
                                                         }
-#line 1987 "lang.tab.c"
+#line 1989 "lang.tab.c"
     break;
 
   case 23:
-#line 358 "lang.y"
+#line 360 "lang.y"
          { (yyval.node) = (yyvsp[0].node); }
-#line 1993 "lang.tab.c"
+#line 1995 "lang.tab.c"
     break;
 
   case 24:
-#line 359 "lang.y"
+#line 361 "lang.y"
          { (yyval.node) = NULL; }
-#line 1999 "lang.tab.c"
+#line 2001 "lang.tab.c"
     break;
 
   case 25:
-#line 363 "lang.y"
+#line 365 "lang.y"
         { (yyval.node) = (yyvsp[0].node); }
-#line 2005 "lang.tab.c"
+#line 2007 "lang.tab.c"
     break;
 
   case 26:
-#line 364 "lang.y"
+#line 366 "lang.y"
                    { (yyval.node) = add_node2('R', (yyvsp[-2].node), (yyvsp[0].node)); }
-#line 2011 "lang.tab.c"
+#line 2013 "lang.tab.c"
     break;
 
   case 27:
-#line 368 "lang.y"
+#line 370 "lang.y"
                           { (yyval.node) = add_node0('P'); 
                             (yyval.node)->type = 0;
                             (yyval.node)->value = (char *) strdup((yyvsp[0].id)); 
@@ -2020,11 +2022,11 @@ yyreduce:
                             free((yyvsp[-1].type));
                             free((yyvsp[0].id)); 
                           }
-#line 2024 "lang.tab.c"
+#line 2026 "lang.tab.c"
     break;
 
   case 28:
-#line 376 "lang.y"
+#line 378 "lang.y"
                           { (yyval.node) = add_node0('P'); 
                             (yyval.node)->type = 1;
                             (yyval.node)->value = (char *) strdup((yyvsp[0].id));    
@@ -2033,11 +2035,11 @@ yyreduce:
                             free((yyvsp[-1].type));
                             free((yyvsp[0].id));  
                           }
-#line 2037 "lang.tab.c"
+#line 2039 "lang.tab.c"
     break;
 
   case 29:
-#line 384 "lang.y"
+#line 386 "lang.y"
                           { (yyval.node) = add_node0('P'); 
                             (yyval.node)->type = 2;
                             (yyval.node)->value = (char *) strdup((yyvsp[0].id));
@@ -2046,65 +2048,65 @@ yyreduce:
                             free((yyvsp[-1].type));
                             free((yyvsp[0].id));      
                           }
-#line 2050 "lang.tab.c"
+#line 2052 "lang.tab.c"
     break;
 
   case 30:
-#line 395 "lang.y"
+#line 397 "lang.y"
                          { (yyval.node) = add_node2('R', (yyvsp[-1].node), (yyvsp[0].node)); }
-#line 2056 "lang.tab.c"
+#line 2058 "lang.tab.c"
     break;
 
   case 31:
-#line 396 "lang.y"
+#line 398 "lang.y"
                          { (yyval.node) = NULL; }
-#line 2062 "lang.tab.c"
+#line 2064 "lang.tab.c"
     break;
 
   case 32:
-#line 400 "lang.y"
+#line 402 "lang.y"
               { (yyval.node) = (yyvsp[0].node); }
-#line 2068 "lang.tab.c"
+#line 2070 "lang.tab.c"
     break;
 
   case 33:
-#line 401 "lang.y"
+#line 403 "lang.y"
               { (yyval.node) = (yyvsp[0].node); }
-#line 2074 "lang.tab.c"
+#line 2076 "lang.tab.c"
     break;
 
   case 34:
-#line 402 "lang.y"
+#line 404 "lang.y"
               { (yyval.node) = (yyvsp[0].node); }
-#line 2080 "lang.tab.c"
+#line 2082 "lang.tab.c"
     break;
 
   case 35:
-#line 403 "lang.y"
+#line 405 "lang.y"
               { (yyval.node) = (yyvsp[0].node); }
-#line 2086 "lang.tab.c"
+#line 2088 "lang.tab.c"
     break;
 
   case 36:
-#line 404 "lang.y"
+#line 406 "lang.y"
               { (yyval.node) = (yyvsp[0].node); }
-#line 2092 "lang.tab.c"
+#line 2094 "lang.tab.c"
     break;
 
   case 37:
-#line 405 "lang.y"
+#line 407 "lang.y"
               { (yyval.node) = (yyvsp[0].node); }
-#line 2098 "lang.tab.c"
+#line 2100 "lang.tab.c"
     break;
 
   case 38:
-#line 406 "lang.y"
+#line 408 "lang.y"
               { (yyval.node) = (yyvsp[0].node); }
-#line 2104 "lang.tab.c"
+#line 2106 "lang.tab.c"
     break;
 
   case 39:
-#line 410 "lang.y"
+#line 412 "lang.y"
                            { 
                             (yyval.node) = add_node0('A');
                             (yyval.node)->type = get_id_type((yyvsp[-3].id));
@@ -2112,60 +2114,67 @@ yyreduce:
                             (yyval.node)->node1 = add_node0('V');
                             (yyval.node)->node1->type = get_id_type((yyvsp[-3].id));
                             (yyval.node)->node1->value = (char *) strdup((yyvsp[-3].id));
+                            (yyval.node)->node1->addr = get_id_addr((yyvsp[-3].id));
                             (yyval.node)->node2 = (yyvsp[-1].node);
                             if ((yyval.node)->node1->type != (yyval.node)->node2->type) {
                               if (!((yyval.node)->node1->type == 1 && (yyval.node)->node2->type == 0)) {
                                 print_semantic_error((yyval.node)->node1->value, 4);
                               }
                             }
+                            add_instruct2("mov", (yyval.node)->node1->addr, (yyval.node)->node2->addr);
                             free((yyvsp[-3].id));
                           }
-#line 2124 "lang.tab.c"
+#line 2128 "lang.tab.c"
     break;
 
   case 40:
-#line 428 "lang.y"
+#line 432 "lang.y"
                           { (yyval.node) = add_node0('V'); 
                             (yyval.node)->value = (char *) strdup((yyvsp[0].id));   
                             (yyval.node)->type = get_id_type((yyvsp[0].id));
                             (yyval.node)->addr = get_id_addr((yyvsp[0].id));
                             free((yyvsp[0].id));  
                           }
-#line 2135 "lang.tab.c"
+#line 2139 "lang.tab.c"
     break;
 
   case 41:
-#line 434 "lang.y"
+#line 438 "lang.y"
                           { (yyval.node) = add_node0('I');
                             (yyval.node)->type = 0;
-                            (yyval.node)->value = (char *) strdup((yyvsp[0].num));    
+                            (yyval.node)->value = (char *) strdup((yyvsp[0].num)); 
+                            (yyval.node)->addr = addRegisterCount();
+                            add_instruct2("mov", (yyval.node)->addr, (yyvsp[0].num));
                             free((yyvsp[0].num)); 
                           }
-#line 2145 "lang.tab.c"
+#line 2151 "lang.tab.c"
     break;
 
   case 42:
-#line 439 "lang.y"
+#line 445 "lang.y"
                           { (yyval.node) = add_node0('D'); 
                             (yyval.node)->type = 1;
                             (yyval.node)->value = (char *) strdup((yyvsp[0].num));  
+                            (yyval.node)->addr = addRegisterCount();
+                            add_instruct2("mov", (yyval.node)->addr, (yyvsp[0].num));
                             free((yyvsp[0].num));   
                           }
-#line 2155 "lang.tab.c"
+#line 2163 "lang.tab.c"
     break;
 
   case 43:
-#line 444 "lang.y"
+#line 452 "lang.y"
                           { (yyval.node) = add_node0('S'); 
                             (yyval.node)->type = 2;
+                            (yyval.node)->addr = str_to_addr((yyvsp[0].str));
                             (yyval.node)->value = (char *) strdup((yyvsp[0].str));  
                             free((yyvsp[0].str));   
                           }
-#line 2165 "lang.tab.c"
+#line 2174 "lang.tab.c"
     break;
 
   case 44:
-#line 449 "lang.y"
+#line 458 "lang.y"
                           { (yyval.node) = add_node0('E');
 
                             (yyval.node)->node1 = add_node0('V');
@@ -2176,45 +2185,82 @@ yyreduce:
                             (yyval.node)->node2 = (yyvsp[-1].node);
                             (yyval.node)->node3 = (yyvsp[0].node);
                             build_expression_type((yyval.node));
+                            if ((yyval.node)->node1->type != 2) {
+                              char *newAddr = addRegisterCount();
+                              if ((yyval.node)->node1->type == 0 && (yyval.node)->node3->type == 1) {
+                                add_instruct2("inttofl", (yyval.node)->node1->addr, (yyval.node)->node1->addr);
+                              }
+                              if ((yyval.node)->node3->type == 0 && (yyval.node)->node2->type == 1) {
+                                add_instruct2("inttofl", (yyval.node)->node3->addr, (yyval.node)->node3->addr);
+                              }
+                              add_instruct3((yyval.node)->node2->addr, newAddr, (yyval.node)->node1->addr, (yyval.node)->node3->addr);
+                              (yyval.node)->addr = newAddr;
+                            } else {
+
+                            }
                             free((yyvsp[-2].id));
                           }
-#line 2182 "lang.tab.c"
+#line 2204 "lang.tab.c"
     break;
 
   case 45:
-#line 461 "lang.y"
+#line 483 "lang.y"
                           { (yyval.node) = add_node0('E');
 
                             (yyval.node)->node1 = add_node0('I');
                             (yyval.node)->node1->type = 0;
                             (yyval.node)->node1->value = (char *) strdup((yyvsp[-2].num));
 
+                            (yyval.node)->node1->addr = addRegisterCount();
+                            add_instruct2("mov", (yyval.node)->node1->addr, (yyvsp[-2].num));
+
                             (yyval.node)->node2 = (yyvsp[-1].node);
                             (yyval.node)->node3 = (yyvsp[0].node);
                             build_expression_type((yyval.node));
+                            char *newAddr = addRegisterCount();
+                            if ((yyval.node)->node1->type == 0 && (yyval.node)->node3->type == 1) {
+                              add_instruct2("inttofl", (yyval.node)->node1->addr, (yyval.node)->node1->addr);
+                            }
+                            if ((yyval.node)->node3->type == 0 && (yyval.node)->node2->type == 1) {
+                              add_instruct2("inttofl", (yyval.node)->node3->addr, (yyval.node)->node3->addr);
+                            }
+                            add_instruct3((yyval.node)->node2->addr, newAddr, (yyval.node)->node1->addr, (yyval.node)->node3->addr);
+                            (yyval.node)->addr = newAddr;
                             free((yyvsp[-2].num));
                           }
-#line 2198 "lang.tab.c"
+#line 2232 "lang.tab.c"
     break;
 
   case 46:
-#line 472 "lang.y"
+#line 506 "lang.y"
                           { (yyval.node) = add_node0('E');
 
                             (yyval.node)->node1 = add_node0('D');
                             (yyval.node)->node1->type = 1;
                             (yyval.node)->node1->value = (char *) strdup((yyvsp[-2].num));
 
+                            (yyval.node)->node1->addr = addRegisterCount();
+                            add_instruct2("mov", (yyval.node)->node1->addr, (yyvsp[-2].num));
+
                             (yyval.node)->node2 = (yyvsp[-1].node);
                             (yyval.node)->node3 = (yyvsp[0].node);
                             build_expression_type((yyval.node));
+                            char *newAddr = addRegisterCount();
+                            if ((yyval.node)->node1->type == 0 && (yyval.node)->node3->type == 1) {
+                              add_instruct2("inttofl", (yyval.node)->node1->addr, (yyval.node)->node1->addr);
+                            }
+                            if ((yyval.node)->node3->type == 0 && (yyval.node)->node2->type == 1) {
+                              add_instruct2("inttofl", (yyval.node)->node3->addr, (yyval.node)->node3->addr);
+                            }
+                            add_instruct3((yyval.node)->node2->addr, newAddr, (yyval.node)->node1->addr, (yyval.node)->node3->addr);
+                            (yyval.node)->addr = newAddr;
                             free((yyvsp[-2].num));
                           }
-#line 2214 "lang.tab.c"
+#line 2260 "lang.tab.c"
     break;
 
   case 47:
-#line 483 "lang.y"
+#line 529 "lang.y"
                           { (yyval.node) = add_node0('E');
 
                             (yyval.node)->node1 = add_node0('S');
@@ -2226,61 +2272,65 @@ yyreduce:
                             build_expression_type((yyval.node));
                             free((yyvsp[-2].str));
                           }
-#line 2230 "lang.tab.c"
+#line 2276 "lang.tab.c"
     break;
 
   case 48:
-#line 497 "lang.y"
+#line 543 "lang.y"
         { (yyval.node) = add_node0('B'); 
+          (yyval.node)->addr = "add";
           (yyval.node)->value = (char *) strdup("+");     
         }
-#line 2238 "lang.tab.c"
+#line 2285 "lang.tab.c"
     break;
 
   case 49:
-#line 500 "lang.y"
+#line 547 "lang.y"
         { (yyval.node) = add_node0('B'); 
+          (yyval.node)->addr = "sub";
           (yyval.node)->value = (char *) strdup("-");     
         }
-#line 2246 "lang.tab.c"
+#line 2294 "lang.tab.c"
     break;
 
   case 50:
-#line 503 "lang.y"
+#line 551 "lang.y"
         { (yyval.node) = add_node0('B'); 
+          (yyval.node)->addr = "div";
           (yyval.node)->value = (char *) strdup("/");     
         }
-#line 2254 "lang.tab.c"
+#line 2303 "lang.tab.c"
     break;
 
   case 51:
-#line 506 "lang.y"
-        { (yyval.node) = add_node0('B'); 
+#line 555 "lang.y"
+        { (yyval.node) = add_node0('B');
+          (yyval.node)->addr = "mul";
           (yyval.node)->value = (char *) strdup("*");     
         }
-#line 2262 "lang.tab.c"
+#line 2312 "lang.tab.c"
     break;
 
   case 52:
-#line 512 "lang.y"
+#line 562 "lang.y"
                                                                       { (yyval.node) = add_node2('C', (yyvsp[-4].node), (yyvsp[-1].node)); }
-#line 2268 "lang.tab.c"
+#line 2318 "lang.tab.c"
     break;
 
   case 53:
-#line 513 "lang.y"
+#line 563 "lang.y"
                                                                       { (yyval.node) = add_node3('C', (yyvsp[-8].node), (yyvsp[-5].node), (yyvsp[-1].node)); }
-#line 2274 "lang.tab.c"
+#line 2324 "lang.tab.c"
     break;
 
   case 54:
-#line 514 "lang.y"
+#line 564 "lang.y"
                                                                       { (yyval.node) = add_node2('W', (yyvsp[-4].node), (yyvsp[-1].node)); }
-#line 2280 "lang.tab.c"
+#line 2330 "lang.tab.c"
     break;
 
   case 55:
-#line 518 "lang.y"
+#line 568 "lang.y"
                   { (yyval.node) = add_node0('c');
 
                     (yyval.node)->node1 = add_node0('V');
@@ -2297,11 +2347,11 @@ yyreduce:
                     free((yyvsp[-2].id));
                     free((yyvsp[0].id));
                   }
-#line 2301 "lang.tab.c"
+#line 2351 "lang.tab.c"
     break;
 
   case 56:
-#line 534 "lang.y"
+#line 584 "lang.y"
                   { (yyval.node) = add_node0('c');
 
                     (yyval.node)->node1 = add_node0('V');
@@ -2317,11 +2367,11 @@ yyreduce:
                     free((yyvsp[-2].id));
                     free((yyvsp[0].num));
                   }
-#line 2321 "lang.tab.c"
+#line 2371 "lang.tab.c"
     break;
 
   case 57:
-#line 549 "lang.y"
+#line 599 "lang.y"
                   { (yyval.node) = add_node0('c');
 
                     (yyval.node)->node1 = add_node0('V');
@@ -2337,11 +2387,11 @@ yyreduce:
                     free((yyvsp[-2].id));
                     free((yyvsp[0].num));
                   }
-#line 2341 "lang.tab.c"
+#line 2391 "lang.tab.c"
     break;
 
   case 58:
-#line 564 "lang.y"
+#line 614 "lang.y"
                   { (yyval.node) = add_node0('c');
 
                     (yyval.node)->node1 = add_node0('I');
@@ -2357,11 +2407,11 @@ yyreduce:
                     free((yyvsp[-2].num));
                     free((yyvsp[0].id));
                   }
-#line 2361 "lang.tab.c"
+#line 2411 "lang.tab.c"
     break;
 
   case 59:
-#line 579 "lang.y"
+#line 629 "lang.y"
                   { (yyval.node) = add_node0('c');
 
                     (yyval.node)->node1 = add_node0('I');
@@ -2376,11 +2426,11 @@ yyreduce:
                     free((yyvsp[-2].num));
                     free((yyvsp[0].num));
                   }
-#line 2380 "lang.tab.c"
+#line 2430 "lang.tab.c"
     break;
 
   case 60:
-#line 593 "lang.y"
+#line 643 "lang.y"
                   { (yyval.node) = add_node0('c');
 
                     (yyval.node)->node1 = add_node0('I');
@@ -2395,11 +2445,11 @@ yyreduce:
                     free((yyvsp[-2].num));
                     free((yyvsp[0].num));
                   }
-#line 2399 "lang.tab.c"
+#line 2449 "lang.tab.c"
     break;
 
   case 61:
-#line 607 "lang.y"
+#line 657 "lang.y"
                   { (yyval.node) = add_node0('c');
 
                     (yyval.node)->node1 = add_node0('D');
@@ -2415,11 +2465,11 @@ yyreduce:
                     free((yyvsp[-2].num));
                     free((yyvsp[0].id));
                   }
-#line 2419 "lang.tab.c"
+#line 2469 "lang.tab.c"
     break;
 
   case 62:
-#line 622 "lang.y"
+#line 672 "lang.y"
                   { (yyval.node) = add_node0('c');
 
                     (yyval.node)->node1 = add_node0('D');
@@ -2434,11 +2484,11 @@ yyreduce:
                     free((yyvsp[-2].num));
                     free((yyvsp[0].num));
                   }
-#line 2438 "lang.tab.c"
+#line 2488 "lang.tab.c"
     break;
 
   case 63:
-#line 636 "lang.y"
+#line 686 "lang.y"
                   { (yyval.node) = add_node0('c');
 
                     (yyval.node)->node1 = add_node0('D');
@@ -2453,59 +2503,59 @@ yyreduce:
                     free((yyvsp[-2].num));
                     free((yyvsp[0].num));
                   }
-#line 2457 "lang.tab.c"
+#line 2507 "lang.tab.c"
     break;
 
   case 64:
-#line 653 "lang.y"
+#line 703 "lang.y"
         { (yyval.node) = add_node0('B'); 
           (yyval.node)->value = (char *) strdup("CGE");     
         }
-#line 2465 "lang.tab.c"
+#line 2515 "lang.tab.c"
     break;
 
   case 65:
-#line 656 "lang.y"
+#line 706 "lang.y"
         { (yyval.node) = add_node0('B'); 
           (yyval.node)->value = (char *) strdup("CGT");     
         }
-#line 2473 "lang.tab.c"
+#line 2523 "lang.tab.c"
     break;
 
   case 66:
-#line 659 "lang.y"
+#line 709 "lang.y"
         { (yyval.node) = add_node0('B'); 
           (yyval.node)->value = (char *) strdup("CLE");     
         }
-#line 2481 "lang.tab.c"
+#line 2531 "lang.tab.c"
     break;
 
   case 67:
-#line 662 "lang.y"
+#line 712 "lang.y"
         { (yyval.node) = add_node0('B'); 
           (yyval.node)->value = (char *) strdup("CLT");     
         }
-#line 2489 "lang.tab.c"
+#line 2539 "lang.tab.c"
     break;
 
   case 68:
-#line 665 "lang.y"
+#line 715 "lang.y"
         { (yyval.node) = add_node0('B'); 
           (yyval.node)->value = (char *) strdup("CNE");     
         }
-#line 2497 "lang.tab.c"
+#line 2547 "lang.tab.c"
     break;
 
   case 69:
-#line 668 "lang.y"
+#line 718 "lang.y"
         { (yyval.node) = add_node0('B'); 
           (yyval.node)->value = (char *) strdup("CEQ");     
         }
-#line 2505 "lang.tab.c"
+#line 2555 "lang.tab.c"
     break;
 
   case 70:
-#line 674 "lang.y"
+#line 724 "lang.y"
                           { (yyval.node) = add_node0('L');
                             (yyval.node)->value = (char *) strdup("PRINT");
                             (yyval.node)->node1 = add_node0('V');
@@ -2514,26 +2564,29 @@ yyreduce:
                             (yyval.node)->node1->addr = get_id_addr((yyvsp[-2].id));
                             if ((yyval.node)->node1->type != 2) {
                               add_instruct1("print", (yyval.node)->node1->addr);
+                            } else {
+                              print_str((yyval.node)->node1->addr);
                             }
                             free((yyvsp[-2].id));    
                           }
-#line 2521 "lang.tab.c"
+#line 2573 "lang.tab.c"
     break;
 
   case 71:
-#line 685 "lang.y"
+#line 737 "lang.y"
                           { (yyval.node) = add_node0('L');
                             (yyval.node)->value = (char *) strdup("PRINT");
                             (yyval.node)->node1 = add_node0('S');
                             (yyval.node)->node1->type = 2;
                             (yyval.node)->node1->value = (char *) strdup((yyvsp[-2].str)); 
+                            print_str(str_to_addr((yyvsp[-2].str)));
                             free((yyvsp[-2].str));    
                           }
-#line 2533 "lang.tab.c"
+#line 2586 "lang.tab.c"
     break;
 
   case 72:
-#line 692 "lang.y"
+#line 745 "lang.y"
                           { (yyval.node) = add_node0('L');
                             (yyval.node)->value = (char *) strdup("PRINT");
                             (yyval.node)->node1 = add_node0('I');
@@ -2542,11 +2595,11 @@ yyreduce:
                             add_instruct1("print", (yyvsp[-2].num));
                             free((yyvsp[-2].num));    
                           }
-#line 2546 "lang.tab.c"
+#line 2599 "lang.tab.c"
     break;
 
   case 73:
-#line 700 "lang.y"
+#line 753 "lang.y"
                           { (yyval.node) = add_node0('L');
                             (yyval.node)->value = (char *) strdup("PRINT");
                             (yyval.node)->node1 = add_node0('D');
@@ -2555,11 +2608,11 @@ yyreduce:
                             add_instruct1("print", (yyvsp[-2].num));   
                             free((yyvsp[-2].num));
                           }
-#line 2559 "lang.tab.c"
+#line 2612 "lang.tab.c"
     break;
 
   case 74:
-#line 711 "lang.y"
+#line 764 "lang.y"
                                         { (yyval.node) = add_node0('L');
                                           (yyval.node)->type = 0;
                                           (yyval.node)->value = (char *) strdup("SCAN");
@@ -2573,11 +2626,11 @@ yyreduce:
                                           free((yyvsp[-4].id));  
                                           free((yyvsp[-2].type));  
                                         }
-#line 2577 "lang.tab.c"
+#line 2630 "lang.tab.c"
     break;
 
   case 75:
-#line 724 "lang.y"
+#line 777 "lang.y"
                                         { (yyval.node) = add_node0('L');
                                           (yyval.node)->type = 1;
                                           (yyval.node)->value = (char *) strdup("SCAN");
@@ -2591,11 +2644,11 @@ yyreduce:
                                           free((yyvsp[-4].id));  
                                           free((yyvsp[-2].type));     
                                         }
-#line 2595 "lang.tab.c"
+#line 2648 "lang.tab.c"
     break;
 
   case 76:
-#line 737 "lang.y"
+#line 790 "lang.y"
                                         { (yyval.node) = add_node0('L');
                                           (yyval.node)->type = 2;
                                           (yyval.node)->value = (char *) strdup("SCAN");
@@ -2609,11 +2662,11 @@ yyreduce:
                                           free((yyvsp[-4].id));  
                                           free((yyvsp[-2].type));     
                                         }
-#line 2613 "lang.tab.c"
+#line 2666 "lang.tab.c"
     break;
 
   case 77:
-#line 753 "lang.y"
+#line 806 "lang.y"
                           { (yyval.node) = add_node0('L');
                             struct scope* scope = get_last_scope();
                             (yyval.node)->type  = scope->type;
@@ -2628,11 +2681,11 @@ yyreduce:
                             hasReturn = 1;
                             free((yyvsp[-2].id)); 
                           }
-#line 2632 "lang.tab.c"
+#line 2685 "lang.tab.c"
     break;
 
   case 78:
-#line 767 "lang.y"
+#line 820 "lang.y"
                           { (yyval.node) = add_node0('L');
                             struct scope* scope = get_last_scope();
                             (yyval.node)->type  = scope->type;
@@ -2646,11 +2699,11 @@ yyreduce:
                             hasReturn = 1;
                             free((yyvsp[-2].str));   
                           }
-#line 2650 "lang.tab.c"
+#line 2703 "lang.tab.c"
     break;
 
   case 79:
-#line 780 "lang.y"
+#line 833 "lang.y"
                           { (yyval.node) = add_node0('L');
                             struct scope* scope = get_last_scope();
                             (yyval.node)->type  = scope->type;
@@ -2664,11 +2717,11 @@ yyreduce:
                             hasReturn = 1;
                             free((yyvsp[-2].num));   
                           }
-#line 2668 "lang.tab.c"
+#line 2721 "lang.tab.c"
     break;
 
   case 80:
-#line 793 "lang.y"
+#line 846 "lang.y"
                           { (yyval.node) = add_node0('L');
                             struct scope* scope = get_last_scope();
                             (yyval.node)->type  = scope->type;
@@ -2682,11 +2735,11 @@ yyreduce:
                             hasReturn = 1;
                             free((yyvsp[-2].num));   
                           }
-#line 2686 "lang.tab.c"
+#line 2739 "lang.tab.c"
     break;
 
   case 81:
-#line 809 "lang.y"
+#line 862 "lang.y"
                                           { (yyval.node) = add_node1('L', (yyvsp[-2].node));
                                             (yyval.node)->value = (char *) strdup((yyvsp[-4].id));  
                                             (yyval.node)->type = get_id_type((yyvsp[-4].id));
@@ -2696,11 +2749,11 @@ yyreduce:
                                             free_current_params();
                                             free((yyvsp[-4].id));  
                                           }
-#line 2700 "lang.tab.c"
+#line 2753 "lang.tab.c"
     break;
 
   case 82:
-#line 818 "lang.y"
+#line 871 "lang.y"
                                           { (yyval.node) = add_node0('A');
                                             (yyval.node)->node1 = add_node0('V');
                                             (yyval.node)->node1->value = (char *) strdup((yyvsp[-6].id));
@@ -2722,11 +2775,11 @@ yyreduce:
                                             free((yyvsp[-6].id));  
                                             free((yyvsp[-4].id));     
                                           }
-#line 2726 "lang.tab.c"
+#line 2779 "lang.tab.c"
     break;
 
   case 83:
-#line 839 "lang.y"
+#line 892 "lang.y"
                                           { (yyval.node) = add_node0('L');
                                             (yyval.node)->value = (char *) strdup((yyvsp[-3].id));  
                                             (yyval.node)->type = get_id_type((yyvsp[-3].id));
@@ -2736,11 +2789,11 @@ yyreduce:
                                             free_current_params();
                                             free((yyvsp[-3].id));  
                                           }
-#line 2740 "lang.tab.c"
+#line 2793 "lang.tab.c"
     break;
 
   case 84:
-#line 848 "lang.y"
+#line 901 "lang.y"
                                            { (yyval.node) = add_node0('A');
                                             (yyval.node)->node1 = add_node0('V');
                                             (yyval.node)->node1->value = (char *) strdup((yyvsp[-5].id));
@@ -2762,55 +2815,55 @@ yyreduce:
                                             free((yyvsp[-5].id));  
                                             free((yyvsp[-3].id));     
                                           }
-#line 2766 "lang.tab.c"
+#line 2819 "lang.tab.c"
     break;
 
   case 85:
-#line 872 "lang.y"
+#line 925 "lang.y"
                               { (yyval.node) = add_node0('V');
                                 (yyval.node)->value = (char *) strdup((yyvsp[0].id)); 
                                 (yyval.node)->type = get_id_type((yyvsp[0].id));  
                                 add_current_params((yyval.node)->type); 
                                 free((yyvsp[0].id));  
                               }
-#line 2777 "lang.tab.c"
+#line 2830 "lang.tab.c"
     break;
 
   case 86:
-#line 878 "lang.y"
+#line 931 "lang.y"
                               { (yyval.node) = add_node0('I');
                                 (yyval.node)->type = 0;
                                 (yyval.node)->value = (char *) strdup((yyvsp[0].num));  
                                 add_current_params((yyval.node)->type); 
                                 free((yyvsp[0].num));   
                               }
-#line 2788 "lang.tab.c"
+#line 2841 "lang.tab.c"
     break;
 
   case 87:
-#line 884 "lang.y"
+#line 937 "lang.y"
                               { (yyval.node) = add_node0('D');
                                 (yyval.node)->type = 1;
                                 (yyval.node)->value = (char *) strdup((yyvsp[0].num));    
                                 add_current_params((yyval.node)->type); 
                                 free((yyvsp[0].num)); 
                               }
-#line 2799 "lang.tab.c"
+#line 2852 "lang.tab.c"
     break;
 
   case 88:
-#line 890 "lang.y"
+#line 943 "lang.y"
                               { (yyval.node) = add_node0('S');
                                 (yyval.node)->type = 2;
                                 (yyval.node)->value = (char *) strdup((yyvsp[0].str));  
                                 add_current_params((yyval.node)->type);  
                                 free((yyvsp[0].str)); 
                               }
-#line 2810 "lang.tab.c"
+#line 2863 "lang.tab.c"
     break;
 
   case 89:
-#line 896 "lang.y"
+#line 949 "lang.y"
                               { (yyval.node) = add_node0('R');
 
                                 (yyval.node)->node1 = add_node0('V');
@@ -2821,11 +2874,11 @@ yyreduce:
                                 add_current_params((yyval.node)->node1->type);
                                 free((yyvsp[-2].id));
                               }
-#line 2825 "lang.tab.c"
+#line 2878 "lang.tab.c"
     break;
 
   case 90:
-#line 906 "lang.y"
+#line 959 "lang.y"
                               { (yyval.node) = add_node0('R');
 
                                 (yyval.node)->node1 = add_node0('I');
@@ -2836,11 +2889,11 @@ yyreduce:
                                 add_current_params((yyval.node)->node1->type);
                                 free((yyvsp[-2].num));  
                               }
-#line 2840 "lang.tab.c"
+#line 2893 "lang.tab.c"
     break;
 
   case 91:
-#line 916 "lang.y"
+#line 969 "lang.y"
                               { (yyval.node) = add_node0('R');
 
                                 (yyval.node)->node1 = add_node0('D');
@@ -2851,11 +2904,11 @@ yyreduce:
                                 add_current_params((yyval.node)->node1->type);
                                 free((yyvsp[-2].num));   
                               }
-#line 2855 "lang.tab.c"
+#line 2908 "lang.tab.c"
     break;
 
   case 92:
-#line 926 "lang.y"
+#line 979 "lang.y"
                               { (yyval.node) = add_node0('R');
 
                                 (yyval.node)->node1 = add_node0('S');
@@ -2866,11 +2919,11 @@ yyreduce:
                                 add_current_params((yyval.node)->node1->type);
                                 free((yyvsp[-2].str));
                               }
-#line 2870 "lang.tab.c"
+#line 2923 "lang.tab.c"
     break;
 
 
-#line 2874 "lang.tab.c"
+#line 2927 "lang.tab.c"
 
       default: break;
     }
@@ -3108,7 +3161,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 938 "lang.y"
+#line 991 "lang.y"
 
 
 int main(int argc, char **argv) {
@@ -3499,6 +3552,14 @@ void add_symbol_table(char *id, int type) {
   HASH_ADD_STR(symbol_table, key, symbol_node);
 }
 
+char* addLabelNum() {
+  UT_string *str;
+  utstring_new(str);
+  utstring_printf(str, "L%d", labelNum);
+  labelNum++;
+  return utstring_body(str);
+}
+
 char* addRegisterCount() {
   UT_string *str;
   utstring_new(str);
@@ -3589,6 +3650,25 @@ void print_symbol_table() {
     }
   }
   printf("\n");
+}
+
+void print_str(char *addr) {
+  char *label1 = addLabelNum();
+  char *label2 = addLabelNum();
+  char *cont = addRegisterCount();
+  char *charactere = addRegisterCount();
+  char *flag = addRegisterCount();
+
+  add_instruct2("mov", cont, "0");
+  add_function(label1);
+  add_instruct2("mov", charactere, print_array(addr, cont));
+  add_instruct3("seq", flag, charactere, "0");
+  add_instruct2("brnz", label2, flag);
+  add_instruct2("inttoch", charactere, charactere);
+  add_instruct1("print", charactere);
+  add_instruct3("add", cont, cont, "1");
+  add_instruct1("jump", label1);
+  add_function(label2);
 }
 
 char *str_to_addr(char *str) {

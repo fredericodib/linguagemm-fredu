@@ -105,7 +105,9 @@ int hasMain = 0;
 int hasReturn = 0;
 int registerCount = 1;
 int hasSintaxError = 0;
+int labelNum = 1;
 char* addRegisterCount();
+char* addLabelNum();
 char* getLastRegisterCount();
 struct node* tree = NULL;
 struct scope* scope_stack = NULL;
@@ -129,7 +131,7 @@ void add_instruct3(char * label, char *addr1, char *addr2, char *addr3);
 char *str_to_addr(char *str);
 char *print_array(char *addr, char *i);
 char *i_to_str(int i);
-
+void print_str(char *addr);
 void add_scope(char* scope_name, int type);
 void remove_scope();
 struct scope* get_last_scope();
@@ -414,12 +416,14 @@ ID '=' expression ';'      {
                             $$->node1 = add_node0('V');
                             $$->node1->type = get_id_type($1);
                             $$->node1->value = (char *) strdup($1);
+                            $$->node1->addr = get_id_addr($1);
                             $$->node2 = $3;
                             if ($$->node1->type != $$->node2->type) {
                               if (!($$->node1->type == 1 && $$->node2->type == 0)) {
                                 print_semantic_error($$->node1->value, 4);
                               }
                             }
+                            add_instruct2("mov", $$->node1->addr, $$->node2->addr);
                             free($1);
                           }
 ;
@@ -433,16 +437,21 @@ ID                        { $$ = add_node0('V');
                           }
 | INT                     { $$ = add_node0('I');
                             $$->type = 0;
-                            $$->value = (char *) strdup($1);    
+                            $$->value = (char *) strdup($1); 
+                            $$->addr = addRegisterCount();
+                            add_instruct2("mov", $$->addr, $1);
                             free($1); 
                           }
 | DEC                     { $$ = add_node0('D'); 
                             $$->type = 1;
                             $$->value = (char *) strdup($1);  
+                            $$->addr = addRegisterCount();
+                            add_instruct2("mov", $$->addr, $1);
                             free($1);   
                           }
 | STR                     { $$ = add_node0('S'); 
                             $$->type = 2;
+                            $$->addr = str_to_addr($1);
                             $$->value = (char *) strdup($1);  
                             free($1);   
                           }
@@ -456,6 +465,19 @@ ID                        { $$ = add_node0('V');
                             $$->node2 = $2;
                             $$->node3 = $3;
                             build_expression_type($$);
+                            if ($$->node1->type != 2) {
+                              char *newAddr = addRegisterCount();
+                              if ($$->node1->type == 0 && $$->node3->type == 1) {
+                                add_instruct2("inttofl", $$->node1->addr, $$->node1->addr);
+                              }
+                              if ($$->node3->type == 0 && $$->node2->type == 1) {
+                                add_instruct2("inttofl", $$->node3->addr, $$->node3->addr);
+                              }
+                              add_instruct3($$->node2->addr, newAddr, $$->node1->addr, $$->node3->addr);
+                              $$->addr = newAddr;
+                            } else {
+
+                            }
                             free($1);
                           }
 | INT op expression       { $$ = add_node0('E');
@@ -464,9 +486,21 @@ ID                        { $$ = add_node0('V');
                             $$->node1->type = 0;
                             $$->node1->value = (char *) strdup($1);
 
+                            $$->node1->addr = addRegisterCount();
+                            add_instruct2("mov", $$->node1->addr, $1);
+
                             $$->node2 = $2;
                             $$->node3 = $3;
                             build_expression_type($$);
+                            char *newAddr = addRegisterCount();
+                            if ($$->node1->type == 0 && $$->node3->type == 1) {
+                              add_instruct2("inttofl", $$->node1->addr, $$->node1->addr);
+                            }
+                            if ($$->node3->type == 0 && $$->node2->type == 1) {
+                              add_instruct2("inttofl", $$->node3->addr, $$->node3->addr);
+                            }
+                            add_instruct3($$->node2->addr, newAddr, $$->node1->addr, $$->node3->addr);
+                            $$->addr = newAddr;
                             free($1);
                           }
 | DEC op expression       { $$ = add_node0('E');
@@ -475,9 +509,21 @@ ID                        { $$ = add_node0('V');
                             $$->node1->type = 1;
                             $$->node1->value = (char *) strdup($1);
 
+                            $$->node1->addr = addRegisterCount();
+                            add_instruct2("mov", $$->node1->addr, $1);
+
                             $$->node2 = $2;
                             $$->node3 = $3;
                             build_expression_type($$);
+                            char *newAddr = addRegisterCount();
+                            if ($$->node1->type == 0 && $$->node3->type == 1) {
+                              add_instruct2("inttofl", $$->node1->addr, $$->node1->addr);
+                            }
+                            if ($$->node3->type == 0 && $$->node2->type == 1) {
+                              add_instruct2("inttofl", $$->node3->addr, $$->node3->addr);
+                            }
+                            add_instruct3($$->node2->addr, newAddr, $$->node1->addr, $$->node3->addr);
+                            $$->addr = newAddr;
                             free($1);
                           }
 | STR op expression       { $$ = add_node0('E');
@@ -495,15 +541,19 @@ ID                        { $$ = add_node0('V');
 
 op:
   '+'   { $$ = add_node0('B'); 
+          $$->addr = "add";
           $$->value = (char *) strdup("+");     
         }
 | '-'   { $$ = add_node0('B'); 
+          $$->addr = "sub";
           $$->value = (char *) strdup("-");     
         }
 | '/'   { $$ = add_node0('B'); 
+          $$->addr = "div";
           $$->value = (char *) strdup("/");     
         }
-| '*'   { $$ = add_node0('B'); 
+| '*'   { $$ = add_node0('B');
+          $$->addr = "mul";
           $$->value = (char *) strdup("*");     
         }
 ;
@@ -679,6 +729,8 @@ print:
                             $$->node1->addr = get_id_addr($3);
                             if ($$->node1->type != 2) {
                               add_instruct1("print", $$->node1->addr);
+                            } else {
+                              print_str($$->node1->addr);
                             }
                             free($3);    
                           }
@@ -687,6 +739,7 @@ print:
                             $$->node1 = add_node0('S');
                             $$->node1->type = 2;
                             $$->node1->value = (char *) strdup($3); 
+                            print_str(str_to_addr($3));
                             free($3);    
                           }
 | PRINT '(' INT ')' ';'   { $$ = add_node0('L');
@@ -1325,6 +1378,14 @@ void add_symbol_table(char *id, int type) {
   HASH_ADD_STR(symbol_table, key, symbol_node);
 }
 
+char* addLabelNum() {
+  UT_string *str;
+  utstring_new(str);
+  utstring_printf(str, "L%d", labelNum);
+  labelNum++;
+  return utstring_body(str);
+}
+
 char* addRegisterCount() {
   UT_string *str;
   utstring_new(str);
@@ -1415,6 +1476,25 @@ void print_symbol_table() {
     }
   }
   printf("\n");
+}
+
+void print_str(char *addr) {
+  char *label1 = addLabelNum();
+  char *label2 = addLabelNum();
+  char *cont = addRegisterCount();
+  char *charactere = addRegisterCount();
+  char *flag = addRegisterCount();
+
+  add_instruct2("mov", cont, "0");
+  add_function(label1);
+  add_instruct2("mov", charactere, print_array(addr, cont));
+  add_instruct3("seq", flag, charactere, "0");
+  add_instruct2("brnz", label2, flag);
+  add_instruct2("inttoch", charactere, charactere);
+  add_instruct1("print", charactere);
+  add_instruct3("add", cont, cont, "1");
+  add_instruct1("jump", label1);
+  add_function(label2);
 }
 
 char *str_to_addr(char *str) {
