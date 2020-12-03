@@ -129,6 +129,7 @@ void add_instruct1(char * label, char *addr1);
 void add_instruct2(char * label, char *addr1, char *addr2);
 void add_instruct3(char * label, char *addr1, char *addr2, char *addr3);
 char *str_to_addr(char *str);
+char *concat_str(char *addr1, char *addr2);
 char *print_array(char *addr, char *i);
 char *i_to_str(int i);
 void print_str(char *addr);
@@ -476,7 +477,7 @@ ID                        { $$ = add_node0('V');
                               add_instruct3($$->node2->addr, newAddr, $$->node1->addr, $$->node3->addr);
                               $$->addr = newAddr;
                             } else {
-
+                              $$->addr = concat_str($$->node1->addr, $$->node3->addr);
                             }
                             free($1);
                           }
@@ -535,6 +536,8 @@ ID                        { $$ = add_node0('V');
                             $$->node2 = $2;
                             $$->node3 = $3;
                             build_expression_type($$);
+
+                            $$->addr = concat_str(str_to_addr($1), $$->node3->addr);
                             free($1);
                           }
 ;
@@ -1476,6 +1479,47 @@ void print_symbol_table() {
     }
   }
   printf("\n");
+}
+
+char *concat_str(char *addr1, char *addr2) {
+  char *newAddr = addRegisterCount();
+  char *label1 = addLabelNum();
+  char *label2 = addLabelNum();
+  char *label3 = addLabelNum();
+  char *label4 = addLabelNum();
+  char *cont = addRegisterCount();
+  char *contLen = addRegisterCount();
+  char *charactere = addRegisterCount();
+  char *flag = addRegisterCount();
+
+  add_instruct2("mema", newAddr, "200");
+  add_instruct2("mov", contLen, "0");
+
+  add_instruct2("mov", cont, "0");
+  add_function(label1);
+  add_instruct2("mov", charactere, print_array(addr1, cont));
+  add_instruct3("seq", flag, charactere, "0");
+  add_instruct2("brnz", label2, flag);
+  add_instruct2("mov", print_array(newAddr, contLen), charactere);
+  add_instruct3("add", cont, cont, "1");
+  add_instruct3("add", contLen, contLen, "1");
+  add_instruct1("jump", label1);
+  add_function(label2);
+
+  add_instruct2("mov", cont, "0");
+  add_function(label3);
+  add_instruct2("mov", charactere, print_array(addr2, cont));
+  add_instruct3("seq", flag, charactere, "0");
+  add_instruct2("brnz", label4, flag);
+  add_instruct2("mov", print_array(newAddr, contLen), charactere);
+  add_instruct3("add", cont, cont, "1");
+  add_instruct3("add", contLen, contLen, "1");
+  add_instruct1("jump", label3);
+  add_function(label4);
+
+  add_instruct2("mov", print_array(newAddr, contLen), "0");
+
+  return newAddr;
 }
 
 void print_str(char *addr) {

@@ -29,8 +29,12 @@ int main() {
   print(", ");
   print(str2);
 
-  string str2 = "Tudo bom? " + str + ", " + str2;
+  string str4;
+  str4 = "Tudo bom? " + str + ", " + str2;
   print(str4);
+  string str5;
+  str5 = str4 + str4;
+  print(str5);
 
   return(0);
 }
