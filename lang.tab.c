@@ -3844,16 +3844,23 @@ void add_instruct3(char * label, char *addr1, char *addr2, char *addr3) {
 
 void print_new_code() {
   struct code_line* code_line;
+  FILE *fp;
+  fp = fopen("./lang.tac", "w");
   printf(".table\n");
   printf(".code\n");
+  fprintf(fp, ".table\n");
+  fprintf(fp, ".code\n");
   if (new_code != NULL) {
     code_line = new_code;
     while(code_line != NULL) {
       printf("%s", utstring_body(code_line->line));
+      fprintf(fp, "%s", utstring_body(code_line->line));
       code_line = code_line->next;
     }
   }
   printf("nop\n\n");
+  fprintf(fp, "nop\n\n");
+  fclose(fp);
 }
 
 void free_new_code(struct code_line* code_line) {
