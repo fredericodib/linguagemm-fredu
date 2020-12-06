@@ -116,10 +116,10 @@ Grammar
    85               | INT
    86               | DEC
    87               | STR
-   88               | ID ',' callFuncParams
-   89               | INT ',' callFuncParams
-   90               | DEC ',' callFuncParams
-   91               | STR ',' callFuncParams
+   88               | callFuncParams ',' ID
+   89               | callFuncParams ',' INT
+   90               | callFuncParams ',' DEC
+   91               | callFuncParams ',' STR
 
 
 Terminals, with rules where they appear
@@ -1172,9 +1172,6 @@ State 94
 State 95
 
    84 callFuncParams: ID .
-   88               | ID . ',' callFuncParams
-
-    ','  shift, and go to state 125
 
     $default  reduce using rule 84 (callFuncParams)
 
@@ -1182,9 +1179,6 @@ State 95
 State 96
 
    85 callFuncParams: INT .
-   89               | INT . ',' callFuncParams
-
-    ','  shift, and go to state 126
 
     $default  reduce using rule 85 (callFuncParams)
 
@@ -1192,9 +1186,6 @@ State 96
 State 97
 
    86 callFuncParams: DEC .
-   90               | DEC . ',' callFuncParams
-
-    ','  shift, and go to state 127
 
     $default  reduce using rule 86 (callFuncParams)
 
@@ -1202,9 +1193,6 @@ State 97
 State 98
 
    87 callFuncParams: STR .
-   91               | STR . ',' callFuncParams
-
-    ','  shift, and go to state 128
 
     $default  reduce using rule 87 (callFuncParams)
 
@@ -1213,14 +1201,19 @@ State 99
 
    82 callFunc: ID '(' ')' . ';'
 
-    ';'  shift, and go to state 129
+    ';'  shift, and go to state 125
 
 
 State 100
 
    80 callFunc: ID '(' callFuncParams . ')' ';'
+   88 callFuncParams: callFuncParams . ',' ID
+   89               | callFuncParams . ',' INT
+   90               | callFuncParams . ',' DEC
+   91               | callFuncParams . ',' STR
 
-    ')'  shift, and go to state 130
+    ')'  shift, and go to state 126
+    ','  shift, and go to state 127
 
 
 State 101
@@ -1229,14 +1222,14 @@ State 101
    55          | ID . cond INT
    56          | ID . cond DEC
 
-    CGE  shift, and go to state 131
-    CGT  shift, and go to state 132
-    CLE  shift, and go to state 133
-    CLT  shift, and go to state 134
-    CNE  shift, and go to state 135
-    CEQ  shift, and go to state 136
+    CGE  shift, and go to state 128
+    CGT  shift, and go to state 129
+    CLE  shift, and go to state 130
+    CLT  shift, and go to state 131
+    CNE  shift, and go to state 132
+    CEQ  shift, and go to state 133
 
-    cond  go to state 137
+    cond  go to state 134
 
 
 State 102
@@ -1245,14 +1238,14 @@ State 102
    58          | INT . cond INT
    59          | INT . cond DEC
 
-    CGE  shift, and go to state 131
-    CGT  shift, and go to state 132
-    CLE  shift, and go to state 133
-    CLT  shift, and go to state 134
-    CNE  shift, and go to state 135
-    CEQ  shift, and go to state 136
+    CGE  shift, and go to state 128
+    CGT  shift, and go to state 129
+    CLE  shift, and go to state 130
+    CLT  shift, and go to state 131
+    CNE  shift, and go to state 132
+    CEQ  shift, and go to state 133
 
-    cond  go to state 138
+    cond  go to state 135
 
 
 State 103
@@ -1261,21 +1254,21 @@ State 103
    61          | DEC . cond INT
    62          | DEC . cond DEC
 
-    CGE  shift, and go to state 131
-    CGT  shift, and go to state 132
-    CLE  shift, and go to state 133
-    CLT  shift, and go to state 134
-    CNE  shift, and go to state 135
-    CEQ  shift, and go to state 136
+    CGE  shift, and go to state 128
+    CGT  shift, and go to state 129
+    CLE  shift, and go to state 130
+    CLT  shift, and go to state 131
+    CNE  shift, and go to state 132
+    CEQ  shift, and go to state 133
 
-    cond  go to state 139
+    cond  go to state 136
 
 
 State 104
 
    53 comand: WHILE '(' condition . ')' '{' contentList '}'
 
-    ')'  shift, and go to state 140
+    ')'  shift, and go to state 137
 
 
 State 105
@@ -1283,63 +1276,63 @@ State 105
    51 comand: IF '(' condition . ')' '{' contentList '}'
    52       | IF '(' condition . ')' '{' contentList '}' ELSE '{' contentList '}'
 
-    ')'  shift, and go to state 141
+    ')'  shift, and go to state 138
 
 
 State 106
 
    76 return: RETURN '(' ID . ')' ';'
 
-    ')'  shift, and go to state 142
+    ')'  shift, and go to state 139
 
 
 State 107
 
    78 return: RETURN '(' INT . ')' ';'
 
-    ')'  shift, and go to state 143
+    ')'  shift, and go to state 140
 
 
 State 108
 
    79 return: RETURN '(' DEC . ')' ';'
 
-    ')'  shift, and go to state 144
+    ')'  shift, and go to state 141
 
 
 State 109
 
    77 return: RETURN '(' STR . ')' ';'
 
-    ')'  shift, and go to state 145
+    ')'  shift, and go to state 142
 
 
 State 110
 
    69 print: PRINT '(' ID . ')' ';'
 
-    ')'  shift, and go to state 146
+    ')'  shift, and go to state 143
 
 
 State 111
 
    71 print: PRINT '(' INT . ')' ';'
 
-    ')'  shift, and go to state 147
+    ')'  shift, and go to state 144
 
 
 State 112
 
    72 print: PRINT '(' DEC . ')' ';'
 
-    ')'  shift, and go to state 148
+    ')'  shift, and go to state 145
 
 
 State 113
 
    70 print: PRINT '(' STR . ')' ';'
 
-    ')'  shift, and go to state 149
+    ')'  shift, and go to state 146
 
 
 State 114
@@ -1348,7 +1341,7 @@ State 114
    74     | SCAN '(' ID . ',' TYPEFLOAT ')' ';'
    75     | SCAN '(' ID . ',' TYPESTRING ')' ';'
 
-    ','  shift, and go to state 150
+    ','  shift, and go to state 147
 
 
 State 115
@@ -1360,9 +1353,9 @@ State 115
     INT  shift, and go to state 96
     DEC  shift, and go to state 97
     STR  shift, and go to state 98
-    ')'  shift, and go to state 151
+    ')'  shift, and go to state 148
 
-    callFuncParams  go to state 152
+    callFuncParams  go to state 149
 
 
 State 116
@@ -1397,48 +1390,48 @@ State 120
 
    43 expression: ID op . expression
 
-    ID   shift, and go to state 153
+    ID   shift, and go to state 150
     INT  shift, and go to state 91
     DEC  shift, and go to state 92
     STR  shift, and go to state 93
 
-    expression  go to state 154
+    expression  go to state 151
 
 
 State 121
 
    44 expression: INT op . expression
 
-    ID   shift, and go to state 153
+    ID   shift, and go to state 150
     INT  shift, and go to state 91
     DEC  shift, and go to state 92
     STR  shift, and go to state 93
 
-    expression  go to state 155
+    expression  go to state 152
 
 
 State 122
 
    45 expression: DEC op . expression
 
-    ID   shift, and go to state 153
+    ID   shift, and go to state 150
     INT  shift, and go to state 91
     DEC  shift, and go to state 92
     STR  shift, and go to state 93
 
-    expression  go to state 156
+    expression  go to state 153
 
 
 State 123
 
    46 expression: STR op . expression
 
-    ID   shift, and go to state 153
+    ID   shift, and go to state 150
     INT  shift, and go to state 91
     DEC  shift, and go to state 92
     STR  shift, and go to state 93
 
-    expression  go to state 157
+    expression  go to state 154
 
 
 State 124
@@ -1450,238 +1443,208 @@ State 124
 
 State 125
 
-   88 callFuncParams: ID ',' . callFuncParams
-
-    ID   shift, and go to state 95
-    INT  shift, and go to state 96
-    DEC  shift, and go to state 97
-    STR  shift, and go to state 98
-
-    callFuncParams  go to state 158
-
-
-State 126
-
-   89 callFuncParams: INT ',' . callFuncParams
-
-    ID   shift, and go to state 95
-    INT  shift, and go to state 96
-    DEC  shift, and go to state 97
-    STR  shift, and go to state 98
-
-    callFuncParams  go to state 159
-
-
-State 127
-
-   90 callFuncParams: DEC ',' . callFuncParams
-
-    ID   shift, and go to state 95
-    INT  shift, and go to state 96
-    DEC  shift, and go to state 97
-    STR  shift, and go to state 98
-
-    callFuncParams  go to state 160
-
-
-State 128
-
-   91 callFuncParams: STR ',' . callFuncParams
-
-    ID   shift, and go to state 95
-    INT  shift, and go to state 96
-    DEC  shift, and go to state 97
-    STR  shift, and go to state 98
-
-    callFuncParams  go to state 161
-
-
-State 129
-
    82 callFunc: ID '(' ')' ';' .
 
     $default  reduce using rule 82 (callFunc)
 
 
-State 130
+State 126
 
    80 callFunc: ID '(' callFuncParams ')' . ';'
 
-    ';'  shift, and go to state 162
+    ';'  shift, and go to state 155
 
 
-State 131
+State 127
+
+   88 callFuncParams: callFuncParams ',' . ID
+   89               | callFuncParams ',' . INT
+   90               | callFuncParams ',' . DEC
+   91               | callFuncParams ',' . STR
+
+    ID   shift, and go to state 156
+    INT  shift, and go to state 157
+    DEC  shift, and go to state 158
+    STR  shift, and go to state 159
+
+
+State 128
 
    63 cond: CGE .
 
     $default  reduce using rule 63 (cond)
 
 
-State 132
+State 129
 
    64 cond: CGT .
 
     $default  reduce using rule 64 (cond)
 
 
-State 133
+State 130
 
    65 cond: CLE .
 
     $default  reduce using rule 65 (cond)
 
 
-State 134
+State 131
 
    66 cond: CLT .
 
     $default  reduce using rule 66 (cond)
 
 
-State 135
+State 132
 
    67 cond: CNE .
 
     $default  reduce using rule 67 (cond)
 
 
-State 136
+State 133
 
    68 cond: CEQ .
 
     $default  reduce using rule 68 (cond)
 
 
-State 137
+State 134
 
    54 condition: ID cond . ID
    55          | ID cond . INT
    56          | ID cond . DEC
+
+    ID   shift, and go to state 160
+    INT  shift, and go to state 161
+    DEC  shift, and go to state 162
+
+
+State 135
+
+   57 condition: INT cond . ID
+   58          | INT cond . INT
+   59          | INT cond . DEC
 
     ID   shift, and go to state 163
     INT  shift, and go to state 164
     DEC  shift, and go to state 165
 
 
-State 138
+State 136
 
-   57 condition: INT cond . ID
-   58          | INT cond . INT
-   59          | INT cond . DEC
+   60 condition: DEC cond . ID
+   61          | DEC cond . INT
+   62          | DEC cond . DEC
 
     ID   shift, and go to state 166
     INT  shift, and go to state 167
     DEC  shift, and go to state 168
 
 
-State 139
-
-   60 condition: DEC cond . ID
-   61          | DEC cond . INT
-   62          | DEC cond . DEC
-
-    ID   shift, and go to state 169
-    INT  shift, and go to state 170
-    DEC  shift, and go to state 171
-
-
-State 140
+State 137
 
    53 comand: WHILE '(' condition ')' . '{' contentList '}'
 
-    '{'  shift, and go to state 172
+    '{'  shift, and go to state 169
 
 
-State 141
+State 138
 
    51 comand: IF '(' condition ')' . '{' contentList '}'
    52       | IF '(' condition ')' . '{' contentList '}' ELSE '{' contentList '}'
 
-    '{'  shift, and go to state 173
+    '{'  shift, and go to state 170
+
+
+State 139
+
+   76 return: RETURN '(' ID ')' . ';'
+
+    ';'  shift, and go to state 171
+
+
+State 140
+
+   78 return: RETURN '(' INT ')' . ';'
+
+    ';'  shift, and go to state 172
+
+
+State 141
+
+   79 return: RETURN '(' DEC ')' . ';'
+
+    ';'  shift, and go to state 173
 
 
 State 142
 
-   76 return: RETURN '(' ID ')' . ';'
+   77 return: RETURN '(' STR ')' . ';'
 
     ';'  shift, and go to state 174
 
 
 State 143
 
-   78 return: RETURN '(' INT ')' . ';'
+   69 print: PRINT '(' ID ')' . ';'
 
     ';'  shift, and go to state 175
 
 
 State 144
 
-   79 return: RETURN '(' DEC ')' . ';'
+   71 print: PRINT '(' INT ')' . ';'
 
     ';'  shift, and go to state 176
 
 
 State 145
 
-   77 return: RETURN '(' STR ')' . ';'
+   72 print: PRINT '(' DEC ')' . ';'
 
     ';'  shift, and go to state 177
 
 
 State 146
 
-   69 print: PRINT '(' ID ')' . ';'
+   70 print: PRINT '(' STR ')' . ';'
 
     ';'  shift, and go to state 178
 
 
 State 147
 
-   71 print: PRINT '(' INT ')' . ';'
-
-    ';'  shift, and go to state 179
-
-
-State 148
-
-   72 print: PRINT '(' DEC ')' . ';'
-
-    ';'  shift, and go to state 180
-
-
-State 149
-
-   70 print: PRINT '(' STR ')' . ';'
-
-    ';'  shift, and go to state 181
-
-
-State 150
-
    73 scan: SCAN '(' ID ',' . TYPEINT ')' ';'
    74     | SCAN '(' ID ',' . TYPEFLOAT ')' ';'
    75     | SCAN '(' ID ',' . TYPESTRING ')' ';'
 
-    TYPEINT     shift, and go to state 182
-    TYPEFLOAT   shift, and go to state 183
-    TYPESTRING  shift, and go to state 184
+    TYPEINT     shift, and go to state 179
+    TYPEFLOAT   shift, and go to state 180
+    TYPESTRING  shift, and go to state 181
 
 
-State 151
+State 148
 
    83 callFunc: ID '=' ID '(' ')' . ';'
 
-    ';'  shift, and go to state 185
+    ';'  shift, and go to state 182
 
 
-State 152
+State 149
 
    81 callFunc: ID '=' ID '(' callFuncParams . ')' ';'
+   88 callFuncParams: callFuncParams . ',' ID
+   89               | callFuncParams . ',' INT
+   90               | callFuncParams . ',' DEC
+   91               | callFuncParams . ',' STR
 
-    ')'  shift, and go to state 186
+    ')'  shift, and go to state 183
+    ','  shift, and go to state 127
 
 
-State 153
+State 150
 
    39 expression: ID .
    43           | ID . op expression
@@ -1696,133 +1659,133 @@ State 153
     op  go to state 120
 
 
-State 154
+State 151
 
    43 expression: ID op expression .
 
     $default  reduce using rule 43 (expression)
 
 
-State 155
+State 152
 
    44 expression: INT op expression .
 
     $default  reduce using rule 44 (expression)
 
 
-State 156
+State 153
 
    45 expression: DEC op expression .
 
     $default  reduce using rule 45 (expression)
 
 
-State 157
+State 154
 
    46 expression: STR op expression .
 
     $default  reduce using rule 46 (expression)
 
 
-State 158
-
-   88 callFuncParams: ID ',' callFuncParams .
-
-    $default  reduce using rule 88 (callFuncParams)
-
-
-State 159
-
-   89 callFuncParams: INT ',' callFuncParams .
-
-    $default  reduce using rule 89 (callFuncParams)
-
-
-State 160
-
-   90 callFuncParams: DEC ',' callFuncParams .
-
-    $default  reduce using rule 90 (callFuncParams)
-
-
-State 161
-
-   91 callFuncParams: STR ',' callFuncParams .
-
-    $default  reduce using rule 91 (callFuncParams)
-
-
-State 162
+State 155
 
    80 callFunc: ID '(' callFuncParams ')' ';' .
 
     $default  reduce using rule 80 (callFunc)
 
 
-State 163
+State 156
+
+   88 callFuncParams: callFuncParams ',' ID .
+
+    $default  reduce using rule 88 (callFuncParams)
+
+
+State 157
+
+   89 callFuncParams: callFuncParams ',' INT .
+
+    $default  reduce using rule 89 (callFuncParams)
+
+
+State 158
+
+   90 callFuncParams: callFuncParams ',' DEC .
+
+    $default  reduce using rule 90 (callFuncParams)
+
+
+State 159
+
+   91 callFuncParams: callFuncParams ',' STR .
+
+    $default  reduce using rule 91 (callFuncParams)
+
+
+State 160
 
    54 condition: ID cond ID .
 
     $default  reduce using rule 54 (condition)
 
 
-State 164
+State 161
 
    55 condition: ID cond INT .
 
     $default  reduce using rule 55 (condition)
 
 
-State 165
+State 162
 
    56 condition: ID cond DEC .
 
     $default  reduce using rule 56 (condition)
 
 
-State 166
+State 163
 
    57 condition: INT cond ID .
 
     $default  reduce using rule 57 (condition)
 
 
-State 167
+State 164
 
    58 condition: INT cond INT .
 
     $default  reduce using rule 58 (condition)
 
 
-State 168
+State 165
 
    59 condition: INT cond DEC .
 
     $default  reduce using rule 59 (condition)
 
 
-State 169
+State 166
 
    60 condition: DEC cond ID .
 
     $default  reduce using rule 60 (condition)
 
 
-State 170
+State 167
 
    61 condition: DEC cond INT .
 
     $default  reduce using rule 61 (condition)
 
 
-State 171
+State 168
 
    62 condition: DEC cond DEC .
 
     $default  reduce using rule 62 (condition)
 
 
-State 172
+State 169
 
    53 comand: WHILE '(' condition ')' '{' . contentList '}'
 
@@ -1839,7 +1802,7 @@ State 172
     $default  reduce using rule 30 (contentList)
 
     var          go to state 65
-    contentList  go to state 187
+    contentList  go to state 184
     content      go to state 67
     addValue     go to state 68
     comand       go to state 69
@@ -1849,7 +1812,7 @@ State 172
     callFunc     go to state 73
 
 
-State 173
+State 170
 
    51 comand: IF '(' condition ')' '{' . contentList '}'
    52       | IF '(' condition ')' '{' . contentList '}' ELSE '{' contentList '}'
@@ -1867,7 +1830,7 @@ State 173
     $default  reduce using rule 30 (contentList)
 
     var          go to state 65
-    contentList  go to state 188
+    contentList  go to state 185
     content      go to state 67
     addValue     go to state 68
     comand       go to state 69
@@ -1877,186 +1840,186 @@ State 173
     callFunc     go to state 73
 
 
-State 174
+State 171
 
    76 return: RETURN '(' ID ')' ';' .
 
     $default  reduce using rule 76 (return)
 
 
-State 175
+State 172
 
    78 return: RETURN '(' INT ')' ';' .
 
     $default  reduce using rule 78 (return)
 
 
-State 176
+State 173
 
    79 return: RETURN '(' DEC ')' ';' .
 
     $default  reduce using rule 79 (return)
 
 
-State 177
+State 174
 
    77 return: RETURN '(' STR ')' ';' .
 
     $default  reduce using rule 77 (return)
 
 
-State 178
+State 175
 
    69 print: PRINT '(' ID ')' ';' .
 
     $default  reduce using rule 69 (print)
 
 
-State 179
+State 176
 
    71 print: PRINT '(' INT ')' ';' .
 
     $default  reduce using rule 71 (print)
 
 
-State 180
+State 177
 
    72 print: PRINT '(' DEC ')' ';' .
 
     $default  reduce using rule 72 (print)
 
 
-State 181
+State 178
 
    70 print: PRINT '(' STR ')' ';' .
 
     $default  reduce using rule 70 (print)
 
 
-State 182
+State 179
 
    73 scan: SCAN '(' ID ',' TYPEINT . ')' ';'
 
-    ')'  shift, and go to state 189
+    ')'  shift, and go to state 186
 
 
-State 183
+State 180
 
    74 scan: SCAN '(' ID ',' TYPEFLOAT . ')' ';'
 
-    ')'  shift, and go to state 190
+    ')'  shift, and go to state 187
 
 
-State 184
+State 181
 
    75 scan: SCAN '(' ID ',' TYPESTRING . ')' ';'
 
-    ')'  shift, and go to state 191
+    ')'  shift, and go to state 188
 
 
-State 185
+State 182
 
    83 callFunc: ID '=' ID '(' ')' ';' .
 
     $default  reduce using rule 83 (callFunc)
 
 
-State 186
+State 183
 
    81 callFunc: ID '=' ID '(' callFuncParams ')' . ';'
+
+    ';'  shift, and go to state 189
+
+
+State 184
+
+   53 comand: WHILE '(' condition ')' '{' contentList . '}'
+
+    '}'  shift, and go to state 190
+
+
+State 185
+
+   51 comand: IF '(' condition ')' '{' contentList . '}'
+   52       | IF '(' condition ')' '{' contentList . '}' ELSE '{' contentList '}'
+
+    '}'  shift, and go to state 191
+
+
+State 186
+
+   73 scan: SCAN '(' ID ',' TYPEINT ')' . ';'
 
     ';'  shift, and go to state 192
 
 
 State 187
 
-   53 comand: WHILE '(' condition ')' '{' contentList . '}'
+   74 scan: SCAN '(' ID ',' TYPEFLOAT ')' . ';'
 
-    '}'  shift, and go to state 193
+    ';'  shift, and go to state 193
 
 
 State 188
 
-   51 comand: IF '(' condition ')' '{' contentList . '}'
-   52       | IF '(' condition ')' '{' contentList . '}' ELSE '{' contentList '}'
+   75 scan: SCAN '(' ID ',' TYPESTRING ')' . ';'
 
-    '}'  shift, and go to state 194
+    ';'  shift, and go to state 194
 
 
 State 189
-
-   73 scan: SCAN '(' ID ',' TYPEINT ')' . ';'
-
-    ';'  shift, and go to state 195
-
-
-State 190
-
-   74 scan: SCAN '(' ID ',' TYPEFLOAT ')' . ';'
-
-    ';'  shift, and go to state 196
-
-
-State 191
-
-   75 scan: SCAN '(' ID ',' TYPESTRING ')' . ';'
-
-    ';'  shift, and go to state 197
-
-
-State 192
 
    81 callFunc: ID '=' ID '(' callFuncParams ')' ';' .
 
     $default  reduce using rule 81 (callFunc)
 
 
-State 193
+State 190
 
    53 comand: WHILE '(' condition ')' '{' contentList '}' .
 
     $default  reduce using rule 53 (comand)
 
 
-State 194
+State 191
 
    51 comand: IF '(' condition ')' '{' contentList '}' .
    52       | IF '(' condition ')' '{' contentList '}' . ELSE '{' contentList '}'
 
-    ELSE  shift, and go to state 198
+    ELSE  shift, and go to state 195
 
     $default  reduce using rule 51 (comand)
 
 
-State 195
+State 192
 
    73 scan: SCAN '(' ID ',' TYPEINT ')' ';' .
 
     $default  reduce using rule 73 (scan)
 
 
-State 196
+State 193
 
    74 scan: SCAN '(' ID ',' TYPEFLOAT ')' ';' .
 
     $default  reduce using rule 74 (scan)
 
 
-State 197
+State 194
 
    75 scan: SCAN '(' ID ',' TYPESTRING ')' ';' .
 
     $default  reduce using rule 75 (scan)
 
 
-State 198
+State 195
 
    52 comand: IF '(' condition ')' '{' contentList '}' ELSE . '{' contentList '}'
 
-    '{'  shift, and go to state 199
+    '{'  shift, and go to state 196
 
 
-State 199
+State 196
 
    52 comand: IF '(' condition ')' '{' contentList '}' ELSE '{' . contentList '}'
 
@@ -2073,7 +2036,7 @@ State 199
     $default  reduce using rule 30 (contentList)
 
     var          go to state 65
-    contentList  go to state 200
+    contentList  go to state 197
     content      go to state 67
     addValue     go to state 68
     comand       go to state 69
@@ -2083,14 +2046,14 @@ State 199
     callFunc     go to state 73
 
 
-State 200
+State 197
 
    52 comand: IF '(' condition ')' '{' contentList '}' ELSE '{' contentList . '}'
 
-    '}'  shift, and go to state 201
+    '}'  shift, and go to state 198
 
 
-State 201
+State 198
 
    52 comand: IF '(' condition ')' '{' contentList '}' ELSE '{' contentList '}' .
 

@@ -13,16 +13,17 @@ int main() {
   float functionReturn;
 
   string2 = "do you like blueberries?";
-  result = string1 + ", " + string2;
+  result = string1 + ", " + string2 + "\n";
   print(result);
 
   functionReturn = test(4, 5.5);  
   print(functionReturn);
+  print("\n");
 
   if (functionReturn >= 20) {
-    print("maior ou igual");
+    print("maior ou igual\n");
   } else {
-    print("menor");
+    print("menor\n");
   }
 
   while (functionReturn < 1000) {
@@ -30,9 +31,12 @@ int main() {
   }
 
   print(functionReturn);
+  print("\n");
 
   int scanNumero;
   scan(scanNumero, int);
+  print(scanNumero);
+  print("\n");
 
   return(0);
 }

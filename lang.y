@@ -439,6 +439,13 @@ ID                        { $$ = add_node0('V');
                             $$->value = (char *) strdup($1);   
                             $$->type = get_id_type($1);
                             $$->addr = get_id_addr($1);
+
+                            if ($$->addr[0] == '#') {
+                              char *newAddrVar = addRegisterCount();
+                              add_instruct2("mov", newAddrVar, $$->addr);
+                              $$->addr = newAddrVar;
+                            }
+
                             free($1);  
                           }
 | INT                     { $$ = add_node0('I');
@@ -468,6 +475,12 @@ ID                        { $$ = add_node0('V');
                             $$->node1->addr = get_id_addr($1);
                             $$->node1->type = get_id_type($1);
 
+                            if ($$->node1->addr[0] == '#') {
+                              char *newAddrVar = addRegisterCount();
+                              add_instruct2("mov", newAddrVar, $$->node1->addr);
+                              $$->node1->addr = newAddrVar;
+                            }
+
                             $$->node2 = $2;
                             $$->node3 = $3;
                             build_expression_type($$);
@@ -476,7 +489,7 @@ ID                        { $$ = add_node0('V');
                               if ($$->node1->type == 0 && $$->node3->type == 1) {
                                 add_instruct2("inttofl", $$->node1->addr, $$->node1->addr);
                               }
-                              if ($$->node3->type == 0 && $$->node2->type == 1) {
+                              if ($$->node3->type == 0 && $$->node1->type == 1) {
                                 add_instruct2("inttofl", $$->node3->addr, $$->node3->addr);
                               }
                               add_instruct3($$->node2->addr, newAddr, $$->node1->addr, $$->node3->addr);
@@ -499,11 +512,8 @@ ID                        { $$ = add_node0('V');
                             $$->node3 = $3;
                             build_expression_type($$);
                             char *newAddr = addRegisterCount();
-                            if ($$->node1->type == 0 && $$->node3->type == 1) {
+                            if ($$->node3->type == 1) {
                               add_instruct2("inttofl", $$->node1->addr, $$->node1->addr);
-                            }
-                            if ($$->node3->type == 0 && $$->node2->type == 1) {
-                              add_instruct2("inttofl", $$->node3->addr, $$->node3->addr);
                             }
                             add_instruct3($$->node2->addr, newAddr, $$->node1->addr, $$->node3->addr);
                             $$->addr = newAddr;
@@ -522,10 +532,7 @@ ID                        { $$ = add_node0('V');
                             $$->node3 = $3;
                             build_expression_type($$);
                             char *newAddr = addRegisterCount();
-                            if ($$->node1->type == 0 && $$->node3->type == 1) {
-                              add_instruct2("inttofl", $$->node1->addr, $$->node1->addr);
-                            }
-                            if ($$->node3->type == 0 && $$->node2->type == 1) {
+                            if ($$->node3->type == 0) {
                               add_instruct2("inttofl", $$->node3->addr, $$->node3->addr);
                             }
                             add_instruct3($$->node2->addr, newAddr, $$->node1->addr, $$->node3->addr);
@@ -972,49 +979,49 @@ callFuncParams:
                                 add_instruct1("param", str_to_addr($1));  
                                 free($1); 
                               }
-| ID ',' callFuncParams       { $$ = add_node0('R');
+| callFuncParams ',' ID       { $$ = add_node0('R');
 
                                 $$->node1 = add_node0('V');
-                                $$->node1->value = (char *) strdup($1);    
-                                $$->node1->type = get_id_type($1); 
+                                $$->node1->value = (char *) strdup($3);    
+                                $$->node1->type = get_id_type($3); 
 
-                                $$->node2 = $3;
+                                $$->node2 = $1;
                                 add_current_params($$->node1->type);
-                                add_instruct1("param", get_id_addr($1)); 
-                                free($1);
+                                add_instruct1("param", get_id_addr($3)); 
+                                free($3);
                               }
-| INT ',' callFuncParams      { $$ = add_node0('R');
+| callFuncParams ',' INT      { $$ = add_node0('R');
 
                                 $$->node1 = add_node0('I');
                                 $$->node1->type = 0;
-                                $$->node1->value = (char *) strdup($1); 
+                                $$->node1->value = (char *) strdup($3); 
 
-                                $$->node2 = $3;  
+                                $$->node2 = $1;  
                                 add_current_params($$->node1->type);
-                                add_instruct1("param", $1); 
-                                free($1);  
+                                add_instruct1("param", $3); 
+                                free($3);  
                               }
-| DEC ',' callFuncParams      { $$ = add_node0('R');
+| callFuncParams ',' DEC      { $$ = add_node0('R');
 
                                 $$->node1 = add_node0('D');
                                 $$->node1->type = 1;
-                                $$->node1->value = (char *) strdup($1);  
+                                $$->node1->value = (char *) strdup($3);  
 
-                                $$->node2 = $3;
+                                $$->node2 = $1;
                                 add_current_params($$->node1->type);
-                                add_instruct1("param", $1); 
-                                free($1);   
+                                add_instruct1("param", $3); 
+                                free($3);   
                               }
-| STR ',' callFuncParams      { $$ = add_node0('R');
+| callFuncParams ',' STR      { $$ = add_node0('R');
 
                                 $$->node1 = add_node0('S');
                                 $$->node1->type = 2;
-                                $$->node1->value = (char *) strdup($1);     
+                                $$->node1->value = (char *) strdup($3);     
 
-                                $$->node2 = $3;
+                                $$->node2 = $1;
                                 add_current_params($$->node1->type);
-                                add_instruct1("param", str_to_addr($1));  
-                                free($1);
+                                add_instruct1("param", str_to_addr($3));  
+                                free($3);
                               }
 ;
 
@@ -1336,8 +1343,13 @@ void add_current_params(int type) {
     current_params->first = new_params;
   } else {
     params = current_params->first;
-    current_params->first = new_params;
-    new_params->next = params;
+    // current_params->first = new_params;
+    // new_params->next = params;
+    while(params->next != NULL) {
+      params = params->next;
+    }
+    params->next = new_params;
+
   }
 }
 
