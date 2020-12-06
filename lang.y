@@ -104,9 +104,11 @@ void compare_params(char *id);
 int hasMain = 0;
 int hasReturn = 0;
 int registerCount = 1;
+int paramCount = 0;
 int hasSintaxError = 0;
 int labelNum = 1;
 char* addRegisterCount();
+char* addParamCount();
 char* addLabelNum();
 char* getLastRegisterCount();
 struct node* tree = NULL;
@@ -137,7 +139,7 @@ void add_scope(char* scope_name, int type);
 void remove_scope();
 struct scope* get_last_scope();
 
-void add_symbol_table(char *id, int type);
+void add_symbol_table(char *id, int type, int isParam);
 struct symbol_node* find_symbol_table(char *id);
 char* generate_symbol_key(char *id); // Gera uma chave concatenando scope_name + @ + id
 int get_id_type(char *id);
@@ -195,7 +197,7 @@ var:
                             $$->addr = getLastRegisterCount();
                             $$->value = (char *) strdup($2);   
                             add_instruct2("mov", getLastRegisterCount(), "0");
-                            add_symbol_table($2, 0);  
+                            add_symbol_table($2, 0, 0);  
                             free($1);
                             free($2); 
                           } 
@@ -213,7 +215,7 @@ var:
                             $$->node1->node2->type = 0;
                             $$->node1->node2->value = (char *) strdup($4);
                             add_instruct2("mov", getLastRegisterCount(), $4);
-                            add_symbol_table($2, 0);
+                            add_symbol_table($2, 0, 0);
                             free($1);
                             free($2); 
                             free($4); 
@@ -223,7 +225,7 @@ var:
                             $$->addr = getLastRegisterCount();
                             $$->value = (char *) strdup($2);  
                             add_instruct2("mov", getLastRegisterCount(), "0");
-                            add_symbol_table($2, 1);
+                            add_symbol_table($2, 1, 0);
                             free($1);
                             free($2); 
                           } 
@@ -241,7 +243,7 @@ var:
                             $$->node1->node2->type = 0;
                             $$->node1->node2->value = (char *) strdup($4);
                             add_instruct2("mov", getLastRegisterCount(), $4);
-                            add_symbol_table($2, 1);
+                            add_symbol_table($2, 1, 0);
                             free($1);
                             free($2); 
                             free($4); 
@@ -260,7 +262,7 @@ var:
                             $$->node1->node2->type = 1;
                             $$->node1->node2->value = (char *) strdup($4);
                             add_instruct2("mov", getLastRegisterCount(), $4);
-                            add_symbol_table($2, 1);
+                            add_symbol_table($2, 1, 0);
                             free($1);
                             free($2); 
                             free($4); 
@@ -269,7 +271,7 @@ var:
                             $$->type = 2;
                             $$->addr = getLastRegisterCount();
                             $$->value = (char *) strdup($2);    
-                            add_symbol_table($2, 2);
+                            add_symbol_table($2, 2, 0);
                             free($1);
                             free($2); 
                           } 
@@ -286,7 +288,7 @@ var:
                             $$->node1->node2 = add_node0('S');
                             $$->node1->node2->type = 2;
                             $$->node1->node2->value = (char *) strdup($4);
-                            add_symbol_table($2, 2);
+                            add_symbol_table($2, 2, 0);
                             
                             add_instruct2("mov", $$->addr, str_to_addr($4));
 
@@ -299,8 +301,9 @@ var:
 
 func:
   TYPESTRING ID                                         { 
-                                                          add_symbol_table($2, 2); add_scope($2, 2); 
+                                                          add_symbol_table($2, 2, 0); add_scope($2, 2); 
                                                           hasReturn = 0;
+                                                          paramCount = 0;
                                                           add_func_params($2);
                                                           add_function($2);
                                                         }
@@ -317,7 +320,8 @@ func:
                                                           free($2); 
                                                         } 
 
-| TYPEFLOAT ID                                          { add_symbol_table($2, 1); add_scope($2, 1); hasReturn = 0;
+| TYPEFLOAT ID                                          { add_symbol_table($2, 1, 0); add_scope($2, 1); hasReturn = 0;
+                                                          paramCount = 0;
                                                           add_func_params($2); 
                                                           add_function($2);
                                                         }
@@ -335,11 +339,12 @@ func:
                                                         } 
 
 | TYPEINT ID                                            { 
-                                                          add_symbol_table($2, 0); add_scope($2, 0);
+                                                          add_symbol_table($2, 0, 0); add_scope($2, 0);
                                                           if (strcmp($2, "main") == 0) {
                                                             hasMain = 1;
                                                           }
                                                           hasReturn = 0;
+                                                          paramCount = 0;
                                                           add_func_params($2);
                                                           add_function($2);
                                                         }
@@ -371,7 +376,7 @@ param:
   TYPEINT ID              { $$ = add_node0('P'); 
                             $$->type = 0;
                             $$->value = (char *) strdup($2); 
-                            add_symbol_table($2, 0); 
+                            add_symbol_table($2, 0, 1); 
                             add_params(0);
                             free($1);
                             free($2); 
@@ -379,7 +384,7 @@ param:
 | TYPEFLOAT ID            { $$ = add_node0('P'); 
                             $$->type = 1;
                             $$->value = (char *) strdup($2);    
-                            add_symbol_table($2, 1);
+                            add_symbol_table($2, 1, 1);
                             add_params(1);
                             free($1);
                             free($2);  
@@ -387,7 +392,7 @@ param:
 | TYPESTRING ID           { $$ = add_node0('P'); 
                             $$->type = 2;
                             $$->value = (char *) strdup($2);
-                            add_symbol_table($2, 2);
+                            add_symbol_table($2, 2, 1);
                             add_params(2);
                             free($1);
                             free($2);      
@@ -774,6 +779,7 @@ scan:
                                           if ($$->type != $$->node1->type) {
                                             print_semantic_error($$->node1->value, 6);
                                           }
+                                          add_instruct1("scani", $$->node1->addr);
                                           free($3);  
                                           free($5);  
                                         }
@@ -787,6 +793,7 @@ scan:
                                           if ($$->type != $$->node1->type) {
                                             print_semantic_error($$->node1->value, 6);
                                           }
+                                          add_instruct1("scanf", $$->node1->addr);
                                           free($3);  
                                           free($5);     
                                         }
@@ -800,6 +807,7 @@ scan:
                                           if ($$->type != $$->node1->type) {
                                             print_semantic_error($$->node1->value, 6);
                                           }
+                                          print_semantic_error($$->node1->value, 11);
                                           free($3);  
                                           free($5);     
                                         }
@@ -818,6 +826,9 @@ return:
                               print_semantic_error($$->node1->value, 5);
                             }
                             hasReturn = 1;
+                            if (strcmp(scope_stack->scope_name, "main") != 0) {
+                              add_instruct1("return", $$->node1->addr); 
+                            }
                             free($3); 
                           }
 | RETURN '(' STR ')' ';'  { $$ = add_node0('L');
@@ -826,11 +837,13 @@ return:
                             $$->value = (char *) strdup("RETURN");
                             $$->node1 = add_node0('S');
                             $$->node1->type = 2;
+                            $$->node1->addr = str_to_addr($3);
                             $$->node1->value = (char *) strdup($3); 
                             if ($$->type != $$->node1->type) {
                               print_semantic_error($$->node1->value, 5);
                             } 
                             hasReturn = 1;
+                            add_instruct1("return", $$->node1->addr); 
                             free($3);   
                           }
 | RETURN '(' INT ')' ';'  { $$ = add_node0('L');
@@ -844,6 +857,9 @@ return:
                               print_semantic_error($$->node1->value, 5);
                             }
                             hasReturn = 1;
+                            if (strcmp(scope_stack->scope_name, "main") != 0) {
+                              add_instruct1("return", $3); 
+                            }
                             free($3);   
                           }
 | RETURN '(' DEC ')' ';'  { $$ = add_node0('L');
@@ -857,6 +873,7 @@ return:
                               print_semantic_error($$->node1->value, 5);
                             }
                             hasReturn = 1;
+                            add_instruct1("return", $3); 
                             free($3);   
                           }
 ;
@@ -889,6 +906,7 @@ callFunc:
 
                                             compare_params($3);
                                             free_current_params();
+                                            add_instruct1("pop", get_id_addr($1));
                                             free($1);  
                                             free($3);     
                                           }
@@ -919,6 +937,7 @@ callFunc:
 
                                             compare_params($3);
                                             free_current_params();
+                                            add_instruct1("pop", get_id_addr($1));
                                             free($1);  
                                             free($3);     
                                           }
@@ -929,24 +948,28 @@ callFuncParams:
                                 $$->value = (char *) strdup($1); 
                                 $$->type = get_id_type($1);  
                                 add_current_params($$->type); 
+                                add_instruct1("param", get_id_addr($1)); 
                                 free($1);  
                               }
 | INT                         { $$ = add_node0('I');
                                 $$->type = 0;
                                 $$->value = (char *) strdup($1);  
                                 add_current_params($$->type); 
+                                add_instruct1("param", $1); 
                                 free($1);   
                               }
 | DEC                         { $$ = add_node0('D');
                                 $$->type = 1;
                                 $$->value = (char *) strdup($1);    
                                 add_current_params($$->type); 
+                                add_instruct1("param", $1); 
                                 free($1); 
                               }
 | STR                         { $$ = add_node0('S');
                                 $$->type = 2;
                                 $$->value = (char *) strdup($1);  
-                                add_current_params($$->type);  
+                                add_current_params($$->type); 
+                                add_instruct1("param", str_to_addr($1));  
                                 free($1); 
                               }
 | ID ',' callFuncParams       { $$ = add_node0('R');
@@ -957,6 +980,7 @@ callFuncParams:
 
                                 $$->node2 = $3;
                                 add_current_params($$->node1->type);
+                                add_instruct1("param", get_id_addr($1)); 
                                 free($1);
                               }
 | INT ',' callFuncParams      { $$ = add_node0('R');
@@ -967,6 +991,7 @@ callFuncParams:
 
                                 $$->node2 = $3;  
                                 add_current_params($$->node1->type);
+                                add_instruct1("param", $1); 
                                 free($1);  
                               }
 | DEC ',' callFuncParams      { $$ = add_node0('R');
@@ -977,6 +1002,7 @@ callFuncParams:
 
                                 $$->node2 = $3;
                                 add_current_params($$->node1->type);
+                                add_instruct1("param", $1); 
                                 free($1);   
                               }
 | STR ',' callFuncParams      { $$ = add_node0('R');
@@ -987,6 +1013,7 @@ callFuncParams:
 
                                 $$->node2 = $3;
                                 add_current_params($$->node1->type);
+                                add_instruct1("param", str_to_addr($1));  
                                 free($1);
                               }
 ;
@@ -1329,6 +1356,8 @@ void compare_params(char *id) {
   struct params* params1;
   struct params* params2;
 
+  add_instruct2("call", id, i_to_str(func_params->n_params));
+
   if (current_params == NULL) {
     if (func_params->n_params != 0) {
       print_semantic_error(id, 10);
@@ -1352,7 +1381,7 @@ void compare_params(char *id) {
   }
 }
 
-void add_symbol_table(char *id, int type) {
+void add_symbol_table(char *id, int type, int isParam) {
   struct symbol_node* symbol_node = (struct symbol_node*)calloc(1, sizeof(struct symbol_node));
 
   struct symbol_node* symbol_node_check;
@@ -1369,7 +1398,11 @@ void add_symbol_table(char *id, int type) {
   symbol_node->id = (char *) strdup(id);
   symbol_node->type = type;
   symbol_node->key = (char *) strdup(key);
-  symbol_node->addr = addRegisterCount();
+  if (isParam == 0) {
+    symbol_node->addr = addRegisterCount();
+  } else {
+    symbol_node->addr = addParamCount();
+  }
 
   if (last_scope != NULL && last_scope->scope_name != NULL) {
     symbol_node->scope_name = (char *) strdup(last_scope->scope_name);
@@ -1386,6 +1419,14 @@ char* addLabelNum() {
   utstring_new(str);
   utstring_printf(str, "L%d", labelNum);
   labelNum++;
+  return utstring_body(str);
+}
+
+char* addParamCount() {
+  UT_string *str;
+  utstring_new(str);
+  utstring_printf(str, "#%d", paramCount);
+  paramCount++;
   return utstring_body(str);
 }
 
@@ -1837,6 +1878,10 @@ void print_semantic_error(char *id, int type) {
     // parametros n compativel
     case 10: 
       printf("parametros não compativeis na chamada da funcao: %s, linha: %d\n", id, line);
+      break;
+    // scan string
+    case 11: 
+      printf("String não pode ser lida: %s, linha: %d\n", id, line);
       break;
 
   }

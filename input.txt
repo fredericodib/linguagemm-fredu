@@ -1,40 +1,22 @@
-float test(int x, float y) {
-  float value;
-  value = x + 5.5 + y * x;
-  return (value);
+int somatorio(int var) {
+  int result = 0;
+  int pastVar = 0;
+  pastVar = result - 1;
+  if (pastVar <= 0) {
+    return(0);
+  }
+  result = somatorio(pastVar);
+  result = var + result;
+  return (result);
 }
 
+
 int main() {
-  /* Isso é um comentario */
+  int value;
 
-  int x1;
-  int x2 = 4;
-  float x3 = 5.5;
-  float x4;
-
-  x4 = 10 + x3 * x2;
-
-  print(x2);
+  scan(value, int);
+  print(value);
   print("\n");
-  print(3);
-  print("\n");
-  print(3.5);
-  print("\n");
-  print(x4);
-  print("\n");
-
-  string str = "ola";
-  string str2 = "meu nome é fred\n";
-  print(str);
-  print(", ");
-  print(str2);
-
-  string str4;
-  str4 = "Tudo bom? " + str + ", " + str2;
-  print(str4);
-  string str5;
-  str5 = str4 + str4;
-  print(str5);
 
   return(0);
 }
