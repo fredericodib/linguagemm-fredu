@@ -67,7 +67,9 @@ extern int yydebug;
     CLE = 273,
     CLT = 274,
     CNE = 275,
-    CEQ = 276
+    CEQ = 276,
+    AND = 277,
+    OR = 278
   };
 #endif
 
@@ -83,7 +85,7 @@ union YYSTYPE
   char *str;
   struct node *node;
 
-#line 87 "lang.tab.h"
+#line 89 "lang.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

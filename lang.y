@@ -164,14 +164,15 @@ void build_expression_type(struct node *node);
 }
 
 %type <node> prog globalList var func paramsList contentList params param content
-%type <node> addValue comand print scan return callFunc expression expression_mul_div op_add_sub condition cond callFuncParams op_mul_div
+%type <node> addValue comand print scan return callFunc expression expression_mul_div
+%type <node> op_add_sub condition cond callFuncParams op_mul_div condition_or condition_and
 
 %token <id> ID
 %token <type> TYPEINT TYPEFLOAT TYPESTRING
 %token <num> INT DEC
 %token <str> STR
 %token WHILE IF ELSE RETURN PRINT SCAN
-%token CGE CGT CLE CLT CNE CEQ 
+%token CGE CGT CLE CLT CNE CEQ AND OR
 
 %%
 
@@ -436,7 +437,7 @@ ID '=' expression ';'      {
 
 expression: 
 expression_mul_div {$$ = $1;}
-| expression op_add_sub expression  {
+| expression_mul_div op_add_sub expression  {
                                       $$ = add_node0('E');
 
                                       $$->node1 = $1;
@@ -609,12 +610,24 @@ op_mul_div:
 ;
 
 comand:
-  IF '(' condition ')' '{' contentList '}'   { $$ = add_node2('C', $3, $6); }
+  IF '(' condition_or ')' '{' contentList '}'   { $$ = add_node2('C', $3, $6); }
 
-| IF '(' condition ')' '{' contentList '}' ELSE '{' contentList '}'   { $$ = add_node3('C', $3, $6, $10); }
+| IF '(' condition_or ')' '{' contentList '}' ELSE '{' contentList '}'   { $$ = add_node3('C', $3, $6, $10); }
 
-| WHILE '(' condition ')' '{' contentList '}'     { $$ = add_node2('W', $3, $6); }
+| WHILE '(' condition_or ')' '{' contentList '}'     { $$ = add_node2('W', $3, $6); }
 ;
+
+condition_or:
+condition_and {$$ = $1;}
+| condition_and OR condition_or {
+                                    $$ = add_node2('R', $1, $3);
+                                  }
+
+condition_and:
+condition {$$ = $1;}
+| condition AND condition_and {
+                                    $$ = add_node2('R', $1, $3);
+                                  }
 
 condition:
   ID cond ID      { $$ = add_node0('c');

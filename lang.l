@@ -43,6 +43,9 @@ str \"(\\.|[^"\\])*\"
 
 eq "="
 
+or "||"
+and "&&"
+
 ceq "=="
 cne "!="
 clt "<"
@@ -140,6 +143,18 @@ typeString "string"
     word_position += strlen(yytext);
     printf("div (%s)\n", yytext);
     return '/';
+}
+
+{or} {
+    word_position += strlen(yytext);
+    printf("or (%s)\n", yytext);
+    return OR;
+}
+
+{and} {
+    word_position += strlen(yytext);
+    printf("or (%s)\n", yytext);
+    return AND;
 }
 
 {eq} {
