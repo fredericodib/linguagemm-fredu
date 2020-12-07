@@ -1,6 +1,6 @@
 float test(int x, float y) {
   float value;
-  value = x + 5.5 + y * x;
+  value = x + y * x + 5.5;
   return (value);
 }
 

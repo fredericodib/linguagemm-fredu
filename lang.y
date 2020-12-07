@@ -164,7 +164,7 @@ void build_expression_type(struct node *node);
 }
 
 %type <node> prog globalList var func paramsList contentList params param content
-%type <node> addValue comand print scan return callFunc expression op condition cond callFuncParams
+%type <node> addValue comand print scan return callFunc expression expression_mul_div op_add_sub condition cond callFuncParams op_mul_div
 
 %token <id> ID
 %token <type> TYPEINT TYPEFLOAT TYPESTRING
@@ -434,7 +434,39 @@ ID '=' expression ';'      {
                           }
 ;
 
-expression:
+expression: 
+expression_mul_div {$$ = $1;}
+| expression op_add_sub expression  {
+                                      $$ = add_node0('E');
+
+                                      $$->node1 = $1;
+                                      $$->node2 = $2;
+                                      $$->node3 = $3;
+
+                                      if ($$->node1->addr[0] == '#') {
+                                        char *newAddrVar = addRegisterCount();
+                                        add_instruct2("mov", newAddrVar, $$->node1->addr);
+                                        $$->node1->addr = newAddrVar;
+                                      }
+
+                                      build_expression_type($$);
+                                      if ($$->node1->type != 2) {
+                                        char *newAddr = addRegisterCount();
+                                        if ($$->node1->type == 0 && $$->node3->type == 1) {
+                                          add_instruct2("inttofl", $$->node1->addr, $$->node1->addr);
+                                        }
+                                        if ($$->node3->type == 0 && $$->node1->type == 1) {
+                                          add_instruct2("inttofl", $$->node3->addr, $$->node3->addr);
+                                        }
+                                        add_instruct3($$->node2->addr, newAddr, $$->node1->addr, $$->node3->addr);
+                                        $$->addr = newAddr;
+                                      } else {
+                                        $$->addr = concat_str($$->node1->addr, $$->node3->addr);
+                                      }
+
+                                    }
+
+expression_mul_div:
 ID                        { $$ = add_node0('V'); 
                             $$->value = (char *) strdup($1);   
                             $$->type = get_id_type($1);
@@ -468,7 +500,7 @@ ID                        { $$ = add_node0('V');
                             $$->value = (char *) strdup($1);  
                             free($1);   
                           }
-| ID op expression        { $$ = add_node0('E');
+| ID op_mul_div expression_mul_div        { $$ = add_node0('E');
 
                             $$->node1 = add_node0('V');
                             $$->node1->value = (char *) strdup($1);
@@ -499,7 +531,7 @@ ID                        { $$ = add_node0('V');
                             }
                             free($1);
                           }
-| INT op expression       { $$ = add_node0('E');
+| INT op_mul_div expression_mul_div       { $$ = add_node0('E');
 
                             $$->node1 = add_node0('I');
                             $$->node1->type = 0;
@@ -519,7 +551,7 @@ ID                        { $$ = add_node0('V');
                             $$->addr = newAddr;
                             free($1);
                           }
-| DEC op expression       { $$ = add_node0('E');
+| DEC op_mul_div expression_mul_div       { $$ = add_node0('E');
 
                             $$->node1 = add_node0('D');
                             $$->node1->type = 1;
@@ -539,7 +571,7 @@ ID                        { $$ = add_node0('V');
                             $$->addr = newAddr;
                             free($1);
                           }
-| STR op expression       { $$ = add_node0('E');
+| STR op_mul_div expression_mul_div       { $$ = add_node0('E');
 
                             $$->node1 = add_node0('S');
                             $$->node1->type = 2;
@@ -554,7 +586,7 @@ ID                        { $$ = add_node0('V');
                           }
 ;
 
-op:
+op_add_sub:
   '+'   { $$ = add_node0('B'); 
           $$->addr = "add";
           $$->value = (char *) strdup("+");     
@@ -563,7 +595,10 @@ op:
           $$->addr = "sub";
           $$->value = (char *) strdup("-");     
         }
-| '/'   { $$ = add_node0('B'); 
+;
+
+op_mul_div:
+'/'   { $$ = add_node0('B'); 
           $$->addr = "div";
           $$->value = (char *) strdup("/");     
         }
@@ -574,9 +609,11 @@ op:
 ;
 
 comand:
-  IF '(' condition ')' '{' contentList '}'                            { $$ = add_node2('C', $3, $6); }
+  IF '(' condition ')' '{' contentList '}'   { $$ = add_node2('C', $3, $6); }
+
 | IF '(' condition ')' '{' contentList '}' ELSE '{' contentList '}'   { $$ = add_node3('C', $3, $6, $10); }
-| WHILE '(' condition ')' '{' contentList '}'                         { $$ = add_node2('W', $3, $6); }
+
+| WHILE '(' condition ')' '{' contentList '}'     { $$ = add_node2('W', $3, $6); }
 ;
 
 condition:
