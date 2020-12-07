@@ -17,6 +17,7 @@ gcc -g lex.yy.c lang.tab.c -Wall -o lang
 Instruções de Execução:
 ./lang input_correto1.txt
 ./lang input_correto2.txt
+./lang input_correto_fatorial.txt
 
 ./lang input_erro_lexico1.txt
 ./lang input_erro_lexico2.txt

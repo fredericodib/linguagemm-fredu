@@ -1,12 +1,12 @@
-int somatorio(int var) {
+int fatorial(int var) {
   int result = 0;
   int pastVar = 0;
-  pastVar = result - 1;
+  pastVar = var - 1;
   if (pastVar <= 0) {
-    return(0);
+    return(1);
   }
-  result = somatorio(pastVar);
-  result = var + result;
+  result = fatorial(pastVar);
+  result = var * result;
   return (result);
 }
 
@@ -14,7 +14,9 @@ int somatorio(int var) {
 int main() {
   int value;
 
+  print("Digite um número\n");
   scan(value, int);
+  value = fatorial(value);
   print(value);
   print("\n");
 

@@ -101,6 +101,7 @@ void add_current_params(int type);
 void free_current_params();
 void compare_params(char *id);
 
+char *whileLabel = NULL;
 int hasMain = 0;
 int hasReturn = 0;
 int registerCount = 1;
@@ -138,6 +139,7 @@ void print_str(char *addr);
 void add_scope(char* scope_name, int type);
 void remove_scope();
 struct scope* get_last_scope();
+char *calc_cond(struct node *node);
 
 void add_symbol_table(char *id, int type, int isParam);
 struct symbol_node* find_symbol_table(char *id);
@@ -165,7 +167,7 @@ void build_expression_type(struct node *node);
 
 %type <node> prog globalList var func paramsList contentList params param content
 %type <node> addValue comand print scan return callFunc expression expression_mul_div
-%type <node> op_add_sub condition cond callFuncParams op_mul_div condition_or condition_and
+%type <node> op_add_sub condition cond callFuncParams op_mul_div condition_or condition_and condition_root
 
 %token <id> ID
 %token <type> TYPEINT TYPEFLOAT TYPESTRING
@@ -610,23 +612,53 @@ op_mul_div:
 ;
 
 comand:
-  IF '(' condition_or ')' '{' contentList '}'   { $$ = add_node2('C', $3, $6); }
+  IF '(' condition_root ')' '{' contentList '}'   { 
+                                                    $$ = add_node2('C', $3, $6); 
+                                                    add_function($3->addr);
+                                                  }
 
-| IF '(' condition_or ')' '{' contentList '}' ELSE '{' contentList '}'   { $$ = add_node3('C', $3, $6, $10); }
+| IF '(' condition_root ')' '{' contentList '}' {
+                                                  char *label = addLabelNum();
+                                                  add_instruct1("jump", label);
+                                                  add_function($3->addr);
+                                                  $3->addr = label;
+                                                }
+ELSE '{' contentList '}'   { $$ = add_node3('C', $3, $6, $11); add_function($3->addr); }
 
-| WHILE '(' condition_or ')' '{' contentList '}'     { $$ = add_node2('W', $3, $6); }
+| WHILE                                         {
+                                                  whileLabel = addLabelNum();
+                                                  add_function(whileLabel);
+                                                }
+'(' condition_root ')' '{' contentList '}'      { 
+                                                  add_instruct1("jump", whileLabel);
+                                                  add_function($4->addr);
+                                                  $$ = add_node2('W', $4, $7);
+                                                  free(whileLabel);
+                                                }
 ;
+
+condition_root:
+condition_or    {
+                  $$ = $1;
+                  char *label = addLabelNum();
+                  add_instruct2("brz", label, $$->addr);
+                  $$->addr = label;
+                }
 
 condition_or:
 condition_and {$$ = $1;}
 | condition_and OR condition_or {
                                     $$ = add_node2('R', $1, $3);
+                                    $$->addr = $$->node1->addr;
+                                    add_instruct3("or", $$->addr, $$->node1->addr, $$->node2->addr);
                                   }
 
 condition_and:
 condition {$$ = $1;}
 | condition AND condition_and {
                                     $$ = add_node2('R', $1, $3);
+                                    $$->addr = $$->node1->addr;
+                                    add_instruct3("and", $$->addr, $$->node1->addr, $$->node2->addr);
                                   }
 
 condition:
@@ -643,6 +675,7 @@ condition:
                     $$->node3->value = (char *) strdup($3);
                     $$->node3->type = get_id_type($3);
                     $$->node3->addr = get_id_addr($3);
+                    $$->addr = calc_cond($$);
                     free($1);
                     free($3);
                   }
@@ -658,6 +691,9 @@ condition:
                     $$->node3 = add_node0('I');
                     $$->node3->type = 0;
                     $$->node3->value = (char *) strdup($3);
+                    $$->node3->addr = addRegisterCount();
+                    add_instruct2("mov", $$->node3->addr, $3);
+                    $$->addr = calc_cond($$);
                     free($1);
                     free($3);
                   }
@@ -673,6 +709,9 @@ condition:
                     $$->node3 = add_node0('D');
                     $$->node3->type = 1;
                     $$->node3->value = (char *) strdup($3);
+                    $$->node3->addr = addRegisterCount();
+                    add_instruct2("mov", $$->node3->addr, $3);
+                    $$->addr = calc_cond($$);
                     free($1);
                     free($3);
                   }
@@ -681,6 +720,8 @@ condition:
                     $$->node1 = add_node0('I');
                     $$->node1->type = 0;
                     $$->node1->value = (char *) strdup($1);
+                    $$->node1->addr = addRegisterCount();
+                    add_instruct2("mov", $$->node1->addr, $1);
 
                     $$->node2 = $2;
                     
@@ -688,6 +729,7 @@ condition:
                     $$->node3->value = (char *) strdup($3);
                     $$->node3->type = get_id_type($3);
                     $$->node3->addr = get_id_addr($3);
+                    $$->addr = calc_cond($$);
                     free($1);
                     free($3);
                   }
@@ -696,12 +738,17 @@ condition:
                     $$->node1 = add_node0('I');
                     $$->node1->type = 0;
                     $$->node1->value = (char *) strdup($1);
+                    $$->node1->addr = addRegisterCount();
+                    add_instruct2("mov", $$->node1->addr, $1);
 
                     $$->node2 = $2;
                     
                     $$->node3 = add_node0('I');
                     $$->node3->type = 0;
                     $$->node3->value = (char *) strdup($3);
+                    $$->node3->addr = addRegisterCount();
+                    add_instruct2("mov", $$->node3->addr, $3);
+                    $$->addr = calc_cond($$);
                     free($1);
                     free($3);
                   }
@@ -710,20 +757,27 @@ condition:
                     $$->node1 = add_node0('I');
                     $$->node1->type = 0;
                     $$->node1->value = (char *) strdup($1);
+                    $$->node1->addr = addRegisterCount();
+                    add_instruct2("mov", $$->node1->addr, $1);
 
                     $$->node2 = $2;
                     
                     $$->node3 = add_node0('D');
                     $$->node3->type = 1;
                     $$->node3->value = (char *) strdup($3);
+                    $$->node3->addr = addRegisterCount();
+                    add_instruct2("mov", $$->node3->addr, $3);
+                    $$->addr = calc_cond($$);
                     free($1);
                     free($3);
                   }
 | DEC cond ID     { $$ = add_node0('c');
 
                     $$->node1 = add_node0('D');
-                    $$->node1->type = 2;
+                    $$->node1->type = 1;
                     $$->node1->value = (char *) strdup($1);
+                    $$->node1->addr = addRegisterCount();
+                    add_instruct2("mov", $$->node1->addr, $1);
 
                     $$->node2 = $2;
                     
@@ -731,34 +785,45 @@ condition:
                     $$->node3->value = (char *) strdup($3);
                     $$->node3->type = get_id_type($3);
                     $$->node3->addr = get_id_addr($3);
+                    $$->addr = calc_cond($$);
                     free($1);
                     free($3);
                   }
 | DEC cond INT    { $$ = add_node0('c');
 
                     $$->node1 = add_node0('D');
-                    $$->node1->type = 2;
+                    $$->node1->type = 1;
                     $$->node1->value = (char *) strdup($1);
+                    $$->node1->addr = addRegisterCount();
+                    add_instruct2("mov", $$->node1->addr, $1);
 
                     $$->node2 = $2;
                     
                     $$->node3 = add_node0('I');
-                    $$->node3->type = 1;
+                    $$->node3->type = 0;
                     $$->node3->value = (char *) strdup($3);
+                    $$->node3->addr = addRegisterCount();
+                    add_instruct2("mov", $$->node3->addr, $3);
+                    $$->addr = calc_cond($$);
                     free($1);
                     free($3);
                   }
 | DEC cond DEC    { $$ = add_node0('c');
 
                     $$->node1 = add_node0('D');
-                    $$->node1->type = 2;
+                    $$->node1->type = 1;
                     $$->node1->value = (char *) strdup($1);
+                    $$->node1->addr = addRegisterCount();
+                    add_instruct2("mov", $$->node1->addr, $1);
 
                     $$->node2 = $2;
                     
                     $$->node3 = add_node0('D');
-                    $$->node3->type = 2;
+                    $$->node3->type = 1;
                     $$->node3->value = (char *) strdup($3);
+                    $$->node3->addr = addRegisterCount();
+                    add_instruct2("mov", $$->node3->addr, $3);
+                    $$->addr = calc_cond($$);
                     free($1);
                     free($3);
                   }
@@ -1441,6 +1506,64 @@ void compare_params(char *id) {
       }
     }
   }
+}
+
+char *calc_cond(struct node *node) {
+  char *addr = addRegisterCount();
+  node->type = 0;
+
+  add_instruct2("mov", addr, "0");
+  if (node->node1->type == 0 && node->node3->type == 1) {
+    add_instruct2("inttofl", node->node1->addr, node->node1->addr);
+    node->type = 1;
+  }
+  if (node->node3->type == 0 && node->node1->type == 1) {
+    add_instruct2("inttofl", node->node3->addr, node->node3->addr);
+    node->type = 1;
+  }
+
+  if (strcmp(node->node2->value, "CEQ") == 0) {
+    add_instruct3("seq", addr, node->node1->addr, node->node3->addr);
+    if (node->type == 1) {
+      add_instruct2("fltoint", addr, addr);
+    }
+  }
+  if (strcmp(node->node2->value, "CNE") == 0) {
+    add_instruct3("seq", addr, node->node1->addr, node->node3->addr);
+    if (node->type == 1) {
+      add_instruct2("fltoint", addr, addr);
+    }
+    add_instruct3("seq", addr, addr, "0");
+  }
+  if (strcmp(node->node2->value, "CLT") == 0) {
+    add_instruct3("slt", addr, node->node1->addr, node->node3->addr);
+    if (node->type == 1) {
+      add_instruct2("fltoint", addr, addr);
+    }
+  }
+  if (strcmp(node->node2->value, "CGE") == 0) {
+    add_instruct3("slt", addr, node->node1->addr, node->node3->addr);
+    if (node->type == 1) {
+      add_instruct2("fltoint", addr, addr);
+    }
+    add_instruct3("seq", addr, addr, "0");
+  }
+  if (strcmp(node->node2->value, "CLE") == 0) {
+    add_instruct3("sleq", addr, node->node1->addr, node->node3->addr);
+    if (node->type == 1) {
+      add_instruct2("fltoint", addr, addr);
+    }
+  }
+  if (strcmp(node->node2->value, "CGT") == 0) {
+    add_instruct3("sleq", addr, node->node1->addr, node->node3->addr);
+    if (node->type == 1) {
+      add_instruct2("fltoint", addr, addr);
+    }
+    add_instruct3("seq", addr, addr, "0");
+  }
+  node->type = 0;
+
+  return addr;
 }
 
 void add_symbol_table(char *id, int type, int isParam) {
